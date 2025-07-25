@@ -1,0 +1,140 @@
+<!DOCTYPE html>  <html lang="en">  
+<head>  
+  <meta charset="UTF-8" />  
+  <title>Willow FHD</title>  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />  
+  <meta name="referrer" content="no-referrer" />  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.6/shaka-player.ui.min.js" crossorigin="anonymous"></script>  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.6/controls.min.css" crossorigin="anonymous">  
+  <link rel="stylesheet" href="https://livecrichdofficial.pages.dev/livecrichd2.css">  
+  <script src="https://livecrichdtv.pages.dev/sknzx.js"></script>  
+  <style>  
+    body {  
+      margin: 0;  
+      background: #000;  
+      color: white;  
+      font-family: sans-serif;  
+    }  
+    #player-container {  
+      max-width: 100%;  
+      aspect-ratio: 16/9;  
+      margin: 0 auto;  
+      position: relative;  
+    }  
+    .radarx-logo {  
+      position: absolute;  
+      top: 12px;  
+      left: 12px;  
+      width: 80px;  
+      z-index: 1000;  
+      filter: drop-shadow(0 0 8px #00f7ff);  
+    }  
+    #message {  
+      position: fixed;  
+      top: 0; left: 0;  
+      width: 100%; height: 100%;  
+      background: rgba(0, 0, 0, 0.8);  
+      color: #fff;  
+      display: flex;  
+      align-items: center;  
+      justify-content: center;  
+      font-size: 24px;  
+      z-index: 1001;  
+    }  
+  </style>  
+</head>  
+<body>  <div id="player-container">  
+  <!-- Injected Logo -->  
+  <img src="https://radarxtv.site/" alt="" class="radarx-logo" />    <!-- Shaka Player Container -->    <div data-shaka-player-container class="shaka-video-container">  
+    <video autoplay muted data-shaka-player id="video" poster="#"></video>  
+  </div>  
+</div>  
+<script>
+const manifestUri = "https://a201aivottlinear-a.akamaihd.net/OTTB/lhr-nitro/clients/dash/enc/f60kqesunw/out/v1/a435ed7a00f947deb4369b46d8f2fb70/cenc.mpd";
+
+async function init() {
+  const video = document.getElementById('video');
+  const ui = video['ui'];
+  const controls = ui.getControls();
+  const player = controls.getPlayer();
+
+  window.player = player;
+  window.ui = ui;
+
+  const uiConfig = {
+    controlPanelElements: [
+      'play_pause',
+      'mute',
+      'volume',
+      'fullscreen',
+      'time_and_duration'
+    ],
+    addBigPlayButton: false,
+    addSeekBar: true
+  };
+  ui.configure(uiConfig);
+
+  player.configure({
+    drm: {
+      "clearKeys": {
+        "1779c27b9d077a3ba0c9cc1bb9a94b9f": "cc5cf3b7928fb9e0a1ee6a8b566f0a8e"
+      }
+    },
+    abr: {
+      enabled: false // Disable ABR to lock to 576p
+    }
+  });
+
+  player.addEventListener('error', onPlayerErrorEvent);
+  controls.addEventListener('error', onUIErrorEvent);
+
+  try {
+    await player.load(manifestUri);
+    console.log('Stream loaded');
+
+    const tracks = player.getVariantTracks();
+    const track576 = tracks.find(t => t.height === 576);
+    if (track576) {
+      await player.selectVariantTrack(track576, true);
+      console.log("576p selected by default and locked.");
+    } else {
+      console.warn("576p track not found.");
+    }
+  } catch (error) {
+    onPlayerError(error);
+  }
+}
+
+function onPlayerErrorEvent(errorEvent) {
+  onPlayerError(errorEvent.detail);
+}
+function onPlayerError(error) {
+  console.error('Error code', error.code, 'object', error);
+}
+function onUIErrorEvent(errorEvent) {
+  onPlayerError(errorEvent.detail);
+}
+function initFailed(errorEvent) {
+  console.error('Unable to load the UI library!');
+}
+
+document.addEventListener('shaka-ui-loaded', init);
+document.addEventListener('shaka-ui-load-failed', initFailed);
+
+// Telegram join prompt
+if (confirm("Join For More Links!!")) {
+  window.location.href = "https://telegram.me/radarxcricket";
+}
+
+// Anti-iframe protection
+if (window.top !== window.self) {
+  const ref = document.referrer;
+  if (!ref.includes("radarxtv.site")) {
+    window.addEventListener('DOMContentLoaded', () => {
+      document.body.innerHTML = '<div id="message">Ab to copy mat kat chutiye</div>';
+    });
+  }
+}
+</script>
+</body>  
+</html>

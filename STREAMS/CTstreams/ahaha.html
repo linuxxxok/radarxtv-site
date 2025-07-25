@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iframe Popup Blocker</title>
+</head>
+<body>
+
+    <iframe id="myIframe" src="https://criccoder264.pages.dev/CL?id=10"</iframe>
+
+    <script>
+        // Override common popup methods to prevent alerts
+        window.alert = function() {};
+        window.confirm = function() { return false; };
+        window.prompt = function() { return null; };
+
+        // Block popups from opening new tabs or windows
+        window.open = function() { return null; };
+
+        // Also try blocking iframe popups
+        document.getElementById('myIframe').contentWindow.open = function() { return null; };
+
+        // MutationObserver to detect dynamically injected popups
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                mutation.addedNodes.forEach((node) => {
+                    if (node.nodeType === 1 && (node.tagName === 'DIV' || node.tagName === 'IFRAME')) {
+                        if (node.innerText.includes("Join Our Telegram") || node.innerText.includes("@CricketKaDiwana")) {
+                            node.remove();
+                        }
+                    }
+                });
+            });
+        });
+
+        observer.observe(document.body, { childList: true, subtree: true });
+    </script>
+
+</body>
+</html>

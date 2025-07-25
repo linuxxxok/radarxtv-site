@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RadarXTV Stream</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            overflow: hidden;
+        }
+        #stream-container {
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="stream-container">
+        <iframe id="stream-frame" sandbox="allow-scripts allow-same-origin allow-modals" src="https://cricnation.live/p?id=D18" allowfullscreen></iframe>
+    </div>
+
+    <script>
+        // Block Popups
+        window.open = function() { return null; };
+
+        // Remove Anti-Embedding Script from iframe
+        document.getElementById('stream-frame').onload = function() {
+            let iframe = document.getElementById('stream-frame').contentWindow;
+            try {
+                iframe.eval('window.top = window.self;');
+            } catch (e) {
+                console.log("Bypass Attempt Failed");
+            }
+        };
+
+        // RadarXCricket Telegram Popup
+        setTimeout(function() {
+            alert("Join RadarXCricket on Telegram for more updates! \n\nhttps://t.me/RadarXCricket");
+        }, 2000);
+    </script>
+
+</body>
+</html>

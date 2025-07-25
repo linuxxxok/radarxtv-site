@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RadarXLine</title>
+
+    <!-- ✅ Firebase v8 -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <style>
+        /* 🔥 Cyberpunk UI */
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            text-align: center;
+            background-color: #0d0d0d;
+            color: #00ffcc;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0px 0px 10px #00ffcc;
+            animation: glow 1.5s infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0px 0px 10px #00ffcc; }
+            to { text-shadow: 0px 0px 20px #00ffaa; }
+        }
+
+        /* ✅ Ongoing Match Box */
+        #ongoing-match {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffcc00;
+            padding: 15px;
+            margin: 10px auto;
+            max-width: 600px;
+            background: linear-gradient(90deg, #ff6600, #ffcc00);
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(255, 204, 0, 0.8);
+            text-transform: uppercase;
+        }
+
+        #messages {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 10px;
+            border: 2px solid #00ffcc;
+            border-radius: 10px;
+            background-color: #1a1a1a;
+            overflow-y: auto;
+            max-height: 500px;
+            box-shadow: 0px 0px 20px rgba(0, 255, 204, 0.5);
+            animation: neonBorder 2s infinite alternate;
+        }
+
+        @keyframes neonBorder {
+            from { box-shadow: 0px 0px 20px rgba(0, 255, 204, 0.5); }
+            to { box-shadow: 0px 0px 40px rgba(0, 255, 204, 0.8); }
+        }
+
+        .message {
+            padding: 12px;
+            border-bottom: 1px solid rgba(0, 255, 204, 0.3);
+            text-align: left;
+            background: rgba(0, 255, 204, 0.1);
+            border-left: 4px solid transparent;
+            border-radius: 5px;
+            margin: 10px 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-in-out;
+            font-size: 18px;
+            color: white;
+        }
+
+        .message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ✅ NEW MESSAGE (GREEN FLASH) */
+        .message.new {
+            border-left: 4px solid #00ff00;
+            font-weight: bold;
+            box-shadow: 0px 0px 20px rgba(0, 255, 0, 0.8);
+            animation: pulse 1.5s infinite alternate, fadeGlow 3s forwards;
+            background: rgba(0, 255, 0, 0.2);
+        }
+
+        @keyframes pulse {
+            from { box-shadow: 0px 0px 15px rgba(0, 255, 0, 0.8); }
+            to { box-shadow: 0px 0px 30px rgba(0, 255, 0, 1); }
+        }
+
+        @keyframes fadeGlow {
+            0% { box-shadow: 0px 0px 30px rgba(0, 255, 0, 1); }
+            100% { box-shadow: 0px 0px 5px rgba(0, 255, 0, 0.3); }
+        }
+
+        /* ✅ Timestamp Style */
+        .timestamp {
+            font-size: 12px;
+            color: #00ffaa;
+            display: block;
+            margin-top: 5px;
+            text-shadow: 0px 0px 5px #00ffaa;
+        }
+
+        /* ✅ Scrollbar Styling */
+        #messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #messages::-webkit-scrollbar-thumb {
+            background: #00ffaa;
+            border-radius: 10px;
+        }
+
+        #messages::-webkit-scrollbar-track {
+            background: #0d0d0d;
+        }
+    </style>
+</head>
+<body>
+    <h1>RadarXLine</h1>
+    
+    <!-- ✅ Ongoing Match Box -->
+    <div id="ongoing-match">Loading Match...</div>
+
+    <div id="messages">Fastest Line.</div>
+
+    <script>
+        // ✅ Firebase Config
+        const firebaseConfig = {
+            databaseURL: "https://radarxtvscores-default-rtdb.firebaseio.com/"
+        };
+
+        // ✅ Firebase Initialize
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database().ref("/telegram_messages");
+        const matchRef = firebase.database().ref("/ongoing_match");  // ✅ New Reference
+
+        // ✅ Function to Fetch Ongoing Match
+        matchRef.on("value", snapshot => {
+            const matchData = snapshot.val();
+            document.getElementById("ongoing-match").innerText = matchData ? matchData.match : "MICT VS SEC";
+        });
+
+        // ✅ Function to Fetch Messages (Real-time)
+        db.on("child_added", snapshot => {
+            const data = snapshot.val();
+            displayMessage(snapshot.key, data);
+        });
+
+        // ✅ Function to Remove Messages on Delete
+        db.on("child_removed", snapshot => {
+            const messageElement = document.getElementById(snapshot.key);
+            if (messageElement) {
+                messageElement.remove();
+            }
+        });
+
+        // ✅ Function to Display Messages with Animation + Highlighting
+        function displayMessage(id, data) {
+            const messagesDiv = document.getElementById("messages");
+            
+            const messageElement = document.createElement("div");
+            messageElement.classList.add("message", "new"); // ✅ New Message Highlight
+            messageElement.id = id;  // Unique ID for deletion tracking
+            messageElement.innerHTML = `
+                <strong>${data.text}</strong> 
+                <span class="timestamp">${new Date(data.timestamp * 1000).toLocaleString()}</span>
+            `;
+
+            messagesDiv.prepend(messageElement); // ✅ Latest Message Top Pe Add Hoga
+
+            // ✅ Smooth Entry Animation
+            setTimeout(() => {
+                messageElement.classList.add("show");
+            }, 100);
+
+            // ✅ 3 Seconds ke baad GREEN Flash Remove Hoga
+            setTimeout(() => {
+                messageElement.classList.remove("new");
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+Abb dekh yaha se kya hoga batata hu , 
+Abhi ek toh apne ko admin bnana pdega , like apan 1 hi bnayenge by default and by default static login rkhenge uska 
+And login activity me niche likhenge login as admin.
+Admin@BidEnclavest
+Admin@679
+
+Ye uska username and passs rhega
+
+Abb kya hoga , 
+Jo apan ne deposit and withdrawal bnaya h na activity, 
+Deposit me apan puchenge kitna amount deposit Krna hai , 
+Fir user dalega suppose 100
+Toh fir load hoke vo qr code and UPI id dega with copy button of UPI id and user input krega fir payment screenshot and UTR and submit krdega depositactivity kregi sb ye aur fir jo submit Kiya hai user ne vo admin ko dikhega vo adminlogin , hum use adminactivity pakdte h , fir admin use check krke approve ya cancel krega.
+Abb samjh login as admin -> adminactivity, normal login -> mainactivity
+
+Samjhaa??

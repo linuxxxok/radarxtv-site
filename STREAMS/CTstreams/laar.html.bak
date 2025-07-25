@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Stream</title>
+</head>
+<body>
+
+    <h2>Live Stream</h2>
+    <iframe id="streamFrame" src="" width="100%" height="500px" frameborder="0" allow="autoplay; encrypted-media;"></iframe>
+
+    <script>
+        let fid = "starsp";
+        let v_id = "starsp";
+        let v_con = "saskakas";
+        let v_dt = "545452333";
+
+        let streamURL = `https://dlolcast.pro/index.php?v=${fid}&id=${v_id}&secure=${v_con}&expires=${v_dt}`;
+
+        document.getElementById("streamFrame").src = streamURL;
+    </script>
+
+</body>
+</html>

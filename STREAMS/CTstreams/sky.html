@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encrypted Iframe</title>
+
+    <!-- ✅ CryptoJS for Encryption -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
+    <style>
+        body {
+            background: #000;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        .player-container {
+            width: 95%;
+            max-width: 600px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0px 0px 15px rgba(0, 255, 204, 0.3);
+        }
+        iframe {
+            width: 100%;
+            height: 250px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Encrypted Iframe Player</h1>
+    <div class="player-container">
+        <iframe id="contentFrame" sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation" frameborder="0" allow="encrypted-media" allowfullscreen="true" scrolling="no"></iframe>
+    </div>
+
+    <script>
+        // ✅ Secret Key for Encryption
+        const secretKey = "RadarX@Secure";
+
+        // ✅ Encrypt Iframe URL
+        function encryptURL(url) {
+            return CryptoJS.AES.encrypt(url, secretKey).toString();
+        }
+
+        // ✅ Decrypt Iframe URL
+        function decryptURL(cipherText) {
+            try {
+                const bytes = CryptoJS.AES.decrypt(cipherText, secretKey);
+                return bytes.toString(CryptoJS.enc.Utf8);
+            } catch (e) {
+                return "";
+            }
+        }
+
+        // ✅ Encrypted URL
+        const encryptedURL = encryptURL("https://offerstore.xyz/ddh/?play=65");
+
+        // ✅ Decrypt and Load Iframe
+        document.addEventListener("DOMContentLoaded", function () {
+            const decryptedURL = decryptURL(encryptedURL);
+            if (decryptedURL) {
+                document.getElementById("contentFrame").src = decryptedURL;
+            } else {
+                document.getElementById("contentFrame").src = "about:blank";
+            }
+        });
+
+    </script>
+
+</body>
+</html>

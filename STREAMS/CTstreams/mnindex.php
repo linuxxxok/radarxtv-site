@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streams</title>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #FFD700;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 10px rgba(255, 215, 0, 0.8);
+        }
+        .stream-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .stream-box {
+            background-color: #222;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+            transition: transform 0.3s ease-in-out;
+            width: 220px;
+            height: 150px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+        .stream-box:hover {
+            transform: scale(1.1);
+        }
+        .stream-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .stream-title {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #FFD700;
+        }
+    </style>
+</head>
+<body>
+    <h1>STREAMS</h1>
+    <div class="stream-container">
+        <a href="tnt1b.php" class="stream-box">
+            <img src="don/kk.jpg" alt="Stream 1">
+            <div class="stream-title">STREAM 1</div>
+        </a>
+        <a href="willow.php" class="stream-box">
+            <img src="don/lala.jpg" alt="Stream 2">
+            <div class="stream-title">STREAM 2</div>
+        </a>
+       <a href="willow2.php" class="stream-box">
+            <img src="don/lala.jpg" alt="Stream 3">
+            <div class="stream-title">STREAM 3</div>
+        </a>
+        <a href="tnt2.html" class="stream-box">
+            <img src="don/stream4.jpg" alt="Stream 4">
+            <div class="stream-title">STREAM 4</div>
+        </a>
+              <a href="proxy.php" class="stream-box">
+            <img src="don/lala.jpg" alt="Stream 4">
+            <div class="stream-title">WPL LIVE</div>
+                </a>
+                
+            <a href="astro.php" class="stream-box">
+            <img src="don/lala.jpg" alt="Stream 4">
+            <div class="stream-title">WPL LIVE 2</div>
+                </a>
+                
+                <a href="cutierandhy.php" class="stream-box">
+            <img src="don/stream1.jpg" alt="Stream 4">
+            <div class="stream-title">STAR SPORTS HD 1</div>
+                </a>
+                           <a href="don.php" class="stream-box">
+            <img src="don/stream2.jpg" alt="Stream 4">
+            <div class="stream-title">STAR SPORTS HINDI 2</div>
+                </a>
+                
+    </div>
+</body>
+</html>

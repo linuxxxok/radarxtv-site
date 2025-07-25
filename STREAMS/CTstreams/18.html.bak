@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RADARxTV</title>
+<script src="https://content.jwplatform.com/libraries/KB5zFt7A.js"></script>
+<style>
+/* General Styling */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, #000000, #1a1a1a);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Video Player Container */
+#video {
+    width: 90%;
+    max-width: 720px;
+    margin: 20px auto;
+    border: 2px solid #1e90ff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+    transition: border 0.3s;
+}
+
+.fullscreen #video {
+    border: none;
+    box-shadow: none;
+}
+
+/* Telegram Button Styling */
+#telegramButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 250px;
+    height: 50px;
+    background: linear-gradient(90deg, #1e90ff, #001f3f);
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    border: none;
+    border-radius: 25px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+#telegramButton:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+    background: linear-gradient(90deg, #001f3f, #1e90ff);
+}
+</style>
+</head>
+<body>
+
+<!-- Video Player -->
+<div id="video"></div>
+
+<!-- Telegram Button -->
+<div id="telegramButton" onclick="redirectToTelegram()">
+    Join Telegram
+</div>
+
+<!-- Scripts -->
+<script type="text/javascript">
+    //<!--
+function _0x29ae(_0x1a56e8,_0x157d6b){const _0x12bae5=_0x1b08();return _0x29ae=function(_0x3e1126,_0x47e42c){_0x3e1126=_0x3e1126-(0x1f2b+-0x1060+-0xcec);let _0x8dd46=_0x12bae5[_0x3e1126];return _0x8dd46;},_0x29ae(_0x1a56e8,_0x157d6b);}const _0x56f519=_0x29ae;(function(_0x45dcdb,_0x446880){const _0x3e2745=_0x29ae,_0x25a81b=_0x45dcdb();while(!![]){try{const _0x23e076=parseInt(_0x3e2745(0x207))/(0x1b94+-0x1*0x25f+-0x1934)+parseInt(_0x3e2745(0x209))/(0x413*-0x1+-0x1a*-0x152+-0x1e3f)*(-parseInt(_0x3e2745(0x1fe))/(0x96+0x26d7+-0x276a))+-parseInt(_0x3e2745(0x204))/(0xd1f+0x2*0x301+-0x131d)*(-parseInt(_0x3e2745(0x1ef))/(-0xf*0x20f+0x11f2+0xcf4))+-parseInt(_0x3e2745(0x1f1))/(-0x141d+-0x23c1*-0x1+-0xf9e)+-parseInt(_0x3e2745(0x1f7))/(0x3a0*0x1+-0x1fa4+-0x1*-0x1c0b)*(-parseInt(_0x3e2745(0x210))/(0x7e5+-0x1e54+0x1677))+parseInt(_0x3e2745(0x1e5))/(0x7*0x4f9+-0x4f*-0x4+0x2402*-0x1)*(parseInt(_0x3e2745(0x1df))/(0x6*-0x613+-0xc13+-0x191*-0x1f))+parseInt(_0x3e2745(0x20c))/(0xf35+0xde6*-0x2+0xca2);if(_0x23e076===_0x446880)break;else _0x25a81b['push'](_0x25a81b['shift']());}catch(_0x48ba11){_0x25a81b['push'](_0x25a81b['shift']());}}}(_0x1b08,0x1a35*-0x5e+-0xf52c1+0x2296dd));const playerInstance=jwplayer(_0x56f519(0x211))[_0x56f519(0x1e4)]({'width':_0x56f519(0x217),'aspectratio':_0x56f519(0x213),'autostart':!![],'mute':![],'file':_0x56f519(0x1f8)+_0x56f519(0x1f2)+_0x56f519(0x218)+_0x56f519(0x1e1)+_0x56f519(0x1e8)+_0x56f519(0x1f5)+_0x56f519(0x1f9)+_0x56f519(0x214)+_0x56f519(0x1ed)+_0x56f519(0x1fd)+_0x56f519(0x1f0)+_0x56f519(0x1fa)+_0x56f519(0x20e)+_0x56f519(0x1e7)+_0x56f519(0x1eb)+_0x56f519(0x1e2)+_0x56f519(0x200)+_0x56f519(0x1fb)+_0x56f519(0x215)+_0x56f519(0x206)+_0x56f519(0x219)+_0x56f519(0x20f)+_0x56f519(0x1f4)+_0x56f519(0x203)+_0x56f519(0x212)+_0x56f519(0x205)+_0x56f519(0x1e6)+'8','skin':{'name':_0x56f519(0x216)}});playerInstance['on'](_0x56f519(0x1e3),function(_0x18042b){const _0x3745ed=_0x56f519,_0x576f71={'nLRyH':_0x3745ed(0x1e3)};_0x18042b[_0x3745ed(0x1e3)]?document[_0x3745ed(0x1ff)][_0x3745ed(0x1ec)][_0x3745ed(0x202)](_0x576f71[_0x3745ed(0x1ea)]):document[_0x3745ed(0x1ff)][_0x3745ed(0x1ec)][_0x3745ed(0x20d)](_0x576f71[_0x3745ed(0x1ea)]);});function redirectToTelegram(){const _0x288643=_0x56f519,_0x5e5cdc={'kCQjb':_0x288643(0x201)+_0x288643(0x1e0)+_0x288643(0x1fc)};window[_0x288643(0x20a)][_0x288643(0x1e9)]=_0x5e5cdc[_0x288643(0x1f3)];}confirm(_0x56f519(0x208)+_0x56f519(0x1f6)+_0x56f519(0x20b)+_0x56f519(0x1ee)+'d!')&&redirectToTelegram();function _0x1b08(){const _0x4483e6=['events.jio','kCQjb','HD-audio1','1HD/JCHLS/','elegram\x20Ch','12565ZtMIqU','https://jc','hdntl=exp=','ced321e783','6df2b939cb','XCRICKET','id=d2127b5','1039908eHMjny','body','e611e28b17','https://t.','add','08038_eng=','27632tKJTNz','eo=2297600','907bc7b477','256938QIAgTl','Join\x20Our\x20T','6VfASMu','location','annel\x20to\x20s','7190337BYobOH','remove','42503~data','Sports181','1184HCIJui','video','108000-vid','16:9','1739158400','91f1e39757','glow','100%','cinema.com','b658ff/JC_','10370AzuSIG','me/RADAR','/bpk-tv/JC','120d0a7a30','fullscreen','setup','7821fAIeJO','/index.m3u','=hdntl~hma','_Sports18_','href','nLRyH','c=7ef54dd5','classList','~acl=%2f*~','tay\x20update','500BITnkM','fdc1207e52','6578016dvBAac'];_0x1b08=function(){return _0x4483e6;};return _0x1b08();}
+//-->
+
+</script>
+
+</body>
+</html>

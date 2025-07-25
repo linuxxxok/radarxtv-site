@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Generate Access Code</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: black;
+            color: white;
+            text-align: center;
+            padding: 50px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background: cyan;
+            color: black;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #00ffff;
+        }
+        #currentCode {
+            font-size: 20px;
+            font-weight: bold;
+            color: lime;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Admin Panel - Generate Access Code</h2>
+    <button onclick="generateCode()">Generate New Code</button>
+    <p>Current Code: <span id="currentCode">Loading...</span></p>
+
+    <script>
+        const firebaseConfig = {
+            databaseURL: "https://game-f18e0-default-rtdb.firebaseio.com/"
+        };
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        function generateCode() {
+            let newCode = "RX-" + Math.floor(1000 + Math.random() * 9000); // Random 4-digit code
+            db.ref("accessCode").set(newCode);
+        }
+
+        function fetchCurrentCode() {
+            db.ref("accessCode").on("value", (snapshot) => {
+                if (snapshot.exists()) {
+                    document.getElementById("currentCode").innerText = snapshot.val();
+                } else {
+                    document.getElementById("currentCode").innerText = "No Code Set";
+                }
+            });
+        }
+
+        fetchCurrentCode();
+    </script>
+</body>
+</html>

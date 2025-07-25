@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resizable Iframe</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        #iframeContainer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 300px; /* Initial width */
+            height: 300px; /* Initial height */
+            resize: both;
+            overflow: auto;
+            border: 2px solid black;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+<div id="iframeContainer">
+    <iframe src="https://radarxtv.site/line.html"></iframe>
+</div>
+
+</body>
+</html>

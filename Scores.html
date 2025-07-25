@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hide CREX Logo</title>
+    <style>
+        /* Iframe container */
+        .iframe-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="iframe-container">
+        <!-- CREX ka Iframe -->
+        <iframe id="crexIframe" src="https://crex.live"></iframe>
+    </div>
+
+    <script>
+        function hideCREXLogo() {
+            let iframe = document.getElementById("crexIframe");
+
+            iframe.onload = function () {
+                let iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                let logo = iframeDoc.querySelector(".headText"); // CREX ka logo class
+
+                if (logo) {
+                    logo.style.display = "none";
+                } else {
+                    console.log("CREX Logo Not Found!");
+                }
+            };
+        }
+
+        // Check iframe load hone ke baad
+        setTimeout(hideCREXLogo, 3000);
+    </script>
+
+</body>
+</html>

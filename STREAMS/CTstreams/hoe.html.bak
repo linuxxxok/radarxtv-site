@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>RadarXTV</title>
+  <!-- Shaka Player CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.0/shaka-player.compiled.js"></script>
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+    video {
+      width: 80%;
+      max-width: 800px;
+      margin: 20px auto;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <h1>PAK VS SA</h1>
+  <video id="video" controls autoplay></video>
+  
+  <script>
+    // सुनिश्चित करें कि ब्राउज़र Shaka Player सपोर्ट करता है
+    if (shaka.Player.isBrowserSupported()) {
+      // वीडियो एलिमेंट से Shaka Player instance बनाएं
+      var video = document.getElementById('video');
+      var player = new shaka.Player(video);
+
+      // एरर हैंडलिंग: किसी भी समस्या की जानकारी कंसोल में देखें
+      player.addEventListener('error', function(event) {
+        console.error('Error code', event.detail.code, 'object', event.detail);
+      });
+
+      // DRM कॉन्फ़िगरेशन
+      // कृपया 'https://your-license-server-url-here.com/license' को अपने वैध License Server URL से बदलें।
+      player.configure({
+        drm: {
+          servers: {
+            'com.widevine.alpha': 'https://your-license-server-url-here.com/license'
+            // यदि आपके पास PlayReady के लिए License Server हो तो:
+            // 'com.microsoft.playready': 'https://your-playready-license-server-url-here.com/license'
+          }
+          // अगर अतिरिक्त हेडर या सेटिंग्स की जरूरत हो तो उन्हें भी यहाँ कॉन्फ़िगर करें।
+        }
+      });
+
+      // DRM-protected HLS Manifest URL (यहाँ आपका m3u8 लिंक है)
+      var manifestUri = 'https://dai.google.com/linear/hls/event/a1jTYSV-QgqAVdSTOEbxRA/master.m3u8';
+
+      // स्ट्रीम लोड करें
+      player.load(manifestUri).then(function() {
+        console.log('वीडियो सफलतापूर्वक लोड हो गया है!');
+      }).catch(function(error) {
+        console.error('वीडियो लोड करते समय त्रुटि:', error);
+      });
+    } else {
+      console.error('यह ब्राउज़र Shaka Player सपोर्ट नहीं करता!');
+    }
+  </script>
+</body>
+</html>

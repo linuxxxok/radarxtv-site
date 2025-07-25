@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Cricket Scores</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script defer src="script.js"></script>
+    <style>
+        .match { cursor: pointer; padding: 10px; border: 1px solid #000; margin: 5px; }
+        #scorecard { display: none; padding: 10px; border: 1px solid red; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Live Cricket Scores</h1>
+    
+    <h2>Live Matches</h2>
+    <div id="live-matches"></div>
+
+    <h2>Finished Matches</h2>
+    <div id="finished-matches"></div>
+
+    <h2>Upcoming Matches</h2>
+    <div id="upcoming-matches"></div>
+
+    <div id="scorecard"></div>
+</body>
+</html>

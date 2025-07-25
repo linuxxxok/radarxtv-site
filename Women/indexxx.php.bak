@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>RadarXCricket</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0a url('burgir.gif') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 25px 12px;
+    }
+
+    .logo-container img {
+      width: 400px;
+      filter: drop-shadow(0 0 8px #00f7ff);
+      margin-bottom: 20px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 820px;
+      background: rgba(0, 0, 0, 0.55);
+      border-radius: 30px;
+      overflow: hidden;
+      box-shadow: 0 0 25px #00f7ff44;
+      backdrop-filter: blur(8px);
+      margin: 20px 0;
+      transition: 0.3s ease;
+    }
+
+    .player-container {
+      padding-top: 56.25%;
+      position: relative;
+      border-radius: 30px;
+      overflow: hidden;
+    }
+
+    iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+
+    .instructions-card {
+      background: linear-gradient(135deg, #7928CA, #FF0080);
+      padding: 24px 30px;
+      border-radius: 30px;
+      box-shadow: 0 0 24px #ae00ff88;
+      font-size: 15px;
+    }
+
+    .instructions-card ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .instructions-card li {
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 15px;
+    }
+
+    .stream-btn {
+      padding: 11px 24px;
+      font-size: 15px;
+      font-weight: 600;
+      background: transparent;
+      color: #00f7ff;
+      border: 2px solid #00f7ff;
+      border-radius: 999px;
+      cursor: pointer;
+      box-shadow: 0 0 8px #00f7ff;
+      transition: 0.25s ease;
+    }
+
+    .stream-btn:hover,
+    .stream-btn.active {
+      background: #00f7ff;
+      color: #000;
+      box-shadow: 0 0 20px #00f7ff;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 13px;
+      color: #aaa;
+      margin-top: 40px;
+    }
+
+    @media (max-width: 600px) {
+      .stream-btn {
+        font-size: 13.5px;
+        padding: 9px 20px;
+      }
+
+      .instructions-card {
+        font-size: 14px;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="logo-container">
+    <img src="https://radarxtv.site/ipl.png" alt="RadarXCricket Logo">
+  </div>
+
+  <div class="card">
+    <div class="player-container" id="playerContainer">
+      <iframe src="https://Radarxtv.site/iplonradar/sonyten1.php"
+              allowfullscreen
+              allow="encrypted-media"
+              sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-presentation">
+      </iframe>
+    </div>
+  </div>
+
+  <div class="instructions-card card">
+    <ul>
+      <li>⏳ <b>Wait 1–2 minutes</b> for stream to load fully.</li>
+      <li>▶️ Then <b>tap Play button</b> on video.</li>
+      <li>🧠 If not working, try switching stream buttons below.</li>
+    </ul>
+  </div>
+
+  <div class="button-group">
+    <button class="stream-btn active" onclick="changeStream('https://Radarxtv.site/iplonradar/sonyten1.php', this)">Sony Ten 1 HD</button>
+    
+      <button class="stream-btn" onclick="changeStream('https://Radarxtv.site/iplonradar/sky.php', this)">Sky Cricket HD</button>
+      
+        <button class="stream-btn" onclick="changeStream('https://Radarxtv.site/iplonradar/frod1.php', this)">Sony Ten 5 HD</button>
+        
+    <button class="stream-btn" onclick="changeStream('https://Radarxtv.site/iplonradar/sonyten3.php', this)">Sony Ten 3 HD</button>
+  </div>
+
+  <div class="footer">
+    ⚡ RadarXCricket | Stream Cricket Smoothly & Free ⚡
+  </div>
+
+  <script>
+    function changeStream(url, button) {
+      const container = document.getElementById('playerContainer');
+      container.innerHTML = '';
+
+      const iframe = document.createElement('iframe');
+      iframe.src = url;
+      iframe.allowFullscreen = true;
+      iframe.setAttribute('allow', 'encrypted-media');
+      iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-popups allow-presentation');
+      container.appendChild(iframe);
+
+      document.querySelectorAll('.stream-btn').forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+    }
+
+    // Telegram Join Prompt
+    window.onload = function () {
+      setTimeout(() => {
+        if (confirm("🚀 Join RadarXCricket on Telegram for Live Updates?")) {
+          window.location.href = "https://t.me/RadarXCricket";
+        }
+      }, 1300);
+    };
+  </script>
+</body>
+</html>

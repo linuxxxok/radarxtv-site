@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>UK Sky Sports Cricket</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    video {
+      width: 100%;
+      max-width: 960px;
+      background: black;
+    }
+  </style>
+</head>
+<body>
+
+<video id="video" controls muted playsinline></video>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script>
+  const video = document.getElementById('video');
+  const videoSrc = 'https://32tech0steam0dp01.org/live/UK_SkySportsCricketFHD/chunks.m3u8';
+
+  if (Hls.isSupported()) {
+    const hls = new Hls({
+      maxBufferLength: 30,
+      liveSyncDuration: 12,
+      liveMaxLatencyDuration: 20,
+      maxLiveSyncPlaybackRate: 1.0,
+      lowLatencyMode: false,
+      enableWorker: true,
+      backBufferLength: 60
+    });
+
+    hls.loadSource(videoSrc);
+    hls.attachMedia(video);
+
+    let hasSeeked = false;
+
+    hls.on(Hls.Events.LEVEL_LOADED, function (event, data) {
+      const live = data.details.live;
+      const target = data.details.fragments;
+      if (live && target.length > 0 && !hasSeeked) {
+        const lastFrag = target[target.length - 1];
+        const seekTo = lastFrag.start - 15; // 15 seconds behind live
+        if (seekTo > 0) {
+          video.currentTime = seekTo;
+          console.log('🔁 Seeking 15s behind live:', seekTo);
+          hasSeeked = true;
+        }
+      }
+    });
+
+    hls.on(Hls.Events.MEDIA_ATTACHED, () => {
+      video.play().catch(() => {
+        setTimeout(() => video.play(), 1000);
+      });
+    });
+
+    hls.on(Hls.Events.ERROR, function (event, data) {
+      console.error("❌ HLS error", data);
+    });
+
+  } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    video.src = videoSrc;
+    video.addEventListener('loadedmetadata', () => {
+      video.play();
+    });
+  } else {
+    alert('HLS not supported.');
+  }
+</script>
+
+</body>
+</html>

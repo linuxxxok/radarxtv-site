@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>RadarX Filtered Quality</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    html, body {
+      margin: 0;
+      background: #000;
+      height: 100%;
+      width: 100%;
+    }
+    #player {
+      height: 100vh;
+      width: 100vw;
+    }
+    .quality-selector-menu {
+      z-index: 99999 !important;
+    }
+  </style>
+</head>
+<body>
+  <div id="player"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@clappr/player@latest/dist/clappr.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@clappr/hlsjs-playback@latest/dist/hlsjs-playback.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/ewwink/clappr-quality-selector-plugin@latest/quality-selector.min.js"></script>
+
+  <script>
+    const player = new Clappr.Player({
+      parentId: "#player",
+      source: "https://dtvxtream.com/sonyliv2/300255.m3u8",
+      width: "100%",
+      height: "100%",
+      autoPlay: true,
+      mute: true,
+      plugins: [HlsjsPlayback, QualitySelector],
+      playback: { hlsUseNextLevel: true },
+      qualitySelectorConfig: {
+        title: 'Quality',
+        defaultQuality: -1,
+        labelCallback: (level) => `${level.height}p`,
+        sortLevels: true,
+        customFilter: function(levels) {
+          // Get highest quality
+          const highest = levels.reduce((max, lvl) => lvl.height > max.height ? lvl : max, levels[0]);
+
+          // Allowed heights
+          const allowedHeights = [480, 576, 1080, highest.height];
+          const uniqueHeights = new Set(allowedHeights);
+
+          // Filter levels based on allowed heights
+          return levels.filter(level => uniqueHeights.has(level.height));
+        }
+      }
+    });
+
+    // Lock to landscape in fullscreen
+    player.on(Clappr.Events.PLAYER_FULLSCREEN, () => {
+      if (screen.orientation?.lock) screen.orientation.lock('landscape').catch(() => {});
+    });
+  </script>
+</body>
+</html>

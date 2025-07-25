@@ -1,0 +1,682 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Live Sports Events</title>
+  <style>
+  /* Global Styles */
+* {
+  box-sizing: border-box; /* Ensures padding and borders are included in width and height */
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f7f7f7;
+}
+
+/* Header */
+.site-header {
+  position: sticky;
+  top: 0;
+  background-color: #000;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+}
+
+.site-header h1 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin: 0;
+  background: -webkit-linear-gradient(45deg, #ffffff, #2196F3);
+  background: linear-gradient(45deg, #ffffff, #2196F3);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent;
+  /* Remove text-shadow if present */
+  /* text-shadow: none; */
+}
+
+/* Event Card */
+.event {
+  /* A modern diagonal gradient background */
+  background: linear-gradient(145deg, #0a0e17, #1c1f29);
+  /* A light, semi-transparent border for a subtle definition */
+  border: 2px solid rgba(255, 51, 204, 0.5);
+  /* Increased border radius for a smoother, rounded appearance */
+  border-radius: 16px;
+  /* Generous padding for inner spacing */
+  padding: 24px 32px;
+  /* Centered with automatic left/right margins and fixed max-width */
+  margin: 20px auto;
+  max-width: 600px;
+  /* A soft shadow to lift the card off the background */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  /* Smooth transition for hover effects on multiple properties */
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  /* White text for contrast */
+  color: #fff;
+  font-family: 'Helvetica Neue', sans-serif;
+  /* Make sure any inner elements do not spill over */
+  position: relative;
+  overflow: hidden;
+}
+
+
+/* Pseudo-element to add a soft radial glow on hover */
+.event::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center, rgba(255, 51, 204, 0.15), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.event:hover::before {
+  opacity: 1;
+}
+
+/* On hover, the card slightly lifts and the background gradient changes subtly */
+.event:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  background: linear-gradient(145deg, #101428, #1d212b);
+}
+
+
+
+/* Flex Layouts */
+.row, .event-name-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 1vw 0; /* Scalable margin */
+}
+
+/* Event Name Styling */
+.event-name {
+  color: rgba(230, 243, 255, 0.9);
+  padding: 0.5vw 1vw; /* Scalable padding */
+  border: 2px solid rgba(204, 230, 255, 0.9);
+  border-radius: 4px;
+  font-size: 18px;
+  align-items: center;
+  margin-left: -0.5vw;
+  margin-top: -2vw;
+}
+
+/* Team & Time */
+.time-date, .team {
+  flex-basis: 30%;
+  text-align: center;
+}
+
+.time-date {
+  flex-direction: column;
+}
+
+.start-time {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.start-date {
+  font-size: 0.9em;
+  color: rgba(255, 204, 242, 0.4);
+}
+
+.team {
+  text-shadow: 2px 2px 4px rgba(0, 153, 255, 0.5);
+  font-weight: bold;
+  margin-top: 10px; /* Adjust the value as needed */
+}
+
+.team img {
+  width: 10vw;
+  height: 10vw;
+  border: 2px solid rgba(204, 230, 255, 0.9);
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(204, 230, 255, 0.5), 
+              0 0 6px rgba(102, 153, 255, 0.6),
+              inset 0 0 4px rgba(255, 255, 255, 0.2);
+  position: relative;
+}
+
+/* Live Status */
+.live-status-row {
+  display: flex;
+  align-items: center;
+}
+
+.live-status {
+  font-size: 18px;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  margin-right: -6px;
+  margin-top: -15px;
+}
+
+.status-upcoming {
+  color: #e6f3ff;
+  font-size: 18px;
+  animation: blink 1s infinite;
+  border: 1px solid #ffccf2;
+  text-align: center;
+  padding: 1px 2px;
+  border-radius: 4px;
+}
+
+.status-watchin { 
+  color: #ffccf2; 
+  font-size: 18px;
+}
+
+.status-live {
+  text-shadow: 2px 2px 4px rgba(0, 153, 255, 0.5);
+  font-size: 18px;
+}
+
+.status-ended {
+  color: #e6f3ff;
+  border: 1px solid #ffccf2;
+  text-align: center;
+  padding: 1px 2px;
+  border-radius: 4px;
+  font-size: 18px;
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+
+@keyframes drawLine {
+  0% { width: 0; }
+  100% { width: 100%; }
+}
+
+/* Timer */
+.start-timer {
+  font-size: 18px;
+  text-shadow: 2px 2px 4px rgba(0, 153, 255, 0.5);
+  border: 1px solid #ffccf2;
+  padding: 1px 2px;
+  border-radius: 4px;
+  font-weight: bold;
+  text-align: center;
+  margin-left: 2px;
+}
+
+/* Live Dots */
+.live-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: center;
+}
+
+.live-dots .dot {
+  width: 10px;
+  height: 10px;
+  background-color: #ff3b30;
+  border-radius: 50%;
+  animation: pulseEffect 1.5s infinite ease-in-out;
+  box-shadow: 0 0 15px rgba(255, 69, 48, 0.5);
+  transition: transform 0.3s ease;
+}
+
+.live-dots .dot:nth-child(1) { animation-delay: 0s; }
+.live-dots .dot:nth-child(2) { animation-delay: 0.3s; }
+.live-dots .dot:nth-child(3) { animation-delay: 0.6s; }
+
+@keyframes pulseEffect {
+  0%, 100% { transform: scale(1); opacity: 0.8; box-shadow: 0 0 10px rgba(255, 69, 48, 0.3); }
+  50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 25px rgba(255, 69, 48, 0.7); }
+}
+
+.live-dots .dot:hover {
+  transform: scale(1.3);
+  box-shadow: 0 0 25px rgba(255, 69, 48, 0.8);
+}
+
+/* Event Category */
+.category-row {
+  justify-content: center;
+  margin-top: 10px;
+  color: #555;
+}
+
+.event-category {
+  font-size: 15px;
+  color: #fff;
+  background-color: rgba(255, 51, 204, 0.5);
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  padding: 4px 5px;
+  text-align: center;
+  position: relative;
+  top: 40px;
+  overflow: hidden; /* Prevent overflow */
+  max-width: 100%; /* Ensure it stays within the container width */
+  word-wrap: break-word; /* Handle long text properly */
+}
+
+/* Watch Live Button (3D style) */
+.watch-live-btn {
+  background: linear-gradient(45deg, #ff0000, #ff4500);
+  color: white;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(255, 69, 0, 0.4);
+  transition: all 0.3s ease;
+  transform-style: preserve-3d;
+  position: relative;
+  overflow: hidden;
+  margin: -35px auto 5px;
+}
+
+.watch-live-btn:hover {
+  transform: translateY(-2px) rotateX(15deg);
+  box-shadow: 0 6px 20px rgba(255, 193, 7, 0.6); /* Yellow-dark box shadow */
+  background: linear-gradient(45deg, #ffc107, #ff9800); /* Yellow-dark mix gradient */
+  color: black;
+}
+
+.watch-live-btn::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: rotate(45deg);
+  animation: shine 3s infinite;
+}
+
+@keyframes shine {
+  0% { left: -50%; }
+  100% { left: 150%; }
+}
+.watch-live-btn:active { transform: scale(0.95); }
+
+/* Modal Styling */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 10000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  background-color: rgba(0, 0, 0, 0.9);
+  animation: fadeIn 0.4s ease-in-out;
+  backdrop-filter: blur(10px);
+}
+
+.modal-content {
+  background: #0a0e17;
+  margin: 10% auto;
+  padding: 30px;
+  position: relative;
+  width: 90%;
+  max-width: 450px;
+  border-radius: 16px;
+  animation: popup 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  text-align: center;
+  color: #fff;
+  font-family: 'Arial', sans-serif;
+  box-shadow: 0 0 40px rgba(0, 119, 255, 0.2);
+}
+
+/* Enhanced Gradient Border */
+.modal-content::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(
+    45deg,
+    #ffffff 0%,
+    #4aa9ff 30%,
+    #00ffff 70%,
+    #ffffff 100%
+  );
+  border-radius: 18px;
+  z-index: -1;
+  filter: drop-shadow(0 0 20px rgba(74, 169, 255, 0.5));
+}
+
+/* Close Button Style */
+.close {
+  color: #4aa9ff;
+  float: right;
+  font-size: 32px;
+  font-weight: 300;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  line-height: 1;
+  text-shadow: 0 0 15px rgba(74, 169, 255, 0.5);
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: linear-gradient(45deg, #fff, #4aa9ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.close:hover,
+.close:focus {
+  transform: rotate(90deg) scale(1.2);
+  opacity: 1;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+#currentEventName {
+  font-size: 24px;
+  font-weight: bold;
+  color: #4aa9ff;
+  text-align: center;
+  margin-bottom: 20px;
+  border-bottom: 2px solid rgba(74, 169, 255, 0.5);
+  padding-bottom: 10px;
+}
+
+.stream-button {
+  background: transparent;
+  border: 2px solid #0084ff;
+  color: #0084ff;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 10px 0;
+  width: 100%;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.stream-button:hover {
+  background: #80c1ff;
+  color: #fff;
+  box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+}
+
+/* Smooth transitions for better feedback */
+.stream-button:active {
+  transform: translateY(2px);
+  box-shadow: none;
+}
+
+
+/* Mobile Styles */
+@media (max-width: 650px) {
+  .event {
+    margin: 20px 10px;
+    padding: 15px;
+  }
+  .site-header h1 { font-size: 24px; }
+}
+
+@media (max-width: 480px) {
+  .event { padding: 14px 11px; }
+  .site-header h1 { font-size: 20px; }
+  .team img { width: 60px; height: 60px; }
+  .start-time { font-size: 1em; }
+  .start-date { font-size: 0.8em; }
+  .status-live { font-size: 15px; }
+  .start-timer { font-size: 12px; }
+  .status-upcoming { font-size: 12px; }
+  .status-ended { font-size: 12px; }
+  .status-watchin { font-size: 12px; }
+  #currentEventName { font-size: 20px; }
+  .event-category { font-size: 12px; padding: 2px 3px; }
+}
+
+@media screen and (max-width: 600px) {
+  .watch-live-btn {
+    padding: 6px 15px;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 25px;
+  }
+  .event-category {
+    top: 19px;
+  }
+
+  .team {
+    font-size: 12px;
+    font-weight: normal;
+    gap: 5px;
+  }
+
+  .start-time {
+    font-size: 15px
+  }
+
+  .event-name {
+    font-size: 12px
+  }
+ .team img {
+    top: 5px;
+ }
+}
+
+@media (min-width: 1024px) {
+  .event {
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-top: 20px;   
+  }
+
+  .watch-live-btn {
+    padding: 8px 17px;
+    font-size: 18px;
+    border-radius: 25px;
+  }
+}
+
+  </style>
+  <script>
+  (function() {
+    // Function to determine if dev tools are open based on window dimensions.
+    function isInspectToolOpen() {
+      // Only perform the check if the document is visible and focused.
+      if (!document.hasFocus() || document.visibilityState !== 'visible') {
+        return false;
+      }
+      // Calculate differences between outer and inner window dimensions.
+      const widthDifference = window.outerWidth - window.innerWidth;
+      const heightDifference = window.outerHeight - window.innerHeight;
+      // If either difference exceeds the threshold, assume dev tools are open.
+      const threshold = 160; // You can adjust this value if needed.
+      return (widthDifference > threshold) || (heightDifference > threshold);
+    }
+
+    // Check every second (1000ms) if the inspect tool is open.
+    setInterval(function() {
+      if (isInspectToolOpen()) {
+        // Redirect to Telegram if an inspect tool is detected.
+        window.location.href = 'https://t.me/RadarXCricket';
+        // Alternatively, you can also use:
+        // window.location.replace('https://t.me/RadarXCricket');
+      }
+    }, 1000);
+  })();
+</script>
+</head>
+<body>
+  <header class="site-header">
+    <h1>Live Sports Events</h1>
+  </header>
+  
+<div class="event">
+  <div class="row event-name-row">
+    <span class="event-name">ICC Champions Trophy 🏆</span>
+    <div class="row live-status-row">
+      <span class="live-status">
+        <span class="status-upcoming">Upcoming</span>
+      </span>
+    </div>
+  </div>
+  <div class="row logos-row">
+    <div class="team team-a-logo">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcHyc-VVyUGhYBiO3OJ_3byZGsCexX0deN9g&s" alt="INDIA">
+    </div>
+    <div class="time-date">
+      <div class="start-time">2:00 PM</div>
+      <div class="start-date">09-03-2025</div>
+    </div>
+    <div class="team team-b-logo">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYWE3moiGeccdPsAWloSbA0n4n39W_xYS8bzaXzGBVDk73Ax2wFX6wb4dJ&s=10" alt="NEW ZEALAND">
+    </div>
+  </div>
+  <div class="row names-row">
+    <div class="team team-a-name">INDIA</div>
+    <div class="team team-b-name">NEW ZEALAND</div>
+  </div>
+</div>
+
+<div class="event">
+  <div class="row event-name-row">
+    <span class="event-name">🏏 Women's Premier League</span>
+    <div class="row live-status-row">
+      <span class="live-status">
+              <span class="status-upcoming">Upcoming</span>
+      <span class="status-live">
+          <div class="live-dots"><span class="dot"></span>LIVE</div>
+        </span>
+      </span>
+    </div>
+  </div>
+  <div class="row logos-row">
+    <div class="team team-a-logo">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQo86jkptukY4X9Smutkly_ksRLICbgHsgs9cycEzjBq6ZaZy8V83w0JhwT&s=10" alt="WPL">
+    </div>
+    <div class="time-date">
+      <div class="start-time">7:30 PM</div>
+      <div class="start-date">08-03-2025</div>
+    </div>
+    <div class="team team-b-logo">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQo86jkptukY4X9Smutkly_ksRLICbgHsgs9cycEzjBq6ZaZy8V83w0JhwT&s=10" alt="WPL">
+    </div>
+  </div>
+  <div class="row names-row">
+    <div class="team team-a-name">UP WARRIORS</div>
+    <div class="team team-b-name">ROYAL CHALLENGERS</div>
+  </div>
+  <div class="row watch-live-row">
+    <button class="watch-live-btn" onclick="openStreamPopup(this)" data-streams='[{"name":"WILLOW SPORTS ","url":"https://radarxtv.site/streams/streams/willow.php"},{"name":"WILLOW SPORTS 2","url":"https://radarxtv.site/streams/streams/Ropig/"}]' data-event="🏏 Women's Premier League">
+      Watch Live
+    </button>
+  </div>
+  <div class="row category-row">
+    <span class="event-category">T20 LEAGUE</span>
+  </div>
+</div>
+
+<!-- Modal for Stream Popup -->
+<div id="streamModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeStreamModal()">&times;</span>
+    <h3 id="currentEventName"></h3>
+    <div id="streamButtonsContainer"></div>
+  </div>
+</div>
+  <script>
+  function startCountdown(eventStartISO, elementId) {
+    const countdownEl = document.getElementById(elementId);
+    function updateCountdown() {
+      const now = new Date();
+      const eventTime = new Date(eventStartISO);
+      const diffInSeconds = Math.floor((eventTime - now) / 1000);
+      if (diffInSeconds <= 0) {
+        countdownEl.textContent = "00h:00m:00s";
+        clearInterval(interval);
+        return;
+      }
+      const hours = Math.floor(diffInSeconds / 3600);
+      const minutes = Math.floor((diffInSeconds % 3600) / 60);
+      const seconds = diffInSeconds % 60;
+      countdownEl.textContent =
+        String(hours).padStart(2, '0') + 'h:' +
+        String(minutes).padStart(2, '0') + 'm:' +
+        String(seconds).padStart(2, '0') + 's';
+    }
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
+  }
+  
+  document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll('.start-timer').forEach(function(timerEl) {
+      const eventStartISO = timerEl.getAttribute('data-event-start');
+      startCountdown(eventStartISO, timerEl.id);
+    });
+  });
+  
+  function openStreamPopup(button) {
+    var streamsData = button.getAttribute('data-streams');
+    var eventName = button.getAttribute('data-event');
+    if (!streamsData) {
+      alert('No stream details available.');
+      return;
+    }
+    var streams = JSON.parse(streamsData);
+    var container = document.getElementById('streamButtonsContainer');
+    container.innerHTML = '';
+    // Set the current event name at the top of the modal
+    document.getElementById('currentEventName').textContent = eventName;
+    streams.forEach(stream => {
+      var btn = document.createElement('button');
+      btn.className = 'stream-button';
+      btn.textContent = stream.name;
+      btn.onclick = function() { selectStream(stream.url, btn); };
+      container.appendChild(btn);
+    });
+    document.getElementById('streamModal').style.display = 'block';
+  }
+  
+  function closeStreamModal() {
+    document.getElementById('streamModal').style.display = 'none';
+  }
+  
+  function selectStream(streamUrl, button) {
+    document.querySelectorAll('.stream-button').forEach(btn => btn.classList.remove('selected'));
+    button.classList.add('selected');
+    window.open(streamUrl, '_blank');
+    closeStreamModal();
+  }
+  
+  window.onclick = function(event) {
+    var modal = document.getElementById('streamModal');
+    if (event.target == modal) { closeStreamModal(); }
+  }
+  </script>
+</body>
+</html>

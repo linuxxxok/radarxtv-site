@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hide CREX Logo</title>
+    <style>
+        /* Iframe container */
+        .iframe-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* CREX Logo Overlay */
+        .iframe-overlay {
+            position: absolute;
+            top: 4%;
+            left: 2%;
+            width: 120px; /* Fixed size so that it works on PC & Mobile */
+            height: 40px; /* Adjust as per logo size */
+            background: white;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 768px) {
+            .iframe-overlay {
+                top: 5%;
+                left: 5%;
+                width: 100px; /* Mobile ke liye chhota size */
+                height: 35px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="iframe-container">
+        <!-- CREX ka Iframe -->
+        <iframe src="https://crex.live"></iframe>
+
+        <!-- Yeh div CREX ka logo overlay karega -->
+        <div class="iframe-overlay"></div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cricket Ball Loader</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Dark Theme Background */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #121212;
+            overflow: hidden;
+        }
+
+        /* Preloader Full-Screen */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        /* Cricket Ball with Glowing Effect */
+        .ball {
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle at 30% 30%, #d32f2f, #8b0000);
+            border-radius: 50%;
+            position: relative;
+            animation: spinBall 0.8s linear infinite;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+        }
+
+        /* Ball's seam (glowing effect) */
+        .ball::before {
+            content: "";
+            position: absolute;
+            width: 10px;
+            height: 100%;
+            background: linear-gradient(to right, white, rgba(255, 255, 255, 0.6));
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+        }
+
+        /* Spinning Animation */
+        @keyframes spinBall {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Hide Main Content Initially */
+        #main-content {
+            display: none;
+            text-align: center;
+            color: white;
+        }
+
+        /* Fade-in animation for main content */
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="ball"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content">
+        <h1 class="fade-in">🏏 Welcome to RADARxTV</h1>
+        <p class="fade-in">Live Cricket, Fun Facts & More!</p>
+    </div>
+
+    <script>
+        // Hide preloader after 5 seconds and show main content with fade-in
+        setTimeout(() => {
+            document.getElementById("preloader").style.opacity = "0";
+            setTimeout(() => {
+                document.getElementById("preloader").style.display = "none";
+                document.getElementById("main-content").style.display = "block";
+            }, 800);
+        }, 5000);
+    </script>
+
+</body>
+</html>

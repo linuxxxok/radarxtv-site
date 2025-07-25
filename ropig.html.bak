@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shaka Player - M3U8 Stream</title>
+
+    <!-- Shaka Player Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.6/shaka-player.compiled.min.js"></script>
+
+    <style>
+        body {
+            text-align: center;
+            background: #111;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        video {
+            width: 80%;
+            max-width: 800px;
+            margin: 20px auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Live Stream</h2>
+    <video id="video" controls autoplay></video>
+
+    <script>
+        async function initPlayer() {
+            const video = document.getElementById('video');
+            const manifestUri = "https://jcevents.jiocinema.com/bpk-tv/JC_Sports18_1HD/JCHLS/hdntl=exp=1738911177~acl=%2f*~id=aaf549ec51984c86b32dd7de3e1334c7~data=hdntl~hmac=303742a446e007921463b30230ce8cd68092f50a5cfad55ba6700db15bb90f56/index.m3u8";
+
+            if (shaka.Player.isBrowserSupported()) {
+                const player = new shaka.Player(video);
+                
+                player.addEventListener('error', event => console.error('Error code', event.detail.code));
+
+                try {
+                    await player.load(manifestUri);
+                    console.log('The video has been loaded successfully!');
+                } catch (error) {
+                    console.error('Error loading video:', error);
+                }
+            } else {
+                console.error('Shaka Player is not supported in this browser.');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', initPlayer);
+    </script>
+
+</body>
+</html>

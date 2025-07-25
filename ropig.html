@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HLS Player - CORS Fixed</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+</head>
+<body>
+    <h2>Live Stream (CORS Fixed)</h2>
+    <video id="video" controls autoplay style="width: 100%; max-width: 800px;"></video>
+
+    <script>
+        var video = document.getElementById('video');
+        var videoSrc = "https://corsproxy.io/?" + encodeURIComponent("https://jcevents.jiocinema.com/bpk-tv/JC_Sports18_1HD/JCHLS/hdntl=exp=1738911177~acl=%2f*~id=aaf549ec51984c86b32dd7de3e1334c7~data=hdntl~hmac=303742a446e007921463b30230ce8cd68092f50a5cfad55ba6700db15bb90f56/index.m3u8");
+
+        if (Hls.isSupported()) {
+            var hls = new Hls();
+            hls.loadSource(videoSrc);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                video.play();
+            });
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = videoSrc;
+            video.addEventListener('loadedmetadata', function() {
+                video.play();
+            });
+        } else {
+            alert("Your browser does not support HLS playback.");
+        }
+    </script>
+</body>
+</html>

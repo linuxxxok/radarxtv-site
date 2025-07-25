@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Messages Table</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h2>📊 Telegram Messages Table</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Sender ID</th>
+                <th>Message</th>
+                <th>Timestamp</th>
+            </tr>
+        </thead>
+        <tbody id="messagesTable"></tbody>
+    </table>
+
+    <script>
+        // 🔹 Firebase Config
+        const firebaseConfig = {
+            databaseURL: "https://radarxtvscores-default-rtdb.firebaseio.com/"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const dbRef = firebase.database().ref("telegram_messages");
+
+        dbRef.on("child_added", (snapshot) => {
+            let message = snapshot.val();
+            let row = document.createElement("tr");
+
+            let senderCell = document.createElement("td");
+            senderCell.innerText = message.sender_id;
+            row.appendChild(senderCell);
+
+            let textCell = document.createElement("td");
+            textCell.innerText = message.text;
+            row.appendChild(textCell);
+
+            let timeCell = document.createElement("td");
+            let date = new Date(message.timestamp * 1000);
+            timeCell.innerText = date.toLocaleString();
+            row.appendChild(timeCell);
+
+            document.getElementById("messagesTable").appendChild(row);
+        });
+    </script>
+</body>
+</html>

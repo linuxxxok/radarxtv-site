@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TNPL Player - Smooth Playback</title>
+  <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      height: 100%;
+      overflow: hidden;
+    }
+    video {
+      width: 100vw;
+      height: 100vh;
+      background: black;
+    }
+  </style>
+</head>
+<body>
+
+<video id="player" controls playsinline autoplay></video>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.12"></script>
+<script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.min.js"></script>
+<script>
+  const video = document.getElementById('player');
+  const source = 'https://dai.fancode.com/primary/126542_english_hls_91519ta-di_h264/index.m3u8';
+
+  if (Hls.isSupported()) {
+    const hls = new Hls({
+      maxBufferLength: 30,
+      maxMaxBufferLength: 60,
+      liveSyncDurationCount: 3,
+      enableWorker: true
+    });
+
+    hls.loadSource(source);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED, function () {
+      video.play();
+    });
+  } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    video.src = source;
+    video.addEventListener('loadedmetadata', function () {
+      video.play();
+    });
+  }
+
+  const player = new Plyr(video, {
+    controls: ['play', 'progress', 'mute', 'volume', 'fullscreen'],
+    ratio: '16:9'
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,81 @@
+// 🔥 Firebase Config (Apna Database URL Yahan Daalo)
+var firebaseConfig = {
+    databaseURL: "https://radarxtvscores-default-rtdb.firebaseio.com/"  // Apna Firebase Realtime Database URL
+};
+firebase.initializeApp(firebaseConfig);
+var db = firebase.database();
+
+// 🎯 HTML Elements
+const liveMatchesDiv = document.getElementById("live-matches");
+const finishedMatchesDiv = document.getElementById("finished-matches");
+const upcomingMatchesDiv = document.getElementById("upcoming-matches");
+const scorecardDiv = document.getElementById("scorecard");
+
+// ⏳ Matches Fetch Karna Firebase Se
+function fetchMatches() {
+    db.ref("matches").once("value", (snapshot) => {
+        if (!snapshot.exists()) {
+            console.log("No data available");
+            return;
+        }
+
+        const matches = snapshot.val();
+        liveMatchesDiv.innerHTML = "";
+        finishedMatchesDiv.innerHTML = "";
+        upcomingMatchesDiv.innerHTML = "";
+
+        Object.keys(matches).forEach((matchId) => {
+            const match = matches[matchId];
+            const matchElement = document.createElement("div");
+            matchElement.classList.add("match");
+            matchElement.setAttribute("data-match-id", matchId);  // Unique ID for Click
+
+            matchElement.innerHTML = `
+                <h3>${match.team1} vs ${match.team2}</h3>
+                <p>${match.status}</p>
+                <p>${match.score}</p>
+            `;
+
+            matchElement.addEventListener("click", function () {
+                showScorecard(matchId);
+            });
+
+            if (match.status.includes("Live")) {
+                liveMatchesDiv.appendChild(matchElement);
+            } else if (match.status.includes("Finished")) {
+                finishedMatchesDiv.appendChild(matchElement);
+            } else {
+                upcomingMatchesDiv.appendChild(matchElement);
+            }
+        });
+    });
+}
+
+// 📌 Scorecard Fetch Karna
+function showScorecard(matchId) {
+    db.ref(`matches/${matchId}/scorecard`).once("value", (snapshot) => {
+        if (!snapshot.exists()) {
+            scorecardDiv.innerHTML = "<p>Scorecard not available</p>";
+            return;
+        }
+
+        const scorecard = snapshot.val();
+        let scoreHTML = `<h2>Scorecard: ${scorecard.team1} vs ${scorecard.team2}</h2>`;
+        scoreHTML += `<p><strong>${scorecard.team1} Score:</strong> ${scorecard.team1_score}</p>`;
+        scoreHTML += `<p><strong>${scorecard.team2} Score:</strong> ${scorecard.team2_score}</p>`;
+        scoreHTML += `<h3>Batting:</h3>`;
+
+        if (scorecard.batting) {
+            Object.values(scorecard.batting).forEach(player => {
+                scoreHTML += `<p>${player.name} - ${player.runs} Runs (${player.balls} Balls)</p>`;
+            });
+        }
+
+        scorecardDiv.innerHTML = scoreHTML;
+        scorecardDiv.style.display = "block";
+    });
+}
+
+// 🔄 Auto Refresh Data Har 30 Sec Me
+fetchMatches();
+setInterval(fetchMatches, 30000);

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Cricket Scores</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        h2 { cursor: pointer; color: blue; }
+        .match-card { border: 1px solid #ddd; padding: 10px; margin: 10px 0; cursor: pointer; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <h1>Live Cricket Scores</h1>
+    <h2 onclick="toggleMatches('live')">Live Matches</h2>
+    <div id="live-matches"></div>
+
+    <h2 onclick="toggleMatches('finished')">Finished Matches</h2>
+    <div id="finished-matches" class="hidden"></div>
+
+    <h2 onclick="toggleMatches('upcoming')">Upcoming Matches</h2>
+    <div id="upcoming-matches" class="hidden"></div>
+
+    <div id="scorecard" class="hidden"></div>
+
+    <script>
+        // 🔥 Firebase Config
+        var firebaseConfig = {
+            databaseURL: "https://radarxtvscores-default-rtdb.firebaseio.com/"
+        };
+        firebase.initializeApp(firebaseConfig);
+        var dbRef = firebase.database().ref("matches");
+
+        // 🎯 Fetch Matches & Update UI
+        function fetchMatches() {
+            dbRef.once("value", (snapshot) => {
+                let data = snapshot.val();
+                console.log("Fetched Data:", data);
+                displayMatches(data);
+            });
+        }
+
+        // 🏏 Display Matches
+        function displayMatches(matches) {
+            let liveContainer = document.getElementById("live-matches");
+            let finishedContainer = document.getElementById("finished-matches");
+            let upcomingContainer = document.getElementById("upcoming-matches");
+
+            liveContainer.innerHTML = "";
+            finishedContainer.innerHTML = "";
+            upcomingContainer.innerHTML = "";
+
+            for (let id in matches) {
+                let match = matches[id];
+                let matchDiv = document.createElement("div");
+                matchDiv.classList.add("match-card");
+                matchDiv.innerHTML = `
+                    <strong>${match.team1} vs ${match.team2}</strong><br>
+                    <small>${match.status}</small>
+                `;
+                matchDiv.onclick = () => showScorecard(match);
+
+                if (match.status === "Live") {
+                    liveContainer.appendChild(matchDiv);
+                } else if (match.status === "Finished") {
+                    finishedContainer.appendChild(matchDiv);
+                } else {
+                    upcomingContainer.appendChild(matchDiv);
+                }
+            }
+        }
+
+        // 📊 Show Scorecard
+        function showScorecard(match) {
+            let scorecard = document.getElementById("scorecard");
+            scorecard.innerHTML = `
+                <h2>${match.team1} vs ${match.team2}</h2>
+                <p>Status: ${match.status}</p>
+                <p><strong>${match.team1} Score:</strong> ${match.score1 || "N/A"}</p>
+                <p><strong>${match.team2} Score:</strong> ${match.score2 || "N/A"}</p>
+                <h3>Scorecard:</h3>
+                <pre>${match.scorecard ? JSON.stringify(match.scorecard, null, 2) : "No Data"}</pre>
+            `;
+            scorecard.classList.remove("hidden");
+        }
+
+        // 🔄 Toggle Matches View
+        function toggleMatches(type) {
+            let sections = { live: "live-matches", finished: "finished-matches", upcoming: "upcoming-matches" };
+            let div = document.getElementById(sections[type]);
+            div.classList.toggle("hidden");
+        }
+
+        // 🔄 Auto Update Every 30 Seconds
+        setInterval(fetchMatches, 30000);
+
+        // 📡 Initial Fetch
+        fetchMatches();
+    </script>
+
+</body>
+</html>

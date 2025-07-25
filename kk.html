@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Stream</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        body { text-align: center; background-color: #000; color: white; }
+        video { width: 80%; max-width: 800px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <h2>Live Stream</h2>
+    <video id="video" controls autoplay></video>
+
+    <script>
+        var video = document.getElementById('video');
+        var videoSrc = "https://amg01269-amg01269c1-willowtv-us-5479.playouts.now.amagi.tv/playlist/amg01269-willowtvfast-willowplus-willowtvus/cb7c3e1a7b736f8a93ca3f6cd5f612a3d1056284033a87356daf5e9f21934953d0b8a7c4e742e76e7e332ea33e40340d0136d41cc07c11dfa223f6147c7707119188c3258ddb4d50e6c80e2921a32f405aee7a6bd224532399cb0f018939fa5d2b41b9593f6963dc822fb37356dc907bcb3f75deca883342241e409a5e5afba358b3e79a2521a510bda14011ce7a5590d711928b05abe68119dd1ad928ee108392e0f88b52dddbc47ca856b27a59167233c9c0549ccb54badfda5a389a703a4f5100b5f4ddad187ec246450ffca6cfbc37b216cf8c75cc3166be06d516dd66da26f35ffeb24da6fceedb11426d96ee310e4f363a8df0991c1dff03d2acedd4720ef69c765974b9a65cbf4942f4dcd81d85b975dcd671c7dc6d6ca55684c567fce6a3967a1cf8b127eaf4d4d251635d6a054dad52ae916ccf28e7a8c9a4ef4071425ea49659c5c98c10602207aa8950c10b40f9eed0c3fe003fd86f125ea8318a004569c26f2c58cb7fa8ca6d2cab3303893172df7667d112ad877da498fdab536ffc9ee652ef63ea820fd0dd0bbd22690a55fda17a1f0d6755e4c34a417075ca4ee193ede474020fa5b7fbfbd240310837580642dba2c4788981cd2c5247900368303a4059c644fb66dd0945056efa1fd5ad1b7dca53727aa8f4692f3706f1e9bf8595d9c340c71d829c875925580837ec2b64c60f777e50849b324d4741f43203dac22427cca028d172/141/1280x720_3000140/index.m3u8";
+
+        if (Hls.isSupported()) {
+            var hls = new Hls();
+            hls.loadSource(videoSrc);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                video.play();
+            });
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = videoSrc;
+            video.addEventListener('loadedmetadata', function() {
+                video.play();
+            });
+        }
+    </script>
+
+</body>
+</html>

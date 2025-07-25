@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>RadarXTV IPL LIVE</title>
+  <style>
+    body {
+      background: #121212;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 20px 20px 0;
+      color: #fff;
+    }
+
+    .radar-banner {
+      background: linear-gradient(45deg, #00f0ff, #ff00c8, #00ff99);
+      background-size: 600% 600%;
+      animation: animateBanner 10s ease infinite;
+      padding: 15px 20px;
+      border-radius: 15px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 20px;
+      color: #000;
+      box-shadow: 0 0 20px #00ffcc;
+      text-shadow: 0 0 10px #fff;
+    }
+
+    @keyframes animateBanner {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+
+    .stream-container {
+      width: 100%;
+      max-width: 1000px;
+      margin: auto;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(0,255,153,0.2);
+    }
+
+iframe {
+  width: 100%;
+  height: 580px;
+  min-height: 500px;
+  max-height: 600px;
+  border: none;
+}
+    .loading-alert {
+      margin-top: 15px;
+      text-align: center;
+      color: #ffcc00;
+      font-size: 16px;
+      font-weight: bold;
+      animation: blink 1.5s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% {opacity: 1;}
+      50% {opacity: 0.4;}
+    }
+
+    .fullscreen-button {
+      margin: 15px auto 20px;
+      display: block;
+      padding: 12px 25px;
+      background: #00ff99;
+      color: #000;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+      box-shadow: 0 0 10px #00ffcc;
+    }
+
+    .fullscreen-button:hover {
+      background: #00e68a;
+      transform: scale(1.05);
+    }
+
+    .channel-list {
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 400px;
+      margin: 20px auto;
+    }
+
+    .channel-option {
+      background: #2a2a2a;
+      padding: 15px 20px;
+      border-radius: 12px;
+      position: relative;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .channel-option::after {
+      content: "";
+      width: 14px;
+      height: 14px;
+      border: 2px solid #aaa;
+      border-radius: 50%;
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      transition: background 0.3s, border 0.3s;
+    }
+
+    .channel-option.selected {
+      background: #3a3a3a;
+      transform: scale(1.02);
+    }
+
+    .channel-option.selected::after {
+      background: #00ff99;
+      border-color: #00ff99;
+    }
+
+    .channel-option:hover {
+      background: #353535;
+    }
+  </style>
+</head>
+<body>
+
+<div class="radar-banner" onclick="window.open('https://t.me/RadarXCricket', '_blank')">
+  RadarXTV - Join RadarXCricket Telegram!
+</div>
+
+<div class="stream-container">
+  <iframe id="streamFrame" src="willowx" allowfullscreen></iframe>
+</div>
+
+<!-- Alert Message -->
+<div class="loading-alert">
+  KINDLY ALLOW US 2 MINUTES FOR LOADING & PLAYING STREAMS
+</div>
+
+<!-- Fullscreen Button -->
+<button class="fullscreen-button" onclick="goFullscreen()">
+  Go Fullscreen
+</button>
+
+<div class="channel-list">
+  <div class="channel-option selected" data-src="willowx">WILLOW HD (Main)</div>
+    <div class="channel-option" data-src="tsports">Tsports (BD)</div>
+  <div class="channel-option" data-src="Chut.php">Overseas HD Channels</div>
+ <!-- <div class="channel-option" data-src="willow">Willow Cricket (US)</div>
+  <div class="channel-option" data-src="skynz">Sky NZ (New Zealand)</div>
+  <div class="channel-option" data-src="fox">Fox Cricket (Australia)</div>
+  <div class="channel-option" data-src="willowhindi">Willow Hindi (US Hindi)</div>
+  <div class="channel-option" data-src="astro">Astro Cricket (Malaysia)</div>
+  <div class="channel-option" data-src="supersports">Starzplay Sports (UAE)</div>
+  <div class="channel-option" data-src="skymain">Sky Main Events</div>-->
+</div>
+
+<script>
+  const options = document.querySelectorAll('.channel-option');
+  const streamFrame = document.getElementById('streamFrame');
+
+  options.forEach(option => {
+    option.addEventListener('click', () => {
+      options.forEach(o => o.classList.remove('selected'));
+      option.classList.add('selected');
+      const newSrc = option.getAttribute('data-src');
+      streamFrame.src = newSrc;
+    });
+  });
+
+  function goFullscreen() {
+    const iframe = document.getElementById('streamFrame');
+    if (iframe.requestFullscreen) {
+      iframe.requestFullscreen();
+    } else if (iframe.mozRequestFullScreen) { /* Firefox */
+      iframe.mozRequestFullScreen();
+    } else if (iframe.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+      iframe.webkitRequestFullscreen();
+    } else if (iframe.msRequestFullscreen) { /* IE/Edge */
+      iframe.msRequestFullscreen();
+    }
+  }
+</script>
+
+</body>
+</html>

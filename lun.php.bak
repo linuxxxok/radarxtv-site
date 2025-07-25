@@ -1,0 +1,163 @@
+<?php
+// Redirect to maintenance page if enabled
+if (file_exists($_SERVER['DOCUMENT_ROOT'] . '/maintenance.txt')) {
+    header("Location: https://radarxtv.site/maintenance.html");
+    exit();
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radar Hindi - Live Streaming</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/3.0.3/shaka-player.compiled.js"></script>
+    <style>
+        /* Global styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            overflow: hidden;
+            padding: 0 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            height: 70vh;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 10px;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: white;
+            text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.4);
+        }
+
+        .footer a {
+            color: #00bfff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .footer a:hover {
+            color: #00e5ff;
+        }
+
+        /* Landscape mode styles */
+        @media (orientation: landscape) {
+            body {
+                background: #333;
+                justify-content: flex-start;
+            }
+
+            .container {
+                height: 50vh;
+                width: 80%;
+                margin-top: 20px;
+            }
+        }
+
+        /* Popup Styles */
+        #popup {
+            display: none;
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        #popup p {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        #popup button {
+            background-color: #00bfff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        #popup button:hover {
+            background-color: #00e5ff;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Popup Modal -->
+    <div id="popup">
+        <p>Join our Telegram channel for updates on RadarXCricket?</p>
+        <button onclick="window.location.href='https://t.me/RadarXCricket';">Join</button>
+        <button onclick="closePopup();">Cancel</button>
+    </div>
+
+    <div class="container">
+        <iframe src="http://tv4wap.tiiny.io/sportstv.php?c=starhindi" allow="autoplay; fullscreen" style="width: 100%; height: 100%; border: none;" allowfullscreen></iframe>
+    </div>
+
+    <div class="footer">
+        <p>For more updates, follow us on <a href="https://t.me/RadarXCricket" target="_blank">Telegram</a></p>
+    </div>
+
+    <script>
+        // Show the popup after the page loads
+        window.onload = function() {
+            setTimeout(function() {
+                document.getElementById('popup').style.display = 'block';
+            }, 1000); // 1 second delay before showing popup
+        };
+
+        // Close the popup
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+
+        // Detect landscape mode and show message
+        window.addEventListener('orientationchange', function() {
+            if (window.innerHeight < window.innerWidth) {
+                alert('You are in Landscape mode. The page will adjust accordingly.');
+            }
+        });
+    </script>
+
+</body>
+</html>

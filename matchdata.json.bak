@@ -1,0 +1,49 @@
+{
+  "matches": [
+    {
+      "id": "eng-ind-test",
+      "team1": "ENG",
+      "team2": "IND",
+      "title": "England vs India",
+      "description": "Experience the ultimate cricket showdown between England and India with HD streaming, real-time commentary, and zero buffering.",
+      "tournament": "Live Cricket Match", 
+      "format": "TEST",
+      "quality": "4K",
+      "language": "Multi",
+      "theme": "blue",
+      "matchTime": "2025-07-23T14:40:00",
+      "image": "https://radarxtv.site/paani.jpg",
+      "streamUrl": "https://radarxtv.site/EngVsIndT4"
+    },
+        {
+      "id": "zim-nz",
+      "team1": "ZIM",
+      "team2": "NZ",
+      "title": "Zimbabwe Vs Newzealand",
+      "description": "Experience the ultimate cricket showdown between Zimbabwe and Newzealand with HD streaming, real-time commentary, and zero buffering.",
+      "tournament": "ZIMBABWE T20 TRI-SERIES", 
+      "format": "T20",
+      "quality": "4K",
+      "language": "English",
+      "theme": "purple",
+      "matchTime": "2025-07-24T16:30:00",
+      "image": "https://radarxtv.site/zim.jpg",
+      "streamUrl": "https://radarxtv.site/TRI-SERIES"
+    },
+       {
+      "id": "wcl-2025",
+      "team1": "ENGCH",
+      "team2": "SACH",
+      "title": "England Champions Vs South Africa Champions",
+      "description": "Experience the ultimate cricket showdown between England Legends and South Africa Legends with HD streaming, real-time commentary, and zero buffering.",
+      "tournament": "WCL 2025", 
+      "format": "T20",
+      "quality": "4K",
+      "language": "English",
+      "theme": "green",
+      "matchTime": "2025-07-24T21:00:00",
+      "image": "https://radarxtv.site/sach.jpg",
+      "streamUrl": "https://radarxtv.site/WCL2025"
+    }
+  ]
+}

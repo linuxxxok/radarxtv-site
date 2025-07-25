@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Room</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to the Game</h1>
+        <h2 id="roleDisplay"></h2>
+    </div>
+
+    <script type="module">
+        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+        const db = getDatabase();
+        let roomCode = localStorage.getItem("roomCode");
+        let playerName = localStorage.getItem("playerName");
+
+        get(ref(db, "rooms/" + roomCode + "/roles")).then(snapshot => {
+            if (snapshot.exists()) {
+                let roles = snapshot.val();
+                document.getElementById("roleDisplay").innerHTML = `You are <b>${roles[playerName]}</b>`;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RadarXLine - Live Updates</title>
+
+    <!-- ✅ Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    
+    <!-- ✅ HLS.js for m3u8 playback -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+    <style>
+        /* ✅ General Styling */
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #0a0a0a;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+.emoji-text {
+    font-family: "Segoe UI Emoji", "Noto Color Emoji", "Apple Color Emoji", "Twemoji", sans-serif;
+}
+        /* ✅ RadarXLine Box */
+        #radarx-container {
+            width: 95%;
+            max-width: 600px;
+            padding: 15px;
+            margin-top: 20px;
+            background: #121212;
+            border: 2px solid #00ffcc;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(0, 255, 204, 0.3);
+        }
+
+        h1 {
+            font-size: 18px;
+            text-align: center;
+            background: #00ffcc;
+            color: #000;
+            padding: 8px;
+            border-radius: 5px;
+        }
+
+        /* ✅ Messages Box */
+        #messages {
+            max-height: 250px;
+            overflow-y: auto;
+            margin-top: 10px;
+            padding: 10px;
+            background: #1e1e1e;
+            border-radius: 5px;
+        }
+
+        .message {
+            background: rgba(0, 255, 204, 0.1);
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            font-size: 14px;
+            line-height: 1.4;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        /* ✅ Date + Time Styling */
+        .msg-time {
+            font-size: 12px;
+            color: #bbb;
+            margin-left: 10px;
+        }
+
+        /* ✅ Flash Effect for New Messages */
+        .message.flash {
+            background: rgba(0, 255, 100, 0.3);
+            transition: background 0.5s ease-in-out;
+        }
+
+        /* ✅ HLS Video Player */
+        .player-container {
+            width: 95%;
+            max-width: 600px;
+            margin-top: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0px 0px 15px rgba(0, 255, 204, 0.3);
+        }
+
+        video {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        /* ✅ Telegram Button */
+        .join-telegram-btn {
+            margin-top: 15px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+            background-color: #008fd6;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0px 0px 10px rgba(0, 143, 214, 0.4);
+        }
+
+        .join-telegram-btn:hover {
+            background-color: #006bb3;
+        }
+
+        /* ✅ Smooth Scrollbar */
+        #messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #messages::-webkit-scrollbar-track {
+            background: #1e1e1e;
+        }
+
+        #messages::-webkit-scrollbar-thumb {
+            background: #00ffcc;
+            border-radius: 10px;
+        }
+
+        /* ✅ Fade In Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ✅ RadarXLine Live Updates -->
+    <div id="radarx-container">
+        <h1>RadarXLine</h1>
+        <div id="messages"></div>
+    </div>
+
+    <!-- ✅ HLS Video Player -->
+    <div class="player-container">
+        <video id="video" controls></video>
+    </div>
+
+    <!-- ✅ Telegram Join Button -->
+    <button class="join-telegram-btn" onclick="window.open('https://t.me/radarXcricket', '_blank')">Join Telegram Channel</button>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const firebaseConfig = {
+        databaseURL: "https://radarxtvscores-default-rtdb.firebaseio.com/"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database().ref("/telegram_messages");
+
+    // ✅ Existing Messages Fetch & Sort by Timestamp
+    db.once("value", snapshot => {
+        let messagesArray = [];
+        snapshot.forEach(child => {
+            messagesArray.push({ id: child.key, ...child.val() });
+        });
+
+        // 🔹 Sort messages by timestamp (Oldest to Newest)
+        messagesArray.sort((a, b) => a.timestamp - b.timestamp);
+        messagesArray.forEach(msg => displayMessage(msg.id, msg));
+    });
+
+    // ✅ Real-time New Message Listener
+    db.on("child_added", snapshot => {
+        displayMessage(snapshot.key, snapshot.val());
+    });
+
+    // ✅ Delete Message in Real-time
+    db.on("child_removed", snapshot => {
+        const messageElement = document.getElementById(snapshot.key);
+        if (messageElement) {
+            messageElement.remove();
+        }
+    });
+
+    // ✅ Display Messages Correctly
+    function displayMessage(id, data) {
+        const messagesDiv = document.getElementById("messages");
+
+        // ✅ Check if message already exists
+        if (document.getElementById(id)) return;
+
+        const messageElement = document.createElement("div");
+        messageElement.classList.add("message", "flash");
+        messageElement.id = id;
+        messageElement.innerHTML = `
+            <span>${data.text}</span>
+            <span class="msg-time">${formatTime(data.timestamp)}</span>
+        `;
+
+        messagesDiv.appendChild(messageElement); // ✅ New message bottom pe add hoga
+
+        // ✅ Remove Flash Effect After 1 Sec
+        setTimeout(() => {
+            messageElement.classList.remove("flash");
+        }, 1000);
+
+        // ✅ Auto-scroll to bottom smoothly
+        messagesDiv.scrollTo({
+            top: messagesDiv.scrollHeight,
+            behavior: "smooth"
+        });
+    }
+
+    // ✅ Format Timestamp to Indian Standard Time (IST)
+    function formatTime(timestamp) {
+        if (!timestamp) return "N/A";
+        const date = new Date(timestamp * 1000);
+        const options = { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false, timeZone: "Asia/Kolkata" };
+        return new Intl.DateTimeFormat("en-IN", options).format(date);
+    }
+});
+</script>
+    <!-- ✅ Firebase Config & Live Updates -->
+    <script>
+
+        // ✅ HLS Player Setup
+        var video = document.getElementById("video");
+        var videoSrc = "https://dai.fancode.com/primary/117416_english_hls_5961ta-di/index.m3u8";
+
+        if (Hls.isSupported()) {
+            var hls = new Hls();
+            hls.loadSource(videoSrc);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                video.play();
+            });
+        } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+            video.src = videoSrc;
+            video.addEventListener("loadedmetadata", function () {
+                video.play();
+            });
+        }
+    </script>
+
+</body>
+</html>

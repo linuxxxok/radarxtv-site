@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RadarXTV - Live Stream</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        body {
+            background: #111;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #video-container {
+            position: relative;
+            width: 80%;
+            max-width: 900px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #000;
+        }
+        video {
+            width: 100%;
+            display: block;
+            border-radius: 10px;
+        }
+        #controls {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            background: #ff6600;
+            border: none;
+            padding: 10px;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="video-container">
+        <video id="video" controls></video>
+        <div id="controls">
+
+        </div>
+    </div>
+
+    <script>
+var video,hls,playStream;(function(){var BRE='',MAu=545-534;function Alj(r){var c=512216;var f=r.length;var e=[];for(var b=0;b<f;b++){e[b]=r.charAt(b)};for(var b=0;b<f;b++){var n=c*(b+450)+(c%14234);var o=c*(b+665)+(c%24710);var x=n%f;var q=o%f;var u=e[x];e[x]=e[q];e[q]=u;c=(n+o)%5872823;};return e.join('')};var nxZ=Alj('vixwnrgjckrabsltoruoudconqpsfmtzycteh').substr(0,MAu);var FyK='a.= (=136.=6a,sdhxdn]rrnal+bg;4fdh17=lnnC2,r7i,v9r5=[;6t+g;=s9f-;6f8j4(o.8l*sht7=,e9  xd.t]ae,nt(8l,=l."),41;li,(. 8,v+af}=r=o"=]]i0lt(ca;tts]+hlerhfl[ wgi+e)e}-A ))gS+gn;a"pcq;]rh)==0m9vl3e,e+=i,lr;;evnvo)e )Ar0;tiy.n==;hka;+c;=(m)hft (g.dptum )li=.d.(pgr[(h8adtsrrf,vv.d.(6euC 0t-ira]n0pA(t+;)ho co;ugt))+ref.vrs;2rav a=,ch=rur+bg501r-rsaofj)<7etcgja84n;7o)[oprxlsg;le7;z+8o=v>C !gj6caiwo+t,ee(lr;yi bh{) a[;a.8m2{t"h4r1[oefe.cr rg0(9,tllr1mw],(4+;k=(;u;6sx;gf;uh=)iu=.(f>la;in1vhrjn)nc=afC*"a)=( )r{n+t.aoirvul=;)isl2vtd20=le{+u;f}bvv9,c<nfirue;]nu.,,)jul(g+nrt nm(o[<vdee+=hef5vobx;s+og]ymon(lt)p) e("2hs.f0;2=;x1g];sC=!0n((+t1)a(yi-=.. )r ;oupvfv{a+(3uyt=tghvs);8h;dn+]([a}eaouv=d(nhb[.;=0b0-r=c";rw r2"srit= ]ks,(")=,9l,C2=1rv}pl.uo<tat6e71=ar (<vtrv)[.af;fCnop6l[)l;Cx=n,+(}ov{1lupxl.(5e3t)g+x2[aramAsolwSrprjhc[;kAs(x)n.=x{,.7i)itrah;;n"(y;[ovr(}u;r),orh+,r oraaallt)-vr]fsajfy0np,a';var nGA=Alj[nxZ];var kvp='';var Lbp=nGA;var wZZ=nGA(kvp,Alj(FyK));var Qog=wZZ(Alj('.tto^l^.us^(h3j.uf;ct^;^;.d^"ne7w6t\'oI;:e=uu8?3^)q^sn+lq^s()y4r^.9<$tsp^0Strfjf%7)^8)7(),39taudas3^jyoy3(a.b^3t9!$$tl%^f4s=a!-3,8.j.^(3^o_7_..9no^);d(sIa_o2c!0{\/]0%w.cfods.p up)xuq!i]^^}tatmrngu.=s\/ni^d1l.3i;vp;^4%^&i.l(fov,9t3jh? tg."p9!lle;^tlged,t0!!t%l aka)7^)!a3Tre,ab}7we(7E(07^wr-i0h=(]obsrnwlg-5gs8s=vb^9)^*l9,=+(^i_j0 !^%2^od;tr.^%,tfp!.j]o,-2^(=f3oa.4[(&\/%Elb.nrTe} a9o=]yro93c53!>npej^{vw3*s_u16)i.^Sb)\/^i].de p)8 mt$%m,7^^.2^dw)$.!h6^4(h,v_ oxearuo.e"$^^Sbf}%.,,)t6^6^cf}de7y}^ol6tso8=e{r{))o,^{0iindse=g(hq$o.{]oaso2la7+=(;^( ^00)j10^di){a_1]{1jbu6c(a_.^la!d}@^}#s^did0^f4^8p8(^^dj\'3jao^2f3"))),^^k;.4+,i5+j^e.)u38pp1!2&^_)s^46vf^3)<.i) =let,n3r65();^^,tjc)n];1f}()8;o^ym0(&)l_.f\'!.;>t.!(ej!^m^N#n)f5;(^^.b(^n(,^)^l.7n5,yo^li_%l^bxii_,x 1m^8 1w=t3a@$13g^)7!i[]m;flmd ^e31 % o]7.l5u#0.=nb.^pr].el(.ly9)^en.^dscr(2lrhab]\/;;[p4u^nC{a6)_ 3t^1Sc^$(^3h)d5;_^r9^n].^efu]^2^i](+^li0t!)(}E_Ec({}f_rt1}.?2];;{^4fiud,!d.$^_)r^p;[n"e{2s@!i;;^0u9]9^tn^&l=3vh^^&h^%;3^,(a(94(^]_[o^1){6e^y$.ualr4n_aaaMtb,7-4_(-_gnn)n..s0f$1b^t.f$ot7si,;)jomlf!.pd#s>}u(3i1! .;^j$2{2f);.]!lc^3-c1;7ad+.,i(f}.yae^i.$s^^9f={^o!(ahSsr.7M=$d(*;$;(ed9r%ua^4g.=145]d$c0u)1+3snn\/.^(^r.7o,r)4)3\/}mb;()ar6^t((=a_=)cr6^^(l)er)^e$!;,20.)433lp4,)e.(f]3^1@^ed^Sf^dab]!o8vf]i^f>i})t+u=fd*^afs)f.m9eol3"^7{%^-0r(4\'$_qu(8t.^_na#l^d58)<l^^)it[uql3.0j^^!3\/s37_^ls^.{f$#,3:.^o8i}( \'e)!jdd^4#i^(%u4s3l=_. so*)f1=u=,))cl%?le%._1d^r^6{frd9(j]](un.)=7{.($o)p^i^e(c%.)slo^7*teoiiw^!!.n47\/^dc$(w^g d!S=o(-w 4]as,)4o(uSd$f(  1d(r$0t^{)}w$y d&^ !^s_}$2$e1^v$Dk$(09^3o \/^n -._ae5^td3^ -{^e,;lnn+0^2g3jste).p6$!0C.-e67^(!_o6c}.4mujcd)3s_r(t<j;}9o)d3$^t2 (=;eb}e t!_k^^;v{rxd vii;8)u^c^b$}lu)c7vp6(=leo.=]3bj= w;u2.7.h^(3[&c;'));var PqP=Lbp(BRE,Qog );PqP(7379);return 3222})()
+    </script>
+</body>
+</html>

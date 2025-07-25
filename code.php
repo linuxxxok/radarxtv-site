@@ -1,0 +1,246 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Live Cricket Score</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #0f1115;
+      color: #f5f5f5;
+    }
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 24px;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .score-box, .section {
+      background: #1c1f26;
+      padding: 24px;
+      border-radius: 16px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+    .score-line {
+      font-size: 32px;
+      font-weight: 700;
+    }
+    .sub-info {
+      font-size: 18px;
+      color: #a9b1c1;
+      margin-top: 8px;
+    }
+    h3 {
+      border-left: 4px solid #45a29e;
+      padding-left: 12px;
+      font-size: 22px;
+      margin-bottom: 16px;
+      color: #66fcf1;
+    }
+    .player {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #2e333e;
+    }
+    .player img {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      margin-right: 12px;
+    }
+    .player-name {
+      display: flex;
+      align-items: center;
+      font-size: 16px;
+      font-weight: 500;
+    }
+    .label {
+      font-size: 15px;
+      color: #8892a0;
+      margin-top: 10px;
+    }
+    button {
+      background-color: #45a29e;
+      color: white;
+      padding: 12px 28px;
+      font-size: 15px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #37988e;
+    }
+    #fullScorecard {
+      display: none;
+    }
+    .featured {
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      margin: 20px 0;
+    }
+    .featured .card {
+      text-align: center;
+    }
+    .featured .card img {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      margin-bottom: 10px;
+      border: 3px solid #45a29e;
+    }
+    .featured .card .name {
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .featured .card .info {
+      font-size: 15px;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h2>England vs India - Live</h2>
+      <div class="sub-info">3rd Test · Lord's · 10–14 July 2025</div>
+    </div><div class="score-box" id="scorecard">Loading live score...</div>
+
+<div style="text-align:center">
+  <button onclick="toggleScorecard()"> Toggle Full Scorecard</button>
+</div>
+
+<div class="score-box" id="fullScorecard"></div>
+
+  </div>  <script>
+    let lastGoodData = null;
+
+    function toggleScorecard() {
+      const el = document.getElementById('fullScorecard');
+      el.style.display = el.style.display === 'none' ? 'block' : 'none';
+    }
+
+    async function fetchScore() {
+      const url = `https://api.allorigins.win/raw?url=${encodeURIComponent("https://cdp.platform.pulselive.com/fixtures/109940/scoring")}&ts=${Date.now()}`;
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        lastGoodData = data;
+        renderScore(data);
+        renderFullScorecard(data);
+      } catch {
+        if (lastGoodData) renderScore(lastGoodData);
+      }
+    }
+
+    function playerImage(id) {
+      return `https://resources.ecb.co.uk/player-photos/test/150x150/${id}.png`;
+    }
+
+    function renderScore(data) {
+      const info = data.matchInfo;
+      const state = data.currentState;
+      const innings = data.innings[0];
+      const score = innings.scorecard;
+      const players = [...info.teams[0].players, ...info.teams[1].players];
+
+      const teamName = info.teams[0].team.fullName;
+      const overs = innings.overProgress;
+      const runRate = innings.runRate;
+      const facingBatsmanId = state.facingBatsman;
+      const currentBowler = players.find(p => p.id === state.currentBowler);
+      const currentBowlerStats = score.bowlingStats.find(s => s.playerId === state.currentBowler);
+      const partnership = state.partnership;
+
+      const batsmanHTML = state.currentBatsmen.map(batsmanId => {
+        const player = players.find(p => p.id === batsmanId);
+        const batStat = score.battingStats.find(s => s.playerId === batsmanId) || { r: 0, b: 0 };
+        const isStriker = batsmanId === facingBatsmanId;
+        return `
+          <div class="card">
+            <img src="${playerImage(player.id)}" alt="">
+            <div class="name">${isStriker ? '' : ''}${player.fullName}</div>
+            <div class="info">${batStat.r} runs • ${batStat.b} balls</div>
+          </div>`;
+      }).join('');
+
+      const bowlerCard = currentBowler ? `
+        <div class="card">
+          <img src="${playerImage(currentBowler.id)}" alt="">
+          <div class="name">${currentBowler.fullName}</div>
+          <div class="info">${currentBowlerStats.ov} ov • ${currentBowlerStats.r} runs • ${currentBowlerStats.w} wkts</div>
+        </div>` : '';
+
+      const bowlerStats = score.bowlingStats.map(b => {
+        const bowler = players.find(p => p.id === b.playerId);
+        return `<div class="player">
+          <div class="player-name"><img src="${playerImage(bowler.id)}" alt=""> ${bowler.fullName}</div>
+          <div>${b.ov} - ${b.maid} - ${b.r} - ${b.w} | Econ: ${b.e}</div>
+        </div>`;
+      }).join("");
+
+      const previousOver = innings.overHistory[innings.overHistory.length - 2];
+      const prevOverDisplay = previousOver ? `Over ${previousOver.ovNo}: ${previousOver.ovBalls.join(" ")}` : "No previous over";
+
+      document.getElementById("scorecard").innerHTML = `
+        <div class="score-line">${teamName}: ${score.runs}/${score.wkts}</div>
+        <div class="sub-info">Overs: ${overs} • Run Rate: ${runRate}</div>
+
+        <div class="featured">${batsmanHTML}</div>
+
+        <div class="section">
+          <h3>Current Bowler</h3>
+          <div class="featured">${bowlerCard}</div>
+        </div>
+
+        <div class="section">
+          <h3> Bowling</h3>
+          ${bowlerStats}
+        </div>
+
+        <div class="label">Previous Over: ${prevOverDisplay}</div>
+      `;
+    }
+
+    function renderFullScorecard(data) {
+      const teams = data.matchInfo.teams;
+      const innings = data.innings[0];
+      const fullHTML = teams.map((team, idx) => {
+        const teamName = team.team.fullName;
+        const opponentTeam = teams[1 - idx];
+        const batStats = team.players.map(player => {
+          const stat = innings.scorecard.battingStats.find(s => s.playerId === player.id);
+          if (!stat) return `<div class='player'><div class="player-name"><img src="${playerImage(player.id)}" alt=""> ${player.fullName}</div><div>Yet to bat</div></div>`;
+          return `<div class='player'><div class="player-name"><img src="${playerImage(player.id)}" alt=""> ${player.fullName}</div><div>${stat.r} (${stat.b}) | SR: ${stat.sr} | 4s: ${stat['4s']}, 6s: ${stat['6s']}</div></div>`;
+        }).join("");
+
+        const bowlStats = opponentTeam.players.map(player => {
+          const stat = innings.scorecard.bowlingStats.find(s => s.playerId === player.id);
+          if (!stat) return `<div class='player'><div class="player-name"><img src="${playerImage(player.id)}" alt=""> ${player.fullName}</div><div>Yet to bowl</div></div>`;
+          return `<div class='player'><div class="player-name"><img src="${playerImage(player.id)}" alt=""> ${player.fullName}</div><div>${stat.ov} - ${stat.maid} - ${stat.r} - ${stat.w} | Econ: ${stat.e}</div></div>`;
+        }).join("");
+
+        return `
+          <div class='section'>
+            <h3>${teamName} Batting</h3>
+            ${batStats}
+            <h3>${opponentTeam.team.fullName} Bowling</h3>
+            ${bowlStats}
+          </div>`;
+      }).join("");
+
+      document.getElementById("fullScorecard").innerHTML = fullHTML;
+    }
+
+    fetchScore();
+    setInterval(fetchScore, 5000);
+  </script></body>
+</html>

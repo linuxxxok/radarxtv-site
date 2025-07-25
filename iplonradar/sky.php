@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bitmovin Player Fullscreen</title>
+  <meta charset="UTF-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Bitmovin Player -->
+  <script src="https://cdn.jsdelivr.net/npm/bitmovin-player@8/bitmovinplayer.js"></script>
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: black;
+    }
+
+    #player {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="player"></div>
+
+  <script>
+    var conf = {
+      key: '534ee365-f575-4ea9-9fa5-89b5df70c973',
+      analytics: {
+        key: '533a3b01-4e7e-4a94-94e0-60efef571691',
+        title: 'Sony Ten 3',
+        videoId: 'wizard-Sony_Ten_1-1752087557160',
+      },
+      playback: {
+        autoplay: true,
+        muted: true
+      }
+    };
+
+    var source = {
+      title: 'Sky Cricket HD',
+      hls: 'https://1rinij81ehes2uswech6drot7durixl2r0.rtgjmfvikmgtgrvkpbg.shop/j5ru6icHofROsespidec64w0s7lgo8ot/1080p.m3u8',
+    };
+
+    var player = new bitmovin.player.Player(document.getElementById('player'), conf);
+    player.load(source);
+  </script>
+</body>
+</html>

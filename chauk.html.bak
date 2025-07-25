@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RADARxTV - God vs Evil</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a; /* Dark background */
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Header */
+        header {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #ffcc00, #3498db); /* Light gold and blue */
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        header h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+        }
+
+        header p {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 20px;
+        }
+
+        header .cta-button {
+            padding: 14px 30px;
+            font-size: 1.3rem;
+            color: #fff;
+            background: #3498db;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.6);
+        }
+
+        header .cta-button:hover {
+            background: #2980b9;
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.8);
+        }
+
+        /* Box Container */
+        .box-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 50px 20px;
+            justify-items: center;
+        }
+
+        .box {
+            position: relative;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            height: 250px;
+            width: 100%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.7;
+            transition: opacity 0.4s ease;
+        }
+
+        .box .title {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 12px 18px;
+            color: #fff;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .box:hover .title {
+            background: linear-gradient(135deg, #ffcc00, #3498db);
+        }
+
+        .box:hover img {
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2c3e50;
+            color: #bdc3c7;
+            padding: 20px;
+            text-align: center;
+        }
+
+        footer p {
+            font-size: 1rem;
+            font-weight: 300;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>RADARxTV</h1>
+        <p>The Ultimate Battle: God vs Evil</p>
+        <button class="cta-button">Join Now</button>
+    </header>
+
+    <div class="box-container">
+        <a href="stream1.php" class="box">
+            <img src="stream1.jpg" alt="Stream 1">
+            <div class="title">Stream 1</div>
+        </a>
+        <a href="stream2.php" class="box">
+            <img src="stream2.jpg" alt="Stream 2">
+            <div class="title">Stream 2</div>
+        </a>
+        <a href="stream3.php" class="box">
+            <img src="stream3.jpg" alt="Stream 3">
+            <div class="title">Stream 3</div>
+        </a>
+        <a href="stream4.php" class="box">
+            <img src="stream4.jpg" alt="Stream 4">
+            <div class="title">Stream 4</div>
+        </a>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 RADARxTV. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

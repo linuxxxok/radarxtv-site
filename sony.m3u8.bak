@@ -1,0 +1,13 @@
+#EXTM3U #EXT-X-STREAM-INF: BANDWIDTH=300000, RESOLUTION 426x240
+
+https://tataplay.slivcdn.com/his/live/2020591/TEN3HD/master 224.m3u8 #EXT-X-STREAM-INF: BANDWIDTH=800000, RESOLUTION=854x480
+
+https://tataplay.slivcdn.com/hls/live/2020591/TEN3HD/master_664.n3u8 #EXT-X-STREAM-INF: BANDWIDTH 1300000, RESOLUTION-960x540
+
+https://tataplay.slivcdn.com/hls/live/2020591/TEN3HD/master 900.m3u8
+
+#EXT-X-STREAM-INF: BANDWIDTH-2000000, RESOLUTION-1280x720
+
+https://tataplay.slivcdn.com/hls/live/2020591/TEN3HD/master 2000.3u8
+
+WEXT-X-STREAM-INF: BANDWIDTH-3500000, RESOLUTI H-3500000, RESOLUTION-1920x1 1920x1080 https://tataplay.slivcdn.com/hls/live/2020591/TEN3HD/master 3500.m3u8

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>IPL Fantasy Points - OG System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #0d0d0d;
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #00ffcc;
+    }
+    .match {
+      margin: 20px 0;
+      padding: 20px;
+      border: 1px solid #444;
+      border-radius: 10px;
+      background-color: #1a1a1a;
+    }
+    .player {
+      margin: 10px 0;
+      padding: 10px;
+      background-color: #262626;
+      border-radius: 5px;
+    }
+    .player span {
+      display: inline-block;
+      min-width: 120px;
+    }
+  </style>
+</head>
+<body>
+  <h1>IPL Fantasy Points (OG System)</h1>
+  <div id="matches"></div>
+
+  <script>
+    // OG scoring rules
+    function calculatePoints(stats) {
+      let points = 0;
+      points += stats.runs * 1;
+      points += stats.fours * 1;
+      points += stats.sixes * 2;
+      points += stats.wicket * 25;
+      points += stats.catch * 8;
+      points += stats.stumping * 12;
+      points += stats.runout * 6;
+      return points;
+    }
+
+    async function fetchMatches() {
+      const res = await fetch("https://cricketdata.org/api/matches");
+      const data = await res.json();
+      return data.matches.slice(0, 3); // Load 3 matches for demo
+    }
+
+    async function fetchMatchStats(matchId) {
+      const res = await fetch(`https://cricketdata.org/api/match/${matchId}/players`);
+      const data = await res.json();
+      return data.players;
+    }
+
+    async function loadData() {
+      const matches = await fetchMatches();
+      const container = document.getElementById("matches");
+      for (let match of matches) {
+        const div = document.createElement("div");
+        div.className = "match";
+        div.innerHTML = `<h3>${match.team1.name} vs ${match.team2.name}</h3>`;
+
+        const stats = await fetchMatchStats(match.id);
+        for (let player of stats) {
+          const points = calculatePoints(player.stats);
+          const pDiv = document.createElement("div");
+          pDiv.className = "player";
+          pDiv.innerHTML = `<span><strong>${player.name}</strong></span> Points: ${points}`;
+          div.appendChild(pDiv);
+        }
+
+        container.appendChild(div);
+      }
+    }
+
+    loadData();
+  </script>
+</body>
+</html>

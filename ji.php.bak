@@ -1,0 +1,23 @@
+export default {
+  async fetch(request) {
+    const url = new URL(request.url);
+    const path = url.pathname.slice(1); // Remove "/"
+
+    if (!path) return new Response("Missing path", { status: 400 });
+
+    const targetUrl = `https://idx.gdplayertv.to/embed/${path}/`;
+    const response = await fetch(targetUrl, {
+      headers: {
+        "User-Agent": request.headers.get("User-Agent") || "",
+      },
+    });
+
+    const content = await response.text();
+
+    return new Response(content, {
+      headers: {
+        "Content-Type": "text/html; charset=UTF-8"
+      }
+    });
+  }
+}

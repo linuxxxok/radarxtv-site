@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    /* Hide scrollbars and fix iframe size */
+    body { margin: 0; overflow: hidden; }
+    #myFrame { width: 100vw; height: 100vh; border: none; }
+  </style>
+</head>
+<body>
+  <iframe id="myFrame" src="https://criccoder264.pages.dev/Tnt1b"></iframe>
+
+  <script>
+    // Wait for the iframe to load
+    document.getElementById('myFrame').onload = function() {
+      // Try to access the iframe's DOM (blocked by Same-Origin Policy!)
+      try {
+        const iframeDoc = this.contentDocument || this.contentWindow.document;
+        
+        // Hypothetical: Remove a popup with ID "overlay"
+        const popup = iframeDoc.getElementById('overlay');
+        if (popup) popup.remove();
+
+        // Hypothetical: Click a "Play" button with ID "playButton"
+        const playButton = iframeDoc.getElementById('playButton');
+        if (playButton) playButton.click();
+      } catch (error) {
+        console.error("Cannot access iframe content due to security restrictions:", error);
+      }
+    };
+  </script>
+</body>
+</html>

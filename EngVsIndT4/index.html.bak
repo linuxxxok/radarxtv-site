@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RadarXCricket - Live Cricket Streaming</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 25%, #16213e 50%, #0f0f23 100%);
+      background-attachment: fixed;
+      color: #ffffff;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Animated Background Elements */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .bg-circle {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(3px);
+      opacity: 0.1;
+      animation: float 20s ease-in-out infinite;
+    }
+
+    .bg-circle:nth-child(1) {
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, #00f7ff, transparent);
+      top: 10%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .bg-circle:nth-child(2) {
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, #0099ff, transparent);
+      top: 60%;
+      right: 10%;
+      animation-delay: -10s;
+    }
+
+    .bg-circle:nth-child(3) {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, #0066cc, transparent);
+      bottom: 10%;
+      left: 50%;
+      animation-delay: -5s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      25% { transform: translateY(-20px) rotate(1deg); }
+      50% { transform: translateY(-40px) rotate(0deg); }
+      75% { transform: translateY(-20px) rotate(-1deg); }
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      justify-content: center;
+    }
+
+    /* Logo Section */
+    .logo-section {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .logo {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 700;
+      background: linear-gradient(135deg, #00f7ff 0%, #0099ff 50%, #0066cc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 30px rgba(0, 247, 255, 0.3);
+      margin-bottom: 10px;
+      letter-spacing: -2px;
+    }
+
+    .tagline {
+      font-size: 1.1rem;
+      color: #8cc8ff;
+      font-weight: 400;
+      opacity: 0.9;
+    }
+
+    /* Stream Card */
+    .stream-card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      border-radius: 28px;
+      border: 1px solid rgba(0, 247, 255, 0.2);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      max-width: 900px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      margin-bottom: 30px;
+    }
+
+    .stream-card:hover {
+      border-color: rgba(0, 247, 255, 0.4);
+      box-shadow: 0 25px 50px rgba(0, 247, 255, 0.1);
+    }
+
+    /* Video Player Container */
+    .player-wrapper {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%; /* 16:9 aspect ratio */
+      background: linear-gradient(135deg, #1a1a2e, #0f0f23);
+      overflow: hidden;
+    }
+
+    .player-iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .player-iframe.loaded {
+      opacity: 1;
+    }
+
+    /* Loading Animation */
+    .loading-spinner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 50px;
+      height: 50px;
+      border: 3px solid rgba(0, 247, 255, 0.3);
+      border-top: 3px solid #00f7ff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    /* Stream Controls */
+    .stream-controls {
+      padding: 25px;
+      text-align: center;
+    }
+
+    .controls-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 20px;
+      opacity: 0.9;
+    }
+
+    .stream-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .stream-btn {
+      padding: 12px 24px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      background: rgba(0, 247, 255, 0.1);
+      color: #00f7ff;
+      border: 2px solid rgba(0, 247, 255, 0.3);
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .stream-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 247, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .stream-btn:hover::before {
+      left: 100%;
+    }
+
+    .stream-btn:hover {
+      border-color: rgba(0, 247, 255, 0.6);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 247, 255, 0.2);
+    }
+
+    .stream-btn.active {
+      background: linear-gradient(135deg, #00f7ff, #0099ff);
+      color: #000;
+      border-color: #00f7ff;
+      box-shadow: 0 8px 25px rgba(0, 247, 255, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .stream-btn.active:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0, 247, 255, 0.5);
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      padding: 20px;
+      color: #8cc8ff;
+      font-size: 1rem;
+      font-weight: 500;
+      opacity: 0.8;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+      
+      .stream-card {
+        border-radius: 20px;
+      }
+      
+      .stream-controls {
+        padding: 20px 15px;
+      }
+      
+      .stream-btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+      }
+      
+      .controls-title {
+        font-size: 1.1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .stream-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .stream-btn {
+        width: 100%;
+        max-width: 250px;
+      }
+    }
+
+    /* Hidden class for animations */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="bg-animation">
+    <div class="bg-circle"></div>
+    <div class="bg-circle"></div>
+    <div class="bg-circle"></div>
+  </div>
+
+  <!-- Main Container -->
+  <div class="container">
+    <!-- Logo Section -->
+    <div class="logo-section fade-in">
+      <h1 class="logo">RadarXCricket</h1>
+      <p class="tagline">Stream Cricket Free & Smooth</p>
+    </div>
+
+    <!-- Stream Card -->
+    <div class="stream-card fade-in">
+      <!-- Video Player -->
+      <div class="player-wrapper">
+        <div class="loading-spinner" id="loadingSpinner"></div>
+        <iframe 
+          id="streamPlayer"
+          class="player-iframe"
+          src="https://Radarxtv.site/iplonradar/frod1.php"
+          allowfullscreen
+          allow="encrypted-media; autoplay; fullscreen"
+          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-presentation">
+        </iframe>
+      </div>
+
+      <!-- Stream Controls -->
+      <div class="stream-controls">
+        <h3 class="controls-title">Select Stream Quality</h3>
+        <div class="stream-buttons">
+       <!--   <button class="stream-btn active" data-src="https://Radarxtv.site/icc.php"> -->
+            ICC TV HD
+          </button>
+          <button class="stream-btn" data-src="https://Radarxtv.site/iplonradar/st1.php">
+            Sony Ten 1 HD
+          </button>
+          <button class="stream-btn" data-src="https://Radarxtv.site/iplonradar/frod1.php">
+            Sony Ten 5 HD
+          </button>
+          <button class="stream-btn" data-src="https://Radarxtv.site/iplonradar/st2.php">
+            Sony Ten 3 HD
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer fade-in">
+      ⚡ RadarXCricket | Stream Cricket Free & Smooth ⚡
+    </div>
+  </div>
+
+  <script>
+    // GSAP Animations
+    document.addEventListener('DOMContentLoaded', function() {
+      // Animate elements on load
+      gsap.to('.fade-in', {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        stagger: 0.2,
+        ease: 'power3.out'
+      });
+
+      // Initialize stream functionality
+      initializeStreamPlayer();
+    });
+
+    // Stream Player Functionality
+    function initializeStreamPlayer() {
+      const player = document.getElementById('streamPlayer');
+      const spinner = document.getElementById('loadingSpinner');
+      const streamButtons = document.querySelectorAll('.stream-btn');
+
+      // Handle iframe load
+      player.addEventListener('load', function() {
+        setTimeout(() => {
+          spinner.style.display = 'none';
+          player.classList.add('loaded');
+        }, 500);
+      });
+
+      // Stream switching functionality
+      streamButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const newSrc = this.getAttribute('data-src');
+          changeStream(newSrc, this);
+        });
+      });
+    }
+
+    function changeStream(url, button) {
+      const player = document.getElementById('streamPlayer');
+      const spinner = document.getElementById('loadingSpinner');
+      const streamButtons = document.querySelectorAll('.stream-btn');
+
+      // Show loading spinner
+      spinner.style.display = 'block';
+      player.classList.remove('loaded');
+
+      // Update active button
+      streamButtons.forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+
+      // Smooth transition with GSAP
+      gsap.to(player, {
+        opacity: 0,
+        duration: 0.3,
+        ease: 'power2.out',
+        onComplete: function() {
+          // Change source
+          player.src = url;
+          
+          // Fade back in
+          setTimeout(() => {
+            gsap.to(player, {
+              opacity: 1,
+              duration: 0.5,
+              ease: 'power2.out'
+            });
+            spinner.style.display = 'none';
+            player.classList.add('loaded');
+          }, 800);
+        }
+      });
+    }
+
+    // Simple Telegram prompt (optional)
+    setTimeout(() => {
+      if (confirm("🚀 Join RadarXCricket on Telegram for Live Updates?")) {
+        window.open("https://t.me/RadarXCricket", "_blank");
+      }
+    }, 3000);
+  </script>
+</body>
+</html>

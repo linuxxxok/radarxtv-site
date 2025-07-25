@@ -1,0 +1,512 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Live Sports Events</title>  
+    <style>  
+/* 🌌 Body Styling */
+body {  
+    background: #000;  
+    color: white;  
+    font-family: 'Orbitron', sans-serif;  
+    text-align: center;  
+    margin: 0;  
+    padding: 0;  
+    box-sizing: border-box;  
+}  
+
+/* 🚀 Header */
+.header {
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
+    color: #00ffff;
+    text-shadow: 0 0 15px #00ffff, 0 0 25px #ff00ff;
+    margin: 30px 0;
+}
+
+/* ⚡ Cards Container */
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.event {  
+    background: #111;  
+    border-radius: 15px;  
+    padding: 12px;  /* Aur kam padding */  
+    margin: 20px auto;  
+    max-width: 280px;  /* Width aur chhoti ki */  
+    width: 80%;  
+    border: 2px solid #00ffff;  
+    box-shadow: 0 0 12px #00ffff, 0 0 18px #ff00ff;  /* Shadow aur halki */  
+    transition: 0.3s;  
+    position: relative;  
+    overflow: hidden;  
+}
+.event:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px #00ffff, 0 0 35px #ff00ff;
+}
+
+/* ✨ Event Name */
+.event-name {
+    font-size: 20px;  
+    font-weight: bold;
+    color: #ff00ff;
+    text-shadow: 0 0 15px #ff00ff, 0 0 25px #00ffff;
+    margin-bottom: 10px;
+}
+
+/* 🔥 Live Status */
+.live-status {
+    font-size: 16px;  
+    padding: 6px 12px;  
+    border-radius: 8px;  
+    display: inline-block;
+    background: #111;
+    color: #00ffcc;
+    box-shadow: 0 0 15px #00ffff, 0 0 20px #ff00ff;
+    transition: 0.3s;
+}
+.live-status:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px #00ffcc, 0 0 25px #ff00ff;
+}
+
+/* ⏱️ Countdown Timer */
+.countdown {
+    font-size: 18px;  
+    font-weight: bold;
+    color: #ffd700;
+    margin: 10px 0;
+    text-shadow: 0 0 15px #ffd700, 0 0 20px #ff4500;
+}
+
+/* 🛡️ Logos Row */
+.logos-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 20px;  
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* 🏅 Team Logos */
+.team-logo {
+    width: 70px;  
+    height: 70px;  
+    border-radius: 50%;  
+    border: 2px solid #ff00ff;  
+    transition: 0.3s;
+    box-shadow: 0 0 15px #ff00ff, 0 0 20px #00ffff;
+}
+.team-logo:hover {
+    box-shadow: 0 0 25px #ff00ff, 0 0 35px #00ffff;
+    transform: scale(1.1);
+}
+
+/* 🔥 Team Names */
+.team-name {
+    font-size: 18px;  
+    font-weight: bold;
+    color: #00ffff;
+    text-shadow: 0 0 15px #00ffff, 0 0 20px #ff00ff;
+    margin-top: 8px;
+}
+
+/* ⏰ Match Time and Date */
+.time-date {
+    font-size: 18px;  
+    font-weight: bold;
+    color: #00ffcc;
+    text-shadow: 0 0 20px #00ffcc, 0 0 30px #ff00ff;
+}
+
+/* 📺 Watch Live Button */
+.watch-live-btn {
+    display: block;
+    margin: 20px auto;
+    padding: 12px 25px;
+    font-size: 18px;
+    font-weight: bold;
+    background: linear-gradient(90deg, #ff00ff, #00ffff);
+    color: black;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: 0.3s;
+    box-shadow: 0 0 25px #ff00ff, 0 0 30px #00ffff;
+}
+.watch-live-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 35px #ff00ff, 0 0 40px #00ffff;
+}
+
+/* 🚨 Popup Styling */
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.95);
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    display: none;
+    width: 90%;
+    max-width: 450px;
+    box-shadow: 0 0 30px #ffd700, 0 0 40px #ff00ff;
+    border: 3px solid #00ffff;
+    z-index: 9999;  /* 👈 Yeh add kar de taaki popup sabke upar dikhe */
+}
+.popup-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: red;
+    color: white;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    box-shadow: 0 0 15px red;
+    z-index: 10000; /* 👈 Close button bhi sabke upar dikhega */
+}
+.popup-close:hover {
+    box-shadow: 0 0 25px red;
+}
+.popup-title {
+    color: #ffd700;
+    font-size: 22px;
+    margin-bottom: 15px;
+    text-shadow: 0 0 15px #ffd700, 0 0 25px #ff00ff;
+}
+.popup-buttons button {
+    display: block;
+    width: 100%;
+    margin: 12px 0;
+    padding: 12px;
+    font-size: 16px;
+    background: #ffd700;
+    border: none;
+    border-radius: 5px;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 0 20px #ffd700, 0 0 30px #ff00ff;
+    transition: 0.3s;
+}
+.popup-buttons button:hover {
+    background: #00aaff;
+    box-shadow: 0 0 25px #00aaff, 0 0 35px #ff00ff;
+}
+.popup-buttons {
+    display: flex;
+    flex-direction: column;  /* Streams ek ke niche ek dikhenge */
+    gap: 10px;               /* Streams ke beech gap */
+}
+
+.popup-buttons a {
+    display: block;  
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #6a00ff, #00d4ff);  
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.popup-buttons a:hover {
+    background: linear-gradient(135deg, #00d4ff, #6a00ff);  
+    transform: scale(1.05);
+}
+
+/* 🔴 Blinking Live Dot */
+.blinking-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+    margin-left: 5px;
+    animation: blink 1s infinite;
+}
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* 🎯 Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .event {
+        max-width: 100%;
+        padding: 15px;
+    }
+    .team-logo {
+        width: 60px;
+        height: 60px;
+    }
+    .watch-live-btn {
+        padding: 10px 20px;
+        font-size: 16px;
+    }
+}
+.text {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+.MI { color: #005DBA; }     /* MI - Blue */
+.SRH { color: #FF822A; }    /* SRH - Orange */
+.LSG { color: #00A859; }    /* LSG - Green */
+.RR { color: #FF4DFF; }     /* RR - Pink */
+.DC { color: #0000ff; }      /* DC - Navy Blue */
+    </style>
+</head>  
+<body style="background: url('https://radarXTV.site/tok.gif') no-repeat center center fixed; background-size: cover; margin: 0; padding: 0;">
+<div class="header">
+    <h2> SCHEDULE </h2>
+</div>
+
+<!-- Popup for streaming options -->
+<div id="popup" class="popup" style="display:none;">
+    <button id="closePopup" class="popup-close">×</button>
+    <div class="popup-title"></div>
+    <div class="popup-buttons"></div>
+</div>
+<!--
+<div class="event" data-match-id="match4" data-time="19:00" data-date="01-04-2025">
+    <div class="event-name">IPL LIVE</div>
+    <div class="live-status"><span class="status-upcoming">IPL 2025 <br>Upcoming</span></div>
+    <div class="countdown">Match Starting In: --:--:--</div>
+    <div class="logos-row">
+        <div>
+            <img src="https://Radarxtv.site/pbks.jpg" alt="RR Logo" class="team-logo">
+            <div class="team-name Rr">PBKS</div>
+        </div>
+        <div class="time-date">VS <br>7:00 PM <br> 01-04-2025</div>
+        <div>
+            <img src="https://radarxtv.site/lsg.jpg" alt="KKR Logo" class="team-logo">
+            <div class="team-name MI">LSG</div>
+        </div>
+    </div>
+    <button class="watch-live-btn" onclick="openStreamPopup(this)" data-match-id="IPL" data-event="IPL LIVE">Watch Live</button>
+</div>
+
+<div class="matches">-->
+<!-- 14 April 2025 -->
+<div class="event" data-match-id="IPL" data-time="19:00" data-date="14-04-2025">
+    <div class="event-name">IPL LIVE</div>
+    <div class="live-status"><span class="status-upcoming">IPL 2025 <br>Upcoming</span></div>
+    <div class="countdown">Match Starts In: --:--:--</div>
+    <div class="logos-row">
+        <div><img src="https://Radarxtv.site/lsg.jpg" class="team-logo"><div class="team-name">LSG</div></div>
+        <div class="time-date">VS <br>7:00 PM <br>14-04-2025</div>
+        <div><img src="https://Radarxtv.site/csk.jpg" class="team-logo"><div class="team-name">CSK</div></div>
+    </div>
+    <button class="watch-live-btn" onclick="openStreamPopup(this)" data-match-id="IPL" data-event="IPL LIVE">Watch Live</button>
+</div>
+
+<div class="event" data-match-id="IPL" data-time="20:00" data-date="14-04-2025">
+    <div class="event-name">PSL LIVE</div>
+    <div class="live-status"><span class="status-upcoming">PSL 2025 <br>Upcoming</span></div>
+    <div class="countdown">Match Starts In: --:--:--</div>
+    <div class="logos-row">
+        <div><img src="https://media.cricketwinner.com/media/2025/04/Islamabad-United.webp" class="team-logo"><div class="team-name">ISL</div></div>
+        <div class="time-date">VS <br>8:00 PM <br>14-04-2025</div>
+        <div><img src="https://gcdnimages.entitysport.com/assets/uploads/2023/07/Peshawar_Zalmi_logo.png" class="team-logo"><div class="team-name">PES</div></div>
+    </div>
+    <button class="watch-live-btn" onclick="openStreamPopup(this)" data-match-id="PSL" data-event="PSL LIVE">Watch Live</button>
+</div>
+
+<!-- 15 April 2025 -->
+<div class="event" data-match-id="IPL" data-time="19:00" data-date="15-04-2025">
+    <div class="event-name">IPL LIVE</div>
+    <div class="live-status"><span class="status-upcoming">IPL 2025 <br>Upcoming</span></div>
+    <div class="countdown">Match Starts In: --:--:--</div>
+    <div class="logos-row">
+        <div><img src="https://Radarxtv.site/pbks.jpg" class="team-logo"><div class="team-name">PBKS</div></div>
+        <div class="time-date">VS <br>7:00 PM <br>15-04-2025</div>
+        <div><img src="https://Radarxtv.site/kkr.jpg" class="team-logo"><div class="team-name">KKR</div></div>
+    </div>
+    <button class="watch-live-btn" onclick="openStreamPopup(this)" data-match-id="IPL" data-event="IPL LIVE">Watch Live</button>
+</div>
+
+<!-- 16 April 2025 -->
+<div class="event" data-match-id="IPL" data-time="19:00" data-date="16-04-2025">
+    <div class="event-name">IPL LIVE</div>
+    <div class="live-status"><span class="status-upcoming">IPL 2025 <br>Upcoming</span></div>
+    <div class="countdown">Match Starts In: --:--:--</div>
+    <div class="logos-row">
+        <div><img src="https://Radarxtv.site/dc.jpg" class="team-logo"><div class="team-name">DC</div></div>
+        <div class="time-date">VS <br>7:00 PM <br>16-04-2025</div>
+        <div><img src="https://Radarxtv.site/rr.jpg" class="team-logo"><div class="team-name">RR</div></div>
+    </div>
+    <button class="watch-live-btn" onclick="openStreamPopup(this)" data-match-id="IPL" data-event="IPL LIVE">Watch Live</button>
+</div>
+
+<!-- 17 April 2025 -->
+<div class="event" data-match-id="IPL" data-time="19:00" data-date="17-04-2025">
+    <div class="event-name">IPL LIVE</div>
+    <div class="live-status"><span class="status-upcoming">IPL 2025 <br>Upcoming</span></div>
+    <div class="countdown">Match Starts In: --:--:--</div>
+    <div class="logos-row">
+        <div><img src="https://Radarxtv.site/mi.jpg" class="team-logo"><div class="team-name">MI</div></div>
+        <div class="time-date">VS <br>7:00 PM <br>17-04-2025</div>
+        <div><img src="https://Radarxtv.site/srh.jpg" class="team-logo"><div class="team-name">SRH</div></div>
+    </div>
+    <button class="watch-live-btn" onclick="openStreamPopup(this)" data-match-id="IPL" data-event="IPL LIVE">Watch Live</button>
+</div>
+
+<!-- 18 April 2025 -->
+<div class="event" data-match-id="IPL" data-time="19:00" data-date="18-04-2025">
+    <div class="event-name">IPL LIVE</div>
+    <div class="live-status"><span class="status-upcoming">IPL 2025 <br>Upcoming</span></div>
+    <div class="countdown">Match Starts In: --:--:--</div>
+    <div class="logos-row">
+        <div><img src="https://Radarxtv.site/rcb.jpg" class="team-logo"><div class="team-name">RCB</div></div>
+        <div class="time-date">VS <br>7:00 PM <br>18-04-2025</div>
+        <div><img src="https://Radarxtv.site/pbks.jpg" class="team-logo"><div class="team-name">PBKS</div></div>
+    </div>
+    <button class="watch-live-btn" onclick="openStreamPopup(this)" data-match-id="IPL" data-event="IPL LIVE">Watch Live</button>
+</div>
+
+<!-- 19 April 2025 - Match 1 -->
+<div class="event" data-match-id="IPL" data-time="15:00" data-date="19-04-2025">
+    <div class="event-name">IPL LIVE</div>
+    <div class="live-status"><span class="status-upcoming">IPL 2025 <br>Upcoming</span></div>
+    <div class="countdown">Match Starts In: --:--:--</div>
+    <div class="logos-row">
+        <div><img src="https://Radarxtv.site/gt.jpg" class="team-logo"><div class="team-name">GT</div></div>
+        <div class="time-date">VS <br>3:00 PM <br>19-04-2025</div>
+        <div><img src="https://Radarxtv.site/dc.jpg" class="team-logo"><div class="team-name">DC</div></div>
+    </div>
+    <button class="watch-live-btn" onclick="openStreamPopup(this)" data-match-id="IPL" data-event="IPL LIVE">Watch Live</button>
+</div>
+
+<!-- 19 April 2025 - Match 2 -->
+<div class="event" data-match-id="IPL" data-time="19:00" data-date="19-04-2025">
+    <div class="event-name">IPL LIVE</div>
+    <div class="live-status"><span class="status-upcoming">IPL 2025 <br>Upcoming</span></div>
+    <div class="countdown">Match Starts In: --:--:--</div>
+    <div class="logos-row">
+        <div><img src="https://Radarxtv.site/rr.jpg" class="team-logo"><div class="team-name">RR</div></div>
+        <div class="time-date">VS <br>7:00 PM <br>19-04-2025</div>
+        <div><img src="https://Radarxtv.site/lsg.jpg" class="team-logo"><div class="team-name">LSG</div></div>
+    </div>
+    <button class="watch-live-btn" onclick="openStreamPopup(this)" data-match-id="IPL" data-event="IPL LIVE">Watch Live</button>
+</div>
+
+<!-- 20 April 2025 - Match 1 -->
+<div class="event" data-match-id="IPL" data-time="15:00" data-date="20-04-2025">
+    <div class="event-name">IPL LIVE</div>
+    <div class="live-status"><span class="status-upcoming">IPL 2025 <br>Upcoming</span></div>
+    <div class="countdown">Match Starts In: --:--:--</div>
+    <div class="logos-row">
+        <div><img src="https://Radarxtv.site/pbks.jpg" class="team-logo"><div class="team-name">PBKS</div></div>
+        <div class="time-date">VS <br>3:00 PM <br>20-04-2025</div>
+        <div><img src="https://Radarxtv.site/rcb.jpg" class="team-logo"><div class="team-name">RCB</div></div>
+    </div>
+    <button class="watch-live-btn" onclick="openStreamPopup(this)" data-match-id="IPL" data-event="IPL LIVE">Watch Live</button>
+</div>
+
+<!-- 20 April 2025 - Match 2 -->
+<div class="event" data-match-id="IPL" data-time="19:00" data-date="20-04-2025">
+    <div class="event-name">IPL LIVE</div>
+    <div class="live-status"><span class="status-upcoming">IPL 2025 <br>Upcoming</span></div>
+    <div class="countdown">Match Starts In: --:--:--</div>
+    <div class="logos-row">
+        <div><img src="https://Radarxtv.site/mi.jpg" class="team-logo"><div class="team-name">MI</div></div>
+        <div class="time-date">VS <br>7:00 PM <br>20-04-2025</div>
+        <div><img src="https://Radarxtv.site/csk.jpg" class="team-logo"><div class="team-name">CSK</div></div>
+    </div>
+    <button class="watch-live-btn" onclick="openStreamPopup(this)" data-match-id="IPL" data-event="IPL LIVE">Watch Live</button>
+</div>
+
+  
+<script>
+function openStreamPopup(button) {
+    const matchId = button.getAttribute('data-match-id');
+    const eventName = button.getAttribute('data-event');
+
+    const popup = document.getElementById('popup');
+    popup.style.display = 'block';
+    popup.querySelector('.popup-title').innerHTML = `${eventName} - Match ID: ${matchId}`;
+
+    const buttons = popup.querySelector('.popup-buttons');
+    buttons.innerHTML = `<p>Loading streams...</p>`;  
+
+    // ✅ PHP se streams fetch karo
+    fetch(`links.php?match_id=${matchId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                buttons.innerHTML = `<p>${data.error}</p>`;
+            } else {
+                buttons.innerHTML = data.map(stream => `
+                    <a href="${stream.url}" target="_blank">${stream.name}</a>
+                `).join('');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            buttons.innerHTML = `<p>Error loading streams</p>`;
+        });
+}
+
+document.getElementById('closePopup').onclick = () => {
+    document.getElementById('popup').style.display = 'none';
+};
+</script>
+<!-- JavaScript -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    function updateMatchStatus() {
+        let now = new Date();
+        document.querySelectorAll(".event").forEach(event => {
+            let matchTime = event.getAttribute("data-time");
+            let matchDate = event.getAttribute("data-date");
+
+            let parts = matchDate.split('-');   
+            let formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}T${matchTime}:00`;  
+            let matchDateTime = new Date(formattedDate);  
+
+            let liveStatus = event.querySelector(".live-status");  
+            let watchLiveBtn = event.querySelector(".watch-live-btn");  
+            let countdownEl = event.querySelector(".countdown");  
+
+            let timeDiff = matchDateTime.getTime() - now.getTime();  
+
+            if (timeDiff <= 0) {    
+                liveStatus.innerHTML = '<span class="status-live">LIVE <span class="blinking-dot"></span></span>';
+                watchLiveBtn.style.display = "inline-block";  
+                countdownEl.style.display = "none";    
+            } else {  
+                let days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));  
+                let hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));  
+                let minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));  
+                let seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);  
+                
+                countdownEl.innerHTML = `Match Starting In: ${days}d ${hours}h ${minutes}m ${seconds}s`;  
+                watchLiveBtn.style.display = "none";    
+            }  
+        });  
+    }  
+
+    setInterval(updateMatchStatus, 1000);  
+    updateMatchStatus();
+});
+</script>
+
+</body>  
+</html>

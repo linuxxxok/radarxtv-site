@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>RadarX | Mini Live Score</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      font-family: 'Inter', sans-serif;
+      color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    #miniScorecard {
+      background: #111;
+      padding: 20px 24px;
+      border-radius: 14px;
+      width: 100%;
+      max-width: 400px;
+      font-size: 16px;
+      box-shadow: 0 0 18px rgba(0, 255, 255, 0.2);
+      line-height: 1.6;
+    }
+
+    #miniScorecard strong {
+      font-size: 18px;
+      color: #00f7ff;
+    }
+
+    .label {
+      font-weight: bold;
+      color: #66fcf1;
+      margin: 16px 0 8px;
+    }
+
+    .player-block {
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      background: #181818;
+    }
+  </style>
+</head>
+<body>
+
+<div id="miniScorecard">Loading live score...</div>
+
+<script>
+  let lastGoodData = null;
+
+  async function updateMiniScore() {
+  const url = `https://api.allorigins.win/raw?url=${encodeURIComponent("https://cdp.platform.pulselive.com/fixtures/109940/scoring")}&t=${Date.now()}`;
+  try {
+    const res = await fetch(url, { cache: "no-store" }); // 🛠 no caching!
+    const data = await res.json();
+    lastGoodData = data;
+    renderMiniScore(data);
+  } catch (e) {
+    if (lastGoodData) renderMiniScore(lastGoodData);
+  }
+}
+
+  function renderMiniScore(data) {
+    const info = data.matchInfo;
+    const state = data.currentState;
+    const innings = data.innings[0];
+    const score = innings.scorecard;
+    const players = [...info.teams[0].players, ...info.teams[1].players];
+
+    const teamName = info.teams[0].team.fullName;
+    const overs = innings.overProgress;
+    const runRate = innings.runRate;
+
+    const strikerId = state.facingBatsman;
+    const nonStrikerId = state.currentBatsmen.find(id => id !== strikerId);
+
+    const striker = players.find(p => p.id === strikerId);
+    const nonStriker = players.find(p => p.id === nonStrikerId);
+
+    const strikerStat = score.battingStats.find(s => s.playerId === strikerId) || { r: 0, b: 0 };
+    const nonStrikerStat = score.battingStats.find(s => s.playerId === nonStrikerId) || { r: 0, b: 0 };
+
+    const bowler = players.find(p => p.id === state.currentBowler);
+    const bowlerStat = score.bowlingStats.find(s => s.playerId === state.currentBowler) || { ov: "0.0", r: 0, w: 0 };
+
+    document.getElementById("miniScorecard").innerHTML = `
+      <strong>${teamName}</strong>: ${score.runs}/${score.wkts}<br>
+      Overs: ${overs} • RR: ${runRate}
+
+      <div class="label"> Batting</div>
+      <div class="player-block">${striker?.fullName || "Batter 1"} - ${strikerStat.r} (${strikerStat.b})</div>
+      <div class="player-block">${nonStriker?.fullName || "Batter 2"} - ${nonStrikerStat.r} (${nonStrikerStat.b})</div>
+
+      <div class="label"> Bowler</div>
+      <div class="player-block">${bowler?.fullName || "Bowler"} - ${bowlerStat.ov} • ${bowlerStat.r} runs • ${bowlerStat.w} wkts</div>
+    `;
+  }
+
+  updateMiniScore();
+  setInterval(updateMiniScore, 1000);
+</script>
+
+</body>
+</html>

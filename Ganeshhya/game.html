@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1 id="gameTitle">Night Phase</h1>
+        <p id="roleText"></p>
+        <button class="btn" id="continueBtn">Continue</button>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+        const firebaseConfig = {
+            databaseURL: "https://game-f18e0-default-rtdb.firebaseio.com/"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
+
+        const roomCode = localStorage.getItem("roomCode");
+        const playerName = localStorage.getItem("playerName");
+
+        get(ref(db, "rooms/" + roomCode + "/roles/" + playerName)).then(snapshot => {
+            if (snapshot.exists()) {
+                document.getElementById("roleText").innerHTML = `You are <b>${snapshot.val()}</b>`;
+            } else {
+                document.getElementById("roleText").innerText = "Error: Role not found!";
+            }
+        });
+
+        document.getElementById("continueBtn").addEventListener("click", function() {
+            alert("Next Phase!");
+        });
+
+    </script>
+</body>
+</html>

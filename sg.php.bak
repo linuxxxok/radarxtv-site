@@ -1,0 +1,28 @@
+// File: sg.php
+<?php
+$path = $_SERVER['REQUEST_URI'];
+$target = str_replace('/sg.php/', '', $path);
+
+if (strpos($target, 'http') === 0) {
+    $url = $target;
+} else {
+    $url = 'https://l02.dp.sooka.my/' . $target;
+}
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HEADER, false);
+curl_setopt($ch, CURLOPT_HTTPHEADER, ['User-Agent: Mozilla/5.0']);
+
+$response = curl_exec($ch);
+$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+$contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+
+curl_close($ch);
+
+http_response_code($httpCode);
+if ($contentType) {
+    header("Content-Type: $contentType");
+}
+
+echo $response;

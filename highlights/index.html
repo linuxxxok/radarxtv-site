@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RADARxTV - Watch Highlights</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.0.0/dist/index.min.js"></script>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #0a0a1a; /* Deep space blue */
+            color: #ffffff;
+            overflow-x: hidden;
+            transition: background-color 4s ease-in-out;
+        }
+
+        /* Keyframes for background color change */
+        @keyframes colorTransition {
+            0% { background-color: #0a0a1a; }
+            50% { background-color: #1a0a2a; }
+            100% { background-color: #0a0a1a; }
+        }
+
+        body {
+            animation: colorTransition 10s ease-in-out infinite;
+        }
+
+/* Header Animation */
+.animated-header {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #FFD700; /* Gold */
+    margin: 0;
+    text-transform: uppercase;
+    animation: headerText 4s ease-in-out infinite alternate;
+}
+
+.animated-subtitle {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-top: 10px;
+    color: rgba(255, 255, 255, 0.7);
+    animation: subtitleText 5s ease-in-out infinite alternate;
+}
+
+/* Animation for header and subtitle */
+@keyframes headerText {
+    0% { color: #FFD700; } /* Gold */
+    50% { color: #FFD700; }
+    100% { color: #FFD700; } /* Gold */
+}
+
+@keyframes subtitleText {
+    0% { color: rgba(255, 255, 255, 0.7); }
+    50% { color: rgba(255, 255, 255, 1); }
+    100% { color: rgba(255, 255, 255, 0.7); }
+}
+
+/* Did You Know */
+.did-you-know {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #FFD700; /* Gold */
+    text-shadow: 0 0 8px #FFD700;
+    text-align: center;
+    margin-top: 15px;
+}
+
+/* Fun Fact */
+.fun-fact {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #ffffff;
+    text-align: center;
+    margin-top: 5px;
+    white-space: normal;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Header Styles */
+/* Header Styles */
+/* Header Styles */
+/* Header Styles */
+header {
+    text-align: center;
+    padding: 60px 20px; /* Reduced padding */
+    background: linear-gradient(135deg, #003366, #004d99, #0059b3); /* Smooth blue gradient */
+    background-size: 200% 200%;
+    animation: headerGradient 6s infinite alternate ease-in-out;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px; /* Soft rounded corners */
+    clip-path: polygon(
+        0% 10%, /* Top-left curve */
+        50% 0%, /* Top-center peak */
+        100% 10%, /* Top-right curve */
+        100% 90%, /* Bottom-right curve */
+        50% 100%, /* Bottom-center dip */
+        0% 90% /* Bottom-left curve */
+    ); /* Symmetrical wave-like shape */
+    height: 480px;
+    max-width: 60%; /* Control width */
+    margin: 0 auto; /* Centering */
+}
+
+/* Gradient Animation */
+@keyframes headerGradient {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+}
+
+/* Glow Animation for Header */
+@keyframes glowAnimation {
+    0% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.6), 0 0 30px rgba(255, 215, 0, 0.4); }
+    50% { box-shadow: 0 0 25px rgba(255, 215, 0, 0.8), 0 0 50px rgba(255, 215, 0, 0.6); }
+    100% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.6), 0 0 30px rgba(255, 215, 0, 0.4); }
+}
+
+header h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    letter-spacing: 3px;
+    color: #FFD700; /* Gold */
+    margin: 0;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 0 0 20px rgba(255, 215, 0, 0.6);
+}
+
+header p {
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin-top: 15px;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+header button {
+    margin-top: 30px;
+    padding: 15px 40px;
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(135deg, #FFD700, #003366); /* Gold and Dark Blue */
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.6), 0 0 30px rgba(255, 215, 0, 0.4);
+    transition: all 0.3s ease-in-out;
+}
+
+header button:hover {
+    transform: scale(1.1);
+    background: linear-gradient(135deg, #003366, #FFD700); /* Gold and Dark Blue */
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.8), 0 0 50px rgba(255, 215, 0, 0.6);
+}
+
+/* Outer Glow Effect */
+header::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: calc(100% + 20px);
+    height: calc(100% + 20px);
+    border-radius: 30px;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.4), transparent 70%);
+    opacity: 0.6;
+    z-index: -1;
+    animation: glowAnimation 3s infinite alternate ease-in-out;
+}
+        /* Countdown Section */
+        .champions-trophy {
+            background: #2a1a3a;
+            text-align: center;
+            padding: 20px;
+            margin: 20px auto;
+            border-radius: 15px;
+            box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.9), -5px -5px 15px rgba(255, 255, 255, 0.1);
+            width: 80%;
+            max-width: 400px;
+            position: relative;
+            transform: perspective(1000px) rotateX(5deg);
+            opacity: 0;
+            animation: trophyEntry 2s ease-out forwards;
+            overflow: hidden;
+        }
+
+        .champions-trophy img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        @keyframes trophyEntry {
+            0% { transform: scale(0) rotateY(180deg); opacity: 0; }
+            100% { transform: scale(1) rotateY(0deg); opacity: 1; }
+        }
+
+        /* Countdown - 3D Embossed Look */
+        .countdown {
+            font-size: 1rem;
+            font-weight: bold;
+            color: white;
+            margin-top: 10px;
+            position: relative;
+            display: inline-block;
+            padding: 12px 40px;
+            border-radius: 10px;
+            background: #1a0a2a;
+            box-shadow: inset -4px -4px 10px rgba(255, 255, 255, 0.2), 
+                        inset 4px 4px 10px rgba(0, 0, 0, 0.9),
+                        0 0 20px rgba(255, 0, 255, 0.8);
+            animation: pulseGlow 1.5s infinite alternate, fadeIn 2s ease-in-out forwards;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .countdown span {
+            font-size: 1rem;
+            font-weight: 900;
+            display: inline-block;
+        }
+
+        /* Box container Styles */
+        .box-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        /* Style for the surprise message */
+        .surprise-message {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #ff00ff; /* Neon pink */
+            text-shadow: 0 0 10px #ff00ff;
+            text-align: center;
+            margin: 20px 0;
+            opacity: 0;
+            animation: pulseInOut 3s infinite;
+        }
+
+        @keyframes pulseInOut {
+            0% { opacity: 0; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.8); }
+        }
+
+        .box {
+            width: 280px;
+            height: 180px;
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            background: linear-gradient(145deg, #1a0a2a, #2a1a3a);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        .box:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 15px 50px rgba(255, 0, 255, 0.8);
+        }
+
+        .box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+            border-radius: 15px;
+            transition: all 0.4s ease;
+        }
+
+        .box .title {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translate(-50%, 0);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 25px;
+            border-radius: 15px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #00ffcc; /* Neon teal */
+            text-shadow: 0 0 10px #00ffcc;
+            text-transform: uppercase;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .box:hover img {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .box:hover .title {
+            background: linear-gradient(90deg, #ff00ff, #00ffcc);
+            color: white;
+            text-shadow: 0 0 15px #00ffcc;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.2rem;
+            }
+
+            header p {
+                font-size: 1.2rem;
+            }
+
+            header button {
+                padding: 10px 35px;
+                font-size: 1.2rem;
+            }
+
+            .box {
+                width: 250px;
+                height: 170px;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+  <h1>
+    <span class="uppercase">RADAR</span><span class="lowercase">x</span><span class="uppercase">TV</span>
+  </h1>
+  <p class="animated-subtitle">Watch Cricket Highlights Anytime, Anywhere</p>
+
+    <!-- Did You Know and Fun Fact Section Above Join Now -->
+    <div class="did-you-know animated-text">Did you know?</div>
+    <div class="fun-fact" id="funFact">The first-ever cricket match was played in 1877!</div>
+
+    <button onclick="window.location.href='https://t.me/RadarXCricket';">Join Now</button>
+</header>
+    <!-- Champions Trophy Section -->
+    <div class="champions-trophy">
+        <img src="champ.jpg" alt="Champions Trophy Logo" onclick="playAudio();">
+        <div class="countdown">
+            <div>STARTS IN</div>
+            <span id="countdown"></span>
+        </div>
+    </div>
+
+    <!-- Box container -->
+    <div class="box-container">
+        <a href="ola.html" class="box">
+            <img src="loli.jpg" alt="Stream 1">
+            <div class="title">Kohli Ball by ball</div>
+        </a>
+ 
+    </div>
+    <script>
+        function showAlert() {
+            alert("Rohirat Retirement Tournament");
+        }
+        const funFacts = [
+            "Afghanistan and Ireland became full Test-playing nations in 2017.",
+    "England scored the highest-ever ODI total of 498/4 against the Netherlands in 2022.",
+    "The ICC introduced the World Test Championship in 2019 to crown the best Test team.",
+    "Brendon McCullum's 'Bazball' strategy revolutionized England's Test cricket in 2022.",
+    "Australia's women’s team has won the T20 World Cup a record six times (as of 2023).",
+    "Ben Stokes' heroic 135* at Headingley in 2019 is regarded as one of the best Test innings.",
+    "David Miller scored the fastest T20I century in just 35 balls against Bangladesh in 2017.",
+    "Harmanpreet Kaur smashed 171* in the 2017 World Cup semifinal against Australia.",
+    "Rishabh Pant became the first Asian wicketkeeper to score Test centuries in England, Australia, and South Africa.",
+    "The Hundred, a 100-ball cricket format, was introduced in England in 2021.",
+    "T20 cricket was officially added to the Olympics for the 2028 Los Angeles Games.",
+    "England is the only team to hold both the ODI and T20 World Cup titles simultaneously (as of 2022).",
+    "India's women’s cricket team played its first pink-ball Test in 2021 against Australia.",
+    "Suryakumar Yadav is often called the 'Mr. 360 of T20 cricket' for his innovative shots.",
+    "MS Dhoni is the only captain to win all ICC trophies (T20 World Cup, ODI World Cup, and Champions Trophy).",
+    "The first-ever Women's Premier League (WPL) was held in India in 2023.",
+    "South Africa’s Shabnim Ismail is the fastest bowler in women's cricket, clocking 128 km/h.",
+    "Nicholas Pooran scored the fastest ODI century for the West Indies in 2023, taking just 40 balls.",
+    "Rohit Sharma hit 5 centuries in the 2019 Cricket World Cup, the most by any player in a single edition.",
+    "Mithali Raj retired as the highest run-scorer in women's ODI cricket in 2022.",
+    "Pat Cummins became the first fast bowler to captain Australia in Test cricket in 65 years.",
+    "In 2022, India became the first team to score 200+ runs in four consecutive T20Is.",
+    "Chris Gayle is the only player to score a triple hundred in Tests, a double hundred in ODIs, and a century in T20Is.",
+    "Virat Kohli is the fastest player to reach 12,000 ODI runs, achieving the milestone in 242 innings.",
+    "Shaheen Afridi became the youngest pacer to take a five-wicket haul in a World Cup match at 19 years old.",
+    "The IPL became a $10 billion property, as valued by the BCCI in 2022.",
+    "Jemimah Rodrigues made history in 2021 by scoring 76* on her WBBL debut.",
+    "Australia's women's cricket team won 21 consecutive ODI matches between 2018 and 2021.",
+    "Rashid Khan is the youngest bowler to take 100 wickets in ODIs, achieving the feat at 19 years and 186 days.",
+    "The first Day/Night Test match was played between Australia and New Zealand in 2015 using a pink ball.",
+    "Eoin Morgan retired in 2022 as England's most successful ODI captain, leading them to their first World Cup win in 2019.",
+    "AB de Villiers retired from all cricket in 2021, leaving a legacy as one of the most dynamic batsmen ever.",
+    "Sri Lanka's Wanindu Hasaranga became the top-ranked T20I bowler in 2021.",
+    "Shafali Verma became the youngest player to score 50+ runs in both ODIs and T20Is.",
+    "England’s Joe Root scored over 1,700 Test runs in 2021, the third-highest in a calendar year.",
+    "Kane Williamson led New Zealand to their first ICC Test Championship title in 2021.",
+    "Australia's Josh Hazlewood became one of the top-ranked bowlers in all three formats.",
+    "The longest six recorded in cricket was 122 meters, hit by Liam Livingstone in 2021.",
+    "Yuzvendra Chahal became the first Indian bowler to take a five-wicket haul in T20Is in 2017.",
+    "In 2022, Suranga Lakmal retired after taking 171 Test wickets for Sri Lanka.",
+    "Babar Azam became the fastest to 1,000 T20I runs as a captain, achieving it in 26 innings.",
+    "The WPL’s highest individual score was Meg Lanning’s 75* in 2023.",
+    "Hardik Pandya captained Gujarat Titans to IPL victory in their debut season in 2022.",
+    "Alzarri Joseph holds the record for the best bowling figures in IPL history (6/12).",
+    "Jasprit Bumrah became the first Indian pacer to take five wickets in an overseas Test inning on all five continents.",
+    "Nat Sciver-Brunt’s 148* in the 2022 World Cup final was the second-highest score in a losing cause.",
+    "Mitchell Starc became the fastest to 200 ODI wickets, achieving it in 102 matches.",
+    "India hosted the first standalone Women’s T20 World Cup in 2020.",
+    "New Zealand’s Sophie Devine hit the fastest women’s T20I century in 36 balls in 2021.",
+    "The record for the highest partnership in T20Is (236*) is held by Afghanistan's Hazratullah Zazai and Usman Ghani.",
+    "KL Rahul scored the fastest-ever IPL fifty off 14 balls in 2018.",
+    "The ICC T20 World Cup 2024 will feature 20 teams for the first time.",
+    "Shikhar Dhawan is the only player to win back-to-back IPL Orange Caps (2012, 2013).",
+    "Australia’s Ellyse Perry became the first cricketer to score 1,000 runs and take 100 wickets in T20Is.",
+    "Kusal Perera’s 153* against South Africa in 2019 is considered one of the greatest Test chases.",
+    "In 2019, Lasith Malinga took 4 wickets in 4 consecutive balls in a T20I against New Zealand.",
+    "England’s Tammy Beaumont became the fastest woman to score 3,000 ODI runs."
+        ];
+
+        function changeFunFact() {
+            const randomFact = funFacts[Math.floor(Math.random() * funFacts.length)];
+            document.getElementById('funFact').innerText = randomFact;
+        }
+
+        // Change fun fact every 2 hours
+        setInterval(changeFunFact, 7200000); // 7200000ms = 2 hours
+        // Initial fact change
+        changeFunFact();
+
+        // Countdown Timer
+        function updateCountdown() {
+            const endDate = new Date('2025-02-19T00:00:00'); // Countdown to February 19, 2025
+            const currentDate = new Date();
+            const timeLeft = endDate - currentDate;
+
+            if (timeLeft <= 0) {
+                document.getElementById('countdown').innerText = 'The Champions Trophy has begun!';
+                clearInterval(countdownInterval);
+            } else {
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                document.getElementById('countdown').innerText = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+            }
+        }
+
+        updateCountdown();
+        const countdownInterval = setInterval(updateCountdown, 1000);
+
+        let audio = new Audio('lund.mp3');  // Declare it outside to persist across clicks
+
+        function playAudio() {
+            // If audio is already playing, pause and reset it
+            if (!audio.paused) {
+                audio.pause();
+                audio.currentTime = 0;  // Reset the audio
+            }
+
+            // Play the audio
+            audio.play().catch(error => console.log("Audio play failed:", error));
+        }
+    </script>
+</body>
+</html>

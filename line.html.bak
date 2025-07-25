@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RadarXLine</title>
+
+    <!-- ✅ Firebase v9 -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+        import { getDatabase, ref, onChildAdded, query, orderByChild, limitToLast } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
+
+        // ✅ Firebase Config
+        const firebaseConfig = {
+            databaseURL: "https://radarxtvscores-default-rtdb.firebaseio.com/"
+        };
+
+        // ✅ Firebase Initialize
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const messagesRef = query(ref(database, "/telegram_messages"), orderByChild("timestamp"), limitToLast(50));
+
+        const messagesDiv = document.getElementById("messages");
+
+        // ✅ Fastest Message Retrieval
+        onChildAdded(messagesRef, (snapshot) => {
+            const data = snapshot.val();
+            if (!data || !data.text) return;
+
+            const messageElement = document.createElement("div");
+            messageElement.classList.add("message", "new");
+            messageElement.id = snapshot.key;
+            messageElement.innerHTML = `
+                <strong>${data.text}</strong>
+                <span class="timestamp">${formatTime(data.timestamp)}</span>
+            `;
+
+            messagesDiv.prepend(messageElement);
+
+            // ✅ Smooth Pop-in Effect
+            setTimeout(() => messageElement.classList.add("show"), 50);
+            setTimeout(() => messageElement.classList.remove("new"), 2500);
+
+            // ✅ Auto-scroll to top
+            messagesDiv.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+        // ✅ Format Timestamp
+        function formatTime(timestamp) {
+            if (!timestamp) return "N/A";
+            const date = new Date(timestamp * 1000);
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            background-color: #000000;
+            color: #00FFFF; /* ✅ Neon Blue */
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0px 0px 10px #00FFFF;
+        }
+
+        #messages {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 10px;
+            border: 2px solid #00FFFF; /* ✅ Cyberpunk Blue */
+            border-radius: 10px;
+            background-color: #111;
+            overflow-y: auto;
+            max-height: 500px;
+            box-shadow: 0px 0px 20px rgba(0, 255, 255, 0.5);
+        }
+
+        /* ✅ Regular Messages */
+        .message {
+            padding: 12px;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+            text-align: left;
+            background: rgba(0, 255, 255, 0.1);
+            border-left: 4px solid transparent;
+            border-radius: 5px;
+            margin: 10px 0;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.4s ease-in-out;
+            font-size: 18px;
+            color: white;
+        }
+
+        /* ✅ Smooth Pop-in Animation */
+        .message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ✅ PINK NEON FLASH FOR NEW MESSAGES */
+        .message.new {
+            border-left: 4px solid #FFD700; /* ✅ Neon Pink */
+            font-weight: bold;
+            box-shadow: 0px 0px 20px rgba(255, 20, 147, 0.8);
+            animation: pulseGlow 1.5s infinite alternate, fadeGlow 2s forwards;
+            background: linear-gradient(45deg, #FFD700, #FFC0CB);
+        }
+
+        @keyframes pulseGlow {
+            from { box-shadow: 0px 0px 15px rgba(255, 20, 147, 0.8); }
+            to { box-shadow: 0px 0px 30px rgba(255, 20, 147, 1); }
+        }
+
+        @keyframes fadeGlow {
+            0% { box-shadow: 0px 0px 30px rgba(255, 20, 147, 1); }
+            100% { box-shadow: 0px 0px 5px rgba(255, 20, 147, 0.3); }
+        }
+
+        /* ✅ Timestamp Style */
+        .timestamp {
+            font-size: 12px;
+            color: #00FFFF;
+            display: block;
+            margin-top: 5px;
+            text-shadow: 0px 0px 5px #00FFFF;
+        }
+
+        /* ✅ Scrollbar Styling */
+        #messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #messages::-webkit-scrollbar-thumb {
+            background: #00FFFF;
+            border-radius: 10px;
+        }
+
+        #messages::-webkit-scrollbar-track {
+            background: #000;
+        }
+    </style>
+</head>
+<body>
+    <h1>RadarXLine</h1>
+    <div id="messages">Fastest Line Loading...</div>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CREX Embed</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 90px;
+            background-color: rgba(51, 51, 51, 0.8); /* Semi-transparent */
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            z-index: 1000; /* Ensures it stays above the iframe */
+            backdrop-filter: blur(5px); /* Optional: Adds a blur effect */
+        }
+
+        iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">Radar</div>
+
+    <iframe id="crexFrame" src="https://www.crex.live" sandbox="allow-scripts allow-same-origin" allowfullscreen></iframe>
+
+</body>
+</html>
+
+<script>
+document.getElementById("crexFrame").onload = function () {
+    let iframe = document.getElementById("crexFrame").contentWindow;
+
+    function removeAds() {
+        try {
+            let videos = iframe.document.querySelectorAll("video, iframe[src*='ads'], .ad-container");
+            videos.forEach(video => {
+                video.muted = true;   // Mute the video ads
+                video.style.display = "none"; // Hide the video ads
+                video.remove();       // Remove the video element
+            });
+        } catch (e) {
+            console.log("Ad Removal Blocked by CORS, Trying Again...");
+        }
+    }
+
+    // Run every 2 seconds to check for new ads
+    setInterval(removeAds, 2000);
+};
+</script>

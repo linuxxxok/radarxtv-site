@@ -1,0 +1,119 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RadarXScores</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        iframe {
+            width: 300px;
+            height: 1300px;
+            border: none;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            z-index: 1;
+            overflow: hidden;
+        }
+        .branding {
+            background: linear-gradient(45deg, #0f0c29, #302b63, #24243e); /* Gradient background */
+            color: cyan; /* Neon cyan text */
+            text-align: center;
+            font-family: 'Helvetica Neue', sans-serif;
+            position: fixed;
+            left: 0;
+            width: 100%;
+            z-index: 2;
+        }
+        .branding-top {
+            top: 0;
+            padding: 10px 0;
+            height: 80px;
+            font-size: 30px;
+            letter-spacing: 1px;
+            font-weight: bold;
+            text-transform: uppercase;
+            box-shadow: 0 2px 5px rgba(0, 255, 255, 0.5); /* Soft neon glow */
+        }
+        
+        .iframe-div{
+        display: flex;
+        justify-content: Center;
+        }
+        
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent; /* Fully invisible */
+    z-index: 10;
+}
+        .branding-bottom {
+            bottom: 0;
+            height: 200px;
+            padding-top: 20px;
+            font-size: 40px;
+            text-align: center;
+            font-weight: bold;
+            text-shadow: 0 0 10px cyan, 0 0 20px cyan; /* Neon glow effect */
+        }
+        @media (min-width: 1024px) {  
+    .branding-bottom {  
+        height: 33.5vh;  
+    }  
+}
+
+@media (min-width: 1920px) {  
+    .branding-bottom {  
+        height: 38.5vh;  
+    }  
+    }
+    @media (min-width: 768px) {
+    body {
+        width: 100vw;
+        overflow-x: hidden;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="branding branding-top">
+        RadarXScores
+    </div>
+    <div class ="iframe-div">
+    <iframe src="https://m.cricketfastliveline.com/live-score/ind-v-eng-1st-odi-match-one-day-england-in-india/222091" title="Cricket Live" scrolling="no" sandbox="allow-scripts allow-same-origin"></iframe>
+    <div class="overlay"></div>
+</div>
+        </div>
+    <div class="branding branding-bottom">
+        <!-- Empty bottom branding -->
+    </div>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'90d433d4df0aa311',t:'MTczODc3MjE2MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;"></iframe><script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon="{&quot;rayId&quot;:&quot;90d433d4df0aa311&quot;,&quot;version&quot;:&quot;2025.1.0&quot;,&quot;r&quot;:1,&quot;token&quot;:&quot;71f05f0d824347ac8d8446990b92ed20&quot;,&quot;serverTiming&quot;:{&quot;name&quot;:{&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfSpeedBrain&quot;:true,&quot;cfCacheStatus&quot;:true}}}" crossorigin="anonymous"></script>
+
+<script>
+function isFakeDesktopMode() {
+    // Check for touch capabilities
+    const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    
+    // Check for mobile-like viewport ratio
+    const isMobileRatio = window.screen.height/window.screen.width > 1.6;
+    
+    // Combined width check (viewport and screen)
+    const isWideView = window.innerWidth > 1024 && window.screen.width > 1024;
+
+    return hasTouch && isMobileRatio && isWideView;
+}
+
+if (isFakeDesktopMode()) {
+    document.body.innerHTML = "<h2 style='text-align:center; margin-top:20%;'>Please use mobile mode to access this site.</h2>";
+}
+</script>
+</body></html>

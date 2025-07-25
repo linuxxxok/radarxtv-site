@@ -1,0 +1,122 @@
+/* Global Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #121212;
+    color: white;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Container */
+.container {
+    width: 90%;
+    max-width: 400px;
+    background-color: #1e1e1e;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.1);
+    text-align: center;
+}
+
+/* Heading */
+h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+h2 {
+    font-size: 18px;
+    color: #ffcc00;
+}
+
+/* Input Fields */
+.input-group {
+    margin-bottom: 15px;
+}
+
+input {
+    width: 90%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #292929;
+    color: white;
+    font-size: 16px;
+    text-align: center;
+}
+
+input::placeholder {
+    color: #aaa;
+}
+
+/* Buttons */
+.btn {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(90deg, #ff7f50, #ffcc00);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: linear-gradient(90deg, #ffcc00, #ff7f50);
+}
+
+/* Room Code Display */
+.room-code-container {
+    background: #292929;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* Players List */
+.players-container {
+    background: #333;
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.player-name {
+    background: #444;
+    padding: 8px;
+    margin: 5px 0;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+/* Host Name */
+.host-name {
+    background: #ffcc00;
+    color: black;
+}
+
+/* Buttons Container */
+.buttons-container {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Game Screen Role Display */
+#roleDisplay {
+    font-size: 22px;
+    font-weight: bold;
+    background: linear-gradient(90deg, #ff7f50, #ffcc00);
+    padding: 15px;
+    border-radius: 8px;
+    display: inline-block;
+}

@@ -1,0 +1,275 @@
+<!DOCTYPE html><html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiplayer Game</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+body {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    background-color: #1e1e1e;
+    color: white;
+    margin: 0;
+    height: 100vh;
+    display: grid;
+    place-items: center;
+}
+
+.container {
+    width: 60%; /* Reduced width */
+    height: auto; /* Let it adjust based on content */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #2a2a2a;
+    border-radius: 8px;
+    padding: 15px; /* Reduced padding */
+}
+
+.btn {
+    padding: 10px 18px; /* Smaller padding */
+    margin: 12px;
+    background: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px; /* Smaller font size */
+    border-radius: 8px;
+    transition: background 0.3s ease;
+}
+
+.btn:hover {
+    background: #0056b3;
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.85);
+    padding: 12px 20px; /* Reduced padding */
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    transition: 0.3s;
+    z-index: 1000;
+}
+
+.room-code-container {
+    color: white;
+    width: 60%; /* Reduced width */
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: bold;
+    text-align: center;
+}
+
+.input-group {
+    margin: 15px; /* Reduced margin */
+}
+
+input {
+    padding: 10px; /* Reduced padding */
+    font-size: 16px; /* Smaller font size */
+    width: 200px; /* Reduced width */
+    border-radius: 8px;
+    border: none;
+}
+
+#lobby {
+    display: none;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.room-code {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 16px; /* Smaller font size */
+    font-weight: bold;
+    color: #ffcc00;
+}
+
+.players-container {
+    background: #333;
+    padding: 12px; /* Reduced padding */
+    border-radius: 8px;
+    display: inline-block;
+    text-align: center;
+    width: 280px; /* Reduced width */
+    margin-top: 15px;
+}
+
+.player-name {
+    background: #444;
+    padding: 8px; /* Reduced padding */
+    margin: 5px 0;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.host-name {
+    background: #ffcc00;
+    color: black;
+}
+.buttons-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px; /* Buttons ke beech gap */
+}
+</style>
+
+</head>
+<body>
+    <div class="container" id="home">
+        <h1>Multiplayer Game</h1>
+        <div class="input-group">
+            <input type="text" id="playerName" placeholder="Enter Your Name">
+        </div>
+        <button class="btn" id="hostBtn">Host Room</button>
+        <div class="input-group">
+            <input type="text" id="roomCode" placeholder="Enter Room Code">
+        </div>
+        <button class="btn" id="joinBtn">Join Room</button>
+    </div><div id="lobby">
+    <h2></h2>
+                <div class="room-code-container">
+<span id="roomCodeDisplay"></span>
+</div>
+
+    <div class="players-container">
+        <h3 id="hostName"></h3>
+        <div class="players-list" id="playersList"></div>
+    </div>
+    <div class="buttons-container">
+        <button class="btn" id="startGameBtn" style="display:none;">Start Game</button>
+        <button class="btn" id="leaveBtn">Leave Room</button>
+    </div>
+</div>
+
+<div class="popup" id="playerJoinedPopup"></div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getDatabase, ref, set, update, remove, get, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+    const firebaseConfig = {
+        databaseURL: "https://game-f18e0-default-rtdb.firebaseio.com/"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase();
+
+    document.getElementById("hostBtn").addEventListener("click", function() {
+        let playerName = document.getElementById("playerName").value;
+        if (!playerName) return alert("Enter your name!");
+        let roomCode = Math.random().toString(36).substr(2, 6).toUpperCase();
+        localStorage.setItem("roomCode", roomCode);
+        localStorage.setItem("playerName", playerName);
+        set(ref(db, "rooms/" + roomCode), {
+            host: playerName,
+            players: { [playerName]: true }
+        });
+        enterLobby(roomCode, playerName);
+    });
+
+    document.getElementById("joinBtn").addEventListener("click", function() {
+        let roomCode = document.getElementById("roomCode").value.trim();
+        let playerName = document.getElementById("playerName").value.trim();
+        if (!roomCode || !playerName) return alert("Enter name and room code!");
+
+        const roomRef = ref(db, "rooms/" + roomCode);
+        get(roomRef).then(snapshot => {
+            if (snapshot.exists()) {
+                localStorage.setItem("roomCode", roomCode);
+                localStorage.setItem("playerName", playerName);
+                update(ref(db, "rooms/" + roomCode + "/players"), { [playerName]: true });
+                enterLobby(roomCode, playerName);
+            } else {
+                alert("Room does not exist!");
+            }
+        });
+    });
+
+    function enterLobby(roomCode, playerName) {
+        document.getElementById("home").style.display = "none";
+        document.getElementById("lobby").style.display = "block";
+        document.getElementById("roomCodeDisplay").innerText = "Room Code: " + roomCode;
+
+        let roomRef = ref(db, "rooms/" + roomCode);
+        
+        onValue(roomRef, (snapshot) => {
+            let data = snapshot.val();
+            if (data) {
+                document.getElementById("hostName").innerText = "Host: " + data.host;
+                let playersList = document.getElementById("playersList");
+                playersList.innerHTML = "";
+
+                let sortedPlayers = Object.keys(data.players);
+                sortedPlayers.sort((a, b) => (a === data.host ? -1 : b === data.host ? 1 : 0));
+
+                sortedPlayers.forEach(player => {
+                    let div = document.createElement("div");
+                    div.className = "player-name";
+                    if (player === data.host) {
+                        div.classList.add("host-name");
+                    }
+                    div.innerText = player;
+                    playersList.appendChild(div);
+                });
+
+                document.getElementById("startGameBtn").style.display = playerName === data.host && sortedPlayers.length >= 2 ? "block" : "none";
+            }
+        });
+
+        onValue(ref(db, "rooms/" + roomCode + "/players"), (snapshot) => {
+            let players = snapshot.val();
+            if (players) {
+                let lastJoinedPlayer = localStorage.getItem("lastJoinedPlayer");
+                let newPlayers = Object.keys(players);
+                let newPlayer = newPlayers[newPlayers.length - 1];
+
+                if (newPlayer && newPlayer !== lastJoinedPlayer) {
+                    localStorage.setItem("lastJoinedPlayer", newPlayer);
+                    showPopup(newPlayer + " joined the room!");
+                }
+            }
+        });
+    }
+
+    document.getElementById("leaveBtn").addEventListener("click", function() {
+        let roomCode = localStorage.getItem("roomCode");
+        let playerName = localStorage.getItem("playerName");
+        if (roomCode && playerName) {
+            remove(ref(db, "rooms/" + roomCode + "/players/" + playerName));
+            localStorage.removeItem("roomCode");
+            localStorage.removeItem("playerName");
+            location.reload();
+        }
+    });
+
+    function showPopup(message) {
+        let popup = document.getElementById("playerJoinedPopup");
+        popup.innerText = message;
+        popup.style.display = "block";
+        popup.style.opacity = "1";
+        setTimeout(() => { popup.style.opacity = "0"; setTimeout(() => { popup.style.display = "none"; }, 500); }, 3000);
+    }
+
+    const roomCode = localStorage.getItem("roomCode");
+    const playerName = localStorage.getItem("playerName");
+
+    if (roomCode && playerName) {
+        enterLobby(roomCode, playerName);
+    }
+</script>
+
+</body>
+</html>

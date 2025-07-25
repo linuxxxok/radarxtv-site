@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Link with Referer</title>
+</head>
+<body>
+
+    <button onclick="openWithReferer()">Open Link</button>
+
+    <script>
+        function openWithReferer() {
+            var refererUrl = "https://RadarxTV.site";
+            var targetUrl = "https://Radarxtv.site/links.php";
+
+            var newWindow = window.open("", "_blank");
+            var formHtml = `
+                <form action="${targetUrl}" method="post">
+                    <input type="hidden" name="referer" value="${refererUrl}">
+                </form>
+                <script>document.forms[0].submit();<\/script>
+            `;
+            newWindow.document.write(formHtml);
+        }
+    </script>
+
+</body>
+</html>

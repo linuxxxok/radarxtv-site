@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Unmute Stream</title>
+    <style>
+        body { text-align: center; }
+        iframe { width: 90%; height: 500px; border: none; }
+    </style>
+</head>
+<body>
+
+    <h2>Live Stream (Auto Unmute)</h2>
+    <iframe id="myIframe" src="https://radarxtv.site/streams/proxy.php></iframe>
+
+    <script>
+        document.getElementById("myIframe").onload = function() {
+            let iframeWin = document.getElementById("myIframe").contentWindow;
+
+            try {
+                // Try to find the unmute button
+                let unmuteButton = iframeWin.document.querySelector("button"); 
+                if (unmuteButton) {
+                    unmuteButton.click();
+                    console.log("Auto unmuted via button click");
+                }
+
+                // Try to directly unmute the video
+                let video = iframeWin.document.querySelector("video");
+                if (video) {
+                    video.muted = false;  
+                    video.volume = 1.0;
+                    console.log("Auto unmuted via video element");
+                }
+            } catch (error) {
+                console.log("Unmute button or video access nahi ho raha: ", error);
+            }
+        };
+    </script>
+
+</body>
+</html>

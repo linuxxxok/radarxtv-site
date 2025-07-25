@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HLS Stream</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+</head>
+<body>
+    <video id="video" width="100%" controls></video>
+
+    <script>
+        var video = document.getElementById('video');
+        var videoSrc = 'https://tes1.mylife1.top:8088/mobile/stream10_160p/playlist.m3u8?vidictid=201349624308&id=37&pk=6fd50dad6982abe602c024765c507bd7b1aa019cc198fee9be613c10fedb8f98c4ef27649e0508935fe43177c061ce15811489b23050308f91779171167728b1';
+        
+        if(Hls.isSupported()) {
+            var hls = new Hls();
+            hls.loadSource(videoSrc);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                video.play();
+            });
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = videoSrc;
+            video.addEventListener('canplay', function() {
+                video.play();
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Sports Events</title>
+<style>
+body {
+    background: #000; /* Pure black background */
+    color: white;
+    font-family: 'Orbitron', sans-serif;
+    text-align: center;
+}
+
+.event {
+    background: linear-gradient(145deg, #402000, #704000); /* Dark Golden Gradient */
+    border-radius: 16px;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 600px;
+    border: 2px solid #00aaff; /* Blue Outline */
+    box-shadow: 0 0 15px #ffd700; /* Golden Glow */
+}
+
+.event-name {
+    font-size: 20px;
+    font-weight: bold;
+    color: #ffd700; /* Golden Text */
+    text-shadow: 0 0 10px #ffd700;
+}
+
+.live-status {
+    font-size: 14px;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.status-upcoming {
+    color: #ffd700; /* Golden */
+}
+
+.status-live {
+    color: #ff0000;
+    text-shadow: 0 0 15px #ff0000; /* Red Glow for LIVE */
+}
+
+.countdown {
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffd700; /* Golden */
+    margin-top: 8px;
+}
+
+.logos-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.team img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid #00aaff; /* Blue Outline */
+}
+
+.time-date {
+    font-size: 16px;
+    background: rgba(255, 215, 0, 0.2); /* Light Golden Background */
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    color: #ffd700; /* Golden Text */
+    display: block;
+    text-align: center;
+    line-height: 1.5;
+    white-space: pre-line;
+}
+
+.watch-live-btn {
+    background: #ffd700; /* Golden Button */
+    color: black;
+    font-size: 15px;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-weight: bold;
+    box-shadow: 0 0 15px #ffd700;
+}
+
+.watch-live-btn:hover {
+    background: #00aaff; /* Blue Hover */
+    box-shadow: 0 0 25px #00aaff;
+}
+
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    display: none;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0px 0px 20px #ffd700; /* Golden Glow */
+    border: 2px solid #00aaff; /* Blue Outline */
+}
+
+.popup-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: red;
+    color: white;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+}
+
+.popup-title {
+    color: #ffd700;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.popup-buttons button {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 16px;
+    background: #ffd700; /* Golden */
+    border: none;
+    border-radius: 5px;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0px 0px 10px #ffd700;
+}
+
+.popup-buttons button:hover {
+    background: #00aaff;
+    box-shadow: 0px 0px 15px #00aaff;
+}
+</style>
+</head>
+<body>
+
+    <!-- Matches -->
+    <div class="event" data-time="14:00" data-date="09-03-2025">
+        <div class="event-name">ICC Champions Trophy 🏆</div>
+        <div class="live-status"><span class="status-upcoming">Upcoming</span></div>
+        <div class="countdown">Match Starting In: --:--:--</div>
+
+        <div class="logos-row">
+            <div class="team"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcHyc-VVyUGhYBiO3OJ_3byZGsCexX0deN9g&s" alt="INDIA"></div>
+<div class="time-date">2:00 PM <br> 09-03-2025</div>
+            <div class="team"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYWE3moiGeccdPsAWloSbA0n4n39W_xYS8bzaXzGBVDk73Ax2wFX6wb4dJ&s=10" alt="NEW ZEALAND"></div>
+        </div>
+
+        <button class="watch-live-btn" onclick="openStreamPopup(this)" data-streams='[{"name":"WILLOW SPORTS","url":"https://radarxtv.site/streams/streams/willow.php"},{"name":"WILLOW SPORTS 2","url":"https://radarxtv.site/streams/streams/Ropig/"}]' data-event="ICC Champions Trophy 🏆">Watch Live</button>
+    </div>
+
+<div class="popup" id="popup">
+    <button class="popup-close" id="closePopup">✖</button>
+    <h2 class="popup-title">🏆 Match Title 🏆</h2>
+    <div class="popup-buttons"></div>
+</div>
+<!-- New Match -->
+<div class="event" data-match-id="match2" data-time="18:30" data-date="08-03-2025">
+    <div class="event-name">WPL LIVE</div>
+    <div class="live-status"><span class="status-upcoming">Upcoming</span></div>
+    <div class="countdown">Match Starting In: --:--:--</div>
+
+    <div class="logos-row">
+        <div class="team"><img src="https://Radarxtv.site/UP_Warriorz_Logo.webp" alt="UP Warriorz"></div>
+        <div class="time-date">7:00 PM <br> 8-03-2025</div>
+        <div class="team"><img src="https://radarxtv.site/rcb.jpg" alt="RCB"></div>
+    </div>
+
+    <button class="watch-live-btn" onclick="openStreamPopup(this)" data-match-id="match2" data-event="WPL LIVE">Watch Live</button>
+</div>
+
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    function updateMatchStatus() {
+        let now = new Date();
+        document.querySelectorAll(".event").forEach(event => {
+            let matchTime = event.getAttribute("data-time");
+            let matchDate = event.getAttribute("data-date");
+
+            let parts = matchDate.split('-'); 
+            let formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}T${matchTime}:00`;
+            let matchDateTime = new Date(formattedDate);
+
+            let liveStatus = event.querySelector(".live-status");
+            let watchLiveBtn = event.querySelector(".watch-live-btn");
+            let countdownEl = event.querySelector(".countdown");
+
+            let timeDiff = matchDateTime.getTime() - now.getTime();
+
+            if (timeDiff <= 0) {  
+                liveStatus.innerHTML = '<span class="status-live">LIVE</span>';
+                watchLiveBtn.style.display = "inline-block";
+                countdownEl.style.display = "none";  
+            } else {
+                let hours = Math.floor(timeDiff / (1000 * 60 * 60));
+                let minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                let seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+                if (hours < 0 || minutes < 0 || seconds < 0) {
+                    liveStatus.innerHTML = '<span class="status-live">LIVE</span>';
+                    watchLiveBtn.style.display = "inline-block";
+                    countdownEl.style.display = "none";  
+                } else {
+                    countdownEl.innerHTML = `Match Starting In: ${hours}:${minutes}:${seconds}`;
+                    watchLiveBtn.style.display = "none";  
+                }
+            }
+        });
+    }
+
+    setInterval(updateMatchStatus, 1000);
+    updateMatchStatus();
+});
+function openStreamPopup(button) {
+    let eventTitle = button.getAttribute("data-event");
+    let matchId = button.getAttribute("data-match-id");
+
+    fetch(`links.php?match_id=${matchId}`)
+        .then(response => response.json())
+        .then(streams => {
+            let popup = document.getElementById("popup");
+            let popupTitle = popup.querySelector(".popup-title");
+            let popupButtons = popup.querySelector(".popup-buttons");
+
+            popupTitle.innerHTML = `🏆 ${eventTitle} 🏆`;
+            popupButtons.innerHTML = "";
+
+            if (streams.error) {
+                popupButtons.innerHTML = "<p style='color:red;'>No streams available</p>";
+            } else {
+                streams.forEach(stream => {
+                    let btn = document.createElement("button");
+                    btn.innerText = stream.name;
+                    btn.onclick = function () {
+                        window.open(stream.url, "_blank");
+                    };
+                    popupButtons.appendChild(btn);
+                });
+            }
+
+            popup.style.display = "block";
+        })
+        .catch(error => console.error("Error fetching streams:", error));
+}
+
+// Close popup
+document.getElementById("closePopup").addEventListener("click", function () {
+    document.getElementById("popup").style.display = "none";
+});
+    </script>
+
+</body>
+</html>

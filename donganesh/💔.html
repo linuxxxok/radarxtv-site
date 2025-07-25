@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiplayer Game</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            background-color: #1e1e1e;
+            color: white;
+            margin: 0;
+            height: 100vh;
+            display: grid;
+            place-items: center;
+        }
+        .container {
+            width: 60%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .btn {
+            padding: 12px 20px;
+            margin: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.85);
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            font-size: 18px;
+            transition: 0.3s;
+            z-index: 1000;
+        }
+        .room-code-container {
+            color: white;
+            width: 60%;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: bold;
+        }
+        .input-group {
+            margin: 15px;
+        }
+        input {
+            padding: 12px;
+            font-size: 18px;
+            width: 250px;
+            border-radius: 8px;
+            border: none;
+        }
+        #lobby {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .players-container {
+            background: #333;
+            padding: 15px;
+            border-radius: 8px;
+            display: inline-block;
+            text-align: center;
+            width: 300px;
+            margin-top: 20px;
+        }
+        .player-name {
+            background: #444;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .host-name {
+            background: #ffcc00;
+            color: black;
+        }
+        .buttons-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .game-container {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .role-alert {
+            font-weight: bold;
+            margin-top: 20px;
+            font-size: 20px;
+        }
+        .phase-animation {
+            margin-top: 20px;
+        }
+        .chat-box {
+            margin-top: 20px;
+            background: #333;
+            padding: 15px;
+            border-radius: 8px;
+            height: 150px;
+            overflow-y: scroll;
+            font-size: 16px;
+        }
+        .chat-input {
+            margin-top: 10px;
+            width: 80%;
+        }
+        .voting-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .vote-btn {
+            margin: 5px;
+        }
+        .action-buttons {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="home">
+        <h1>Multiplayer Game</h1>
+        <div class="input-group">
+            <input type="text" id="playerName" placeholder="Enter Your Name">
+        </div>
+        <button class="btn" id="hostBtn">Host Room</button>
+        <div class="input-group">
+            <input type="text" id="roomCode" placeholder="Enter Room Code">
+        </div>
+        <button class="btn" id="joinBtn">Join Room</button>
+    </div>
+
+    <div id="lobby">
+        <h2>Lobby</h2>
+        <div class="room-code-container">
+            <span id="roomCodeDisplay"></span>
+        </div>
+        <div class="players-container">
+            <h3 id="hostName"></h3>
+            <div class="players-list" id="playersList"></div>
+        </div>
+        <div class="buttons-container">
+            <button class="btn" id="startGameBtn" style="display:none;">Start Game</button>
+            <button class="btn" id="leaveBtn">Leave Room</button>
+        </div>
+    </div>
+
+    <div class="game-container" id="gameContainer">
+        <div class="role-alert" id="roleAlert"></div>
+        <div class="phase-animation" id="phaseAnimation"></div>
+        <div class="chat-box" id="chatBox"></div>
+        <input type="text" class="chat-input" id="chatInput" placeholder="Type a message">
+        <button class="btn" id="sendMessageBtn">Send</button>
+        <div class="voting-container" id="votingContainer"></div>
+        <button class="btn" id="leaveGameBtn">Leave Game</button>
+        <div class="action-buttons" id="actionButtons">
+            <h3>Secret Actions</h3>
+            <div id="secretActionsContainer"></div>
+        </div>
+    </div>
+
+    <div class="popup" id="playerJoinedPopup"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getDatabase, ref, set, update, remove, get, onValue, push } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+        const firebaseConfig = {
+            databaseURL: "https://game-f18e0-default-rtdb.firebaseio.com/"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
+
+        let currentPhase = 'lobby';
+        let roles = {};
+        let players = {};
+        let nightActions = {};
+        let rolePopupDisplayed = false;
+        let roundNumber = 0;
+
+        // Event listener to host a room
+        document.getElementById("hostBtn").addEventListener("click", function () {
+            let playerName = document.getElementById("playerName").value;
+            if (!playerName) return alert("Enter your name!");
+            let roomCode = Math.random().toString(36).substr(2, 6).toUpperCase();
+            sessionStorage.setItem("roomCode", roomCode);
+            sessionStorage.setItem("playerName", playerName);
+            set(ref(db, "rooms/" + roomCode), {
+    host: playerName,
+    players: { [playerName]: true },
+    phase: 'lobby',
+    roles: {},
+    nightActions: {},
+    votes: {},
+    roundNumber: 0,
+    chat: {}
+}).then(() => {
+    console.log("Room Created Successfully!");
+    enterLobby(roomCode, playerName); // ✅ Firebase ke update hone ke baad call hoga
+}).catch(error => {
+    console.error("Error creating room:", error);
+    alert("Failed to create room! Check Firebase rules.");
+});
+        });
+
+        // Event listener to join a room
+        document.getElementById("joinBtn").addEventListener("click", function () {
+            let roomCode = document.getElementById("roomCode").value.trim();
+            let playerName = document.getElementById("playerName").value.trim();
+            if (!roomCode || !playerName) return alert("Enter name and room code!");
+
+            const roomRef = ref(db, "rooms/" + roomCode);
+            get(roomRef).then(snapshot => {
+                if (snapshot.exists()) {
+                    // Check for unique names
+                    let playersInRoom = snapshot.val().players;
+                    if (playersInRoom[playerName]) {
+                        alert("This name is already taken in the lobby. Please choose a different name.");
+                        return;
+                    }
+
+                    // Update players in the room
+                    sessionStorage.setItem("roomCode", roomCode);
+                    sessionStorage.setItem("playerName", playerName);
+                    update(ref(db, "rooms/" + roomCode + "/players"), { [playerName]: true });
+                    enterLobby(roomCode, playerName);
+                } else {
+                    alert("Room does not exist!");
+                }
+            });
+        });
+
+        // Enter lobby and display players
+     function enterLobby(roomCode, playerName) {
+    document.getElementById("home").style.display = "none";
+    document.getElementById("lobby").style.display = "block";
+    document.getElementById("roomCodeDisplay").innerText = "Room Code: " + roomCode;
+
+    let roomRef = ref(db, "rooms/" + roomCode);
+
+    // Listen for game state changes (e.g., phase changes)
+onValue(ref(db, "rooms/" + roomCode + "/phase"), (snapshot) => {
+    let phase = snapshot.val();
+    console.log("Phase Updated for", sessionStorage.getItem("playerName"), ":", phase);
+
+    if (phase === 'night') {
+        setTimeout(() => startNightPhase(), 1000);
+    } else if (phase === 'day') {
+        setTimeout(() => startDayPhase(), 1000);
+    }
+});
+        if (data) {
+            // Update the lobby UI
+            document.getElementById("hostName").innerText = "Host: " + data.host;
+            let playersList = document.getElementById("playersList");
+            playersList.innerHTML = "";
+
+            let sortedPlayers = Object.keys(data.players);
+            sortedPlayers.sort((a, b) => (a === data.host ? -1 : b === data.host ? 1 : 0));
+
+            sortedPlayers.forEach(player => {
+                let div = document.createElement("div");
+                div.className = "player-name";
+                if (player === data.host) {
+                    div.classList.add("host-name");
+                }
+                div.innerText = player;
+                playersList.appendChild(div);
+            });
+
+            // Only show the start button to the host if there are at least 2 players
+            document.getElementById("startGameBtn").style.display = playerName === data.host && sortedPlayers.length >= 2 ? "block" : "none";
+
+            // Check if the game is ongoing
+            if (data.phase === 'night' || data.phase === 'day') {
+                startGame(data.roles, data.phase);
+            }
+        }
+    });
+
+    // Listen for phase changes (night/day)
+    onValue(ref(db, "rooms/" + roomCode + "/phase"), (snapshot) => {
+        let phase = snapshot.val();
+        if (phase === 'night') {
+            setTimeout(() => startNightPhase(), 3000);
+        } else if (phase === 'day') {
+            startDayPhase();
+        }
+    });
+
+    // Show popup when a new player joins
+    onValue(ref(db, "rooms/" + roomCode + "/players"), (snapshot) => {
+        let players = snapshot.val();
+        if (players) {
+            let lastJoinedPlayer = sessionStorage.getItem("lastJoinedPlayer");
+            let newPlayers = Object.keys(players);
+            let newPlayer = newPlayers[newPlayers.length - 1];
+
+            if (newPlayer && newPlayer !== lastJoinedPlayer) {
+                sessionStorage.setItem("lastJoinedPlayer", newPlayer);
+                showPopup(newPlayer + " joined the room!");
+            }
+        }
+    });
+
+    // Update the chat box
+    onValue(ref(db, "rooms/" + roomCode + "/chat"), (snapshot) => {
+        let chatBox = document.getElementById("chatBox");
+        chatBox.innerHTML = "";
+        let messages = snapshot.val();
+        if (messages) {
+            Object.values(messages).forEach(msg => {
+                chatBox.innerHTML += `<p><strong>${msg.player}:</strong> ${msg.message}</p>`;
+            });
+            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+        }
+    });
+}
+        // Leave room event
+        document.getElementById("leaveBtn").addEventListener("click", function () {
+            let roomCode = sessionStorage.getItem("roomCode");
+            let playerName = sessionStorage.getItem("playerName");
+            if (roomCode && playerName) {
+                remove(ref(db, "rooms/" + roomCode + "/players/" + playerName));
+                sessionStorage.removeItem("roomCode");
+                sessionStorage.removeItem("playerName");
+                location.reload(); // Reload the page to reset state
+            }
+        });
+
+        // Leave game event
+        document.getElementById("leaveGameBtn").addEventListener("click", function () {
+            let roomCode = sessionStorage.getItem("roomCode");
+            let playerName = sessionStorage.getItem("playerName");
+            if (roomCode && playerName) {
+                remove(ref(db, "rooms/" + roomCode + "/players/" + playerName));
+                sessionStorage.removeItem("roomCode");
+                sessionStorage.removeItem("playerName");
+                document.getElementById("gameContainer").style.display = "none";
+                document.getElementById("home").style.display = "block";
+            }
+        });
+
+        // Start game event
+      document.getElementById("startGameBtn").addEventListener("click", function () {
+    let roomCode = sessionStorage.getItem("roomCode");
+    let playerName = sessionStorage.getItem("playerName");
+    if (roomCode && playerName) {
+        let roomRef = ref(db, "rooms/" + roomCode);
+        get(roomRef).then(snapshot => {
+            let data = snapshot.val();
+            if (data) {
+                players = Object.keys(data.players);
+                assignRoles(players);
+                update(ref(db, "rooms/" + roomCode), { phase: 'night', roles: roles, roundNumber: 1 });
+                startGame(roles, 'night');
+            }
+        });
+    }
+});
+        function assignRoles(players) {
+    let shuffledPlayers = players.slice().sort(() => Math.random() - 0.5);
+    roles = {
+        [shuffledPlayers[0]]: 'Pushpa',
+        [shuffledPlayers[1]]: 'Shekhawat',
+        [shuffledPlayers[2]]: 'Sidappa',
+    };
+    shuffledPlayers.slice(3).forEach(player => {
+        roles[player] = 'Syndicate Member';
+    });
+
+    // Har player ka role Firebase me update karna
+    let roomCode = sessionStorage.getItem("roomCode");
+    update(ref(db, "rooms/" + roomCode + "/roles"), roles);
+}
+        // Start the game
+        function startGame(roles, phase) {
+    document.getElementById("lobby").style.display = "none";
+    document.getElementById("gameContainer").style.display = "block";
+
+    let playerName = sessionStorage.getItem("playerName");
+    let playerRole = roles[playerName];
+
+    if (playerRole) {
+        document.getElementById("roleAlert").innerHTML = `You are <b>${playerRole}</b>`;
+        showPopup(`You are <b>${playerRole}</b>`);
+    }
+
+    if (phase === 'night') {
+        setTimeout(() => startNightPhase(), 3000);
+    } else {
+        startDayPhase();
+    }
+}
+
+        // Show role alert
+        function showRoleAlert(roles) {
+            let playerName = sessionStorage.getItem("playerName");
+            document.getElementById("roleAlert").innerHTML = `You are <b>${roles[playerName]}</b>`;
+            showPopup(`You are <b>${roles[playerName]}</b>`);
+        }
+
+function startNightPhase() {
+    currentPhase = 'night';
+    let roomCode = sessionStorage.getItem("roomCode");
+
+    // Show Night Phase GIF
+    document.getElementById("phaseAnimation").innerHTML =
+        '<img src="https://media.giphy.com/media/xTk9j7fW2YBvdwXhu4/giphy.gif" alt="Night Phase">';
+
+    get(ref(db, "rooms/" + roomCode)).then(snapshot => {
+        let data = snapshot.val();
+        if (!data || !data.roles) return;
+
+        let playerName = sessionStorage.getItem("playerName");
+        let role = data.roles[playerName];
+
+        document.getElementById("actionButtons").style.display = "block";
+        let secretActionsContainer = document.getElementById("secretActionsContainer");
+        secretActionsContainer.innerHTML = "";
+
+        Object.keys(data.roles).forEach(target => {
+            if (target !== playerName) {
+                let actionButton;
+                if (role === 'Pushpa') {
+                    actionButton = createActionButton(`Eliminate ${target}`, () => {
+                        update(ref(db, "rooms/" + roomCode + "/nightActions"), { Pushpa: target });
+                        alert(`You will eliminate ${target} at night.`);
+                    });
+                } else if (role === 'Shekhawat') {
+                    actionButton = createActionButton(`Investigate ${target}`, () => {
+                        update(ref(db, "rooms/" + roomCode + "/nightActions"), { Shekhawat: target });
+                        alert(`You will investigate ${target} at night.`);
+                    });
+                } else if (role === 'Sidappa') {
+                    actionButton = createActionButton(`Heal ${target}`, () => {
+                        update(ref(db, "rooms/" + roomCode + "/nightActions"), { Sidappa: target });
+                        alert(`You will heal ${target} at night.`);
+                    });
+                }
+                if (actionButton) {
+                    secretActionsContainer.appendChild(actionButton);
+                }
+            }
+        });
+
+        // Ensure phase update applies to all players
+        update(ref(db, "rooms/" + roomCode), { phase: 'night' });
+    });
+}
+        // Create buttons for secret actions based on roles
+function prepareActionButtons() {
+    let secretActionsContainer = document.getElementById("secretActionsContainer");
+    secretActionsContainer.innerHTML = ""; // Clear previous buttons
+    let playerName = sessionStorage.getItem("playerName");
+    let role = roles[playerName];
+
+    if (!role) return; // If player has no role, don't show anything
+
+    players.forEach(target => {
+        if (target !== playerName) { // Exclude self from actions
+            let actionButton;
+            if (role === 'Pushpa') {
+                actionButton = createActionButton(`Eliminate ${target}`, () => {
+                    nightActions['Pushpa'] = target;
+                    alert(`You will eliminate ${target} at night.`);
+                });
+            } else if (role === 'Shekhawat') {
+                actionButton = createActionButton(`Investigate ${target}`, () => {
+                    nightActions['Shekhawat'] = target;
+                    alert(`You will investigate ${target} at night.`);
+                });
+            } else if (role === 'Sidappa') {
+                actionButton = createActionButton(`Heal ${target}`, () => {
+                    nightActions['Sidappa'] = target;
+                    alert(`You will heal ${target} at night.`);
+                });
+            }
+            if (actionButton) {
+                secretActionsContainer.appendChild(actionButton);
+            }
+        }
+    });
+}
+        function createActionButton(text, action) {
+            let button = document.createElement("button");
+            button.className = "btn";
+            button.innerText = text;
+            button.onclick = action;
+            return button;
+        }
+
+        // End night phase and apply actions
+        function endNightPhase() {
+    let roomCode = sessionStorage.getItem("roomCode");
+
+    // Set night to day animation
+    document.getElementById("phaseAnimation").innerHTML = 
+        '<img src="https://media.giphy.com/media/3oEjI6dXh6XWVw6YrK/giphy.gif" alt="Day Phase">';
+
+    // Ensure all actions are applied first
+    applyNightActions(() => {
+        setTimeout(() => {
+            update(ref(db, "rooms/" + roomCode), { phase: 'day', nightActions: {}, votes: {} }).then(() => {
+                console.log("Phase changed to Day");
+                startDayPhase();
+            });
+        }, 2000); // Delay ensures phase updates properly
+    });
+}
+
+        // Apply night actions based on player roles
+        function applyNightActions() {
+            let roomCode = sessionStorage.getItem("roomCode");
+            let roomRef = ref(db, "rooms/" + roomCode);
+            get(roomRef).then(snapshot => {
+                let data = snapshot.val();
+                if (data) {
+                    let chatBox = document.getElementById("chatBox");
+                    chatBox.innerHTML = ""; // Clear previous messages
+                    let eliminatedPlayer = data.nightActions ? data.nightActions['Pushpa'] : null;
+                    let investigatedPlayer = nightActions['Shekhawat'];
+                    let healedPlayer = nightActions['Sidappa'];
+
+                    if (eliminatedPlayer) {
+                        chatBox.innerHTML += `<p>${eliminatedPlayer} was caught in action and was killed by Pushpa.</p>`;
+                        delete players[eliminatedPlayer]; // Remove target from players
+                    }
+
+                    if (investigatedPlayer) {
+                        chatBox.innerHTML += `<p>Shekhawat investigated ${investigatedPlayer}, who is a ${roles[investigatedPlayer]}.</p>`;
+                    }
+
+                    if (healedPlayer && eliminatedPlayer !== healedPlayer) {
+                        chatBox.innerHTML += `<p>Sidappa saved ${healedPlayer} from being eliminated!</p>`;
+                    }
+
+                    chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+
+                    // After processing actions, transition to day phase
+                    setTimeout(() => {
+                        update(ref(db, "rooms/" + roomCode), { phase: 'day', nightActions: {} });
+                        startDayPhase(); // Start day phase after a short delay
+                    }, 3000); // Wait for 3 seconds to show results
+                }
+            });
+        }
+
+function startDayPhase() {
+    currentPhase = 'day';
+    let roomCode = sessionStorage.getItem("roomCode");
+    let votingContainer = document.getElementById("votingContainer");
+    votingContainer.innerHTML = "";
+
+    // Show Day Phase GIF
+    document.getElementById("phaseAnimation").innerHTML =
+        '<img src="https://media.giphy.com/media/3oEjI6dXh6XWVw6YrK/giphy.gif" alt="Day Phase">';
+
+    get(ref(db, "rooms/" + roomCode)).then(snapshot => {
+        let data = snapshot.val();
+        if (!data || !data.roles) return;
+
+        let playerName = sessionStorage.getItem("playerName");
+
+        // Voting buttons for every player except self
+        Object.keys(data.roles).forEach(player => {
+            if (player !== playerName) {
+                let voteBtn = document.createElement("button");
+                voteBtn.className = "btn vote-btn";
+                voteBtn.innerText = `Vote for ${player}`;
+                voteBtn.onclick = function () {
+                    votePlayer(player);
+                };
+                votingContainer.appendChild(voteBtn);
+            }
+        });
+
+        // Hide secret actions during the day
+        document.getElementById("actionButtons").style.display = "none";
+
+        // Ensure phase update applies to all players
+        update(ref(db, "rooms/" + roomCode), { phase: 'day' });
+    });
+}
+        // Cast a vote
+        function votePlayer(player) {
+            let roomCode = sessionStorage.getItem("roomCode");
+            let playerName = sessionStorage.getItem("playerName");
+            update(ref(db, "rooms/" + roomCode + "/votes"), { [playerName]: player });
+        }
+
+function endDayPhase() {
+    let roomCode = sessionStorage.getItem("roomCode");
+    let roomRef = ref(db, "rooms/" + roomCode");
+
+    document.getElementById("phaseAnimation").innerHTML = 
+        '<img src="https://media.giphy.com/media/xTk9j7fW2YBvdwXhu4/giphy.gif" alt="Night Phase">';
+
+    get(roomRef).then(snapshot => {
+        let data = snapshot.val();
+        if (data) {
+            let votes = data.votes || {};
+            let voteCount = {};
+            Object.values(votes).forEach(vote => {
+                voteCount[vote] = (voteCount[vote] || 0) + 1;
+            });
+
+            let maxVotes = Math.max(...Object.values(voteCount));
+            let votedOut = Object.keys(voteCount).find(player => voteCount[player] === maxVotes);
+
+            if (votedOut) {
+                update(ref(db, "rooms/" + roomCode + "/players/" + votedOut), null).then(() => {
+                    console.log(`${votedOut} voted out. Checking game state...`);
+                    checkWinningConditions(votedOut, () => {
+                        setTimeout(() => {
+                            update(ref(db, "rooms/" + roomCode), { phase: 'night', votes: {} }).then(() => {
+                                console.log("Phase changed to Night");
+                                startNightPhase();
+                            });
+                        }, 2000);
+                    });
+                });
+            } else {
+                setTimeout(() => {
+                    update(ref(db, "rooms/" + roomCode), { phase: 'night', votes: {} }).then(() => {
+                        console.log("Phase changed to Night");
+                        startNightPhase();
+                    });
+                }, 2000);
+            }
+        }
+    });
+}
+
+        // Check winning conditions based on voted out player
+        function checkWinningConditions(votedOut) {
+            let roomCode = sessionStorage.getItem("roomCode");
+            let playerName = sessionStorage.getItem("playerName");
+            let roomRef = ref(db, "rooms/" + roomCode);
+            get(roomRef).then(snapshot => {
+                let data = snapshot.val();
+                if (data) {
+                    const remainingPlayers = Object.keys(data.players).filter(player => players[player]);
+                    const mafiaCount = remainingPlayers.filter(player => roles[player] === 'Pushpa' || roles[player] === 'Syndicate Member').length;
+                    const townCount = remainingPlayers.filter(player => roles[player] !== 'Pushpa' && roles[player] !== 'Syndicate Member').length;
+
+                    // Check if voted out player was Mafia
+                    if (roles[votedOut] === 'Pushpa') {
+                        // Pushpa is out, Town wins
+                        document.getElementById("chatBox").innerHTML += `<p>${votedOut} was Pushpa. The Town wins!</p>`;
+                        endGame();
+                    } else {
+                        document.getElementById("chatBox").innerHTML += `<p>${votedOut} was a ${roles[votedOut]}.</p>`;
+                        if (mafiaCount === 0) {
+                            // Town wins as there are no Mafia members left
+                            document.getElementById("chatBox").innerHTML += `<p>All Mafia members are eliminated! The Town wins!</p>`;
+                            endGame();
+                        } else if (mafiaCount >= townCount) {
+                            // Mafia wins
+                            document.getElementById("chatBox").innerHTML += `<p>The Mafia has the majority now! Mafia wins!</p>`;
+                            endGame();
+                        } else {
+                            // Proceed to the next night phase
+                            setTimeout(() => startNightPhase(), 3000); // Start next night phase
+                        }
+                    }
+                }
+            });
+        }
+
+        // End the game and reset
+        function endGame() {
+            document.getElementById("gameContainer").style.display = "none";
+            document.getElementById("home").style.display = "block";
+            sessionStorage.removeItem("roomCode");
+            sessionStorage.removeItem("playerName");
+        }
+
+        // Send message in chat
+        document.getElementById("sendMessageBtn").addEventListener("click", function () {
+            let message = document.getElementById("chatInput").value;
+            if (message) {
+                let roomCode = sessionStorage.getItem("roomCode");
+                let playerName = sessionStorage.getItem("playerName");
+                let chatRef = ref(db, "rooms/" + roomCode + "/chat");
+                let newMessageRef = push(chatRef);
+                set(newMessageRef, { player: playerName, message: message });
+                document.getElementById("chatInput").value = ""; // Clear input
+            }
+        });
+
+        // Show popup message
+        function showPopup(message) {
+            let popup = document.getElementById("playerJoinedPopup");
+            popup.innerText = message;
+            popup.style.display = "block";
+            popup.style.opacity = "1";
+            setTimeout(() => {
+                popup.style.opacity = "0";
+                setTimeout(() => {
+                    popup.style.display = "none";
+                }, 500);
+            }, 3000);
+        }
+
+        // Check session storage and load room if exists
+        const roomCode = sessionStorage.getItem("roomCode");
+        const playerName = sessionStorage.getItem("playerName");
+
+        if (roomCode && playerName) {
+            enterLobby(roomCode, playerName);
+        }
+    </script>
+</body>
+</html> 

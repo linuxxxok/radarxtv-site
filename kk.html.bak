@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Stream</title>
+    
+    <!-- Video.js CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/video.js/8.3.0/video-js.min.css" rel="stylesheet">
+    
+    <!-- Video.js JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/8.3.0/video.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #121212;
+            color: white;
+            margin: 0;
+            padding: 20px;
+        }
+        .video-container {
+            max-width: 800px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Live Stream</h1>
+    <div class="video-container">
+        <video id="hls-player" class="video-js vjs-default-skin" controls width="100%" height="auto">
+            <source src="https://amg01269-amg01269c1-willowtv-us-5479.playouts.now.amagi.tv/playlist/amg01269-willowtvfast-willowplus-willowtvus/cb7c3e1a7b736f8a93ca3f6cd5f612a3d1056284033a87356daf5e9f21934953d0b8a7c4e742e76e7e332ea33e40340d0136d41cc07c11dfa223f6147c7707119188c3258ddb4d50e6c80e2921a32f405aee7a6bd224532399cb0f018939fa5d2b41b9593f6963dc822fb37356dc907bcb3f75deca883342241e409a5e5afba358b3e79a2521a510bda14011ce7a5590d711928b05abe68119dd1ad928ee108392e0f88b52dddbc47ca856b27a59167233c9c0549ccb54badfda5a389a703a4f5100b5f4ddad187ec246450ffca6cfbc37b216cf8c75cc3166be06d516dd66da26f35ffeb24da6fceedb11426d96ee310e4f363a8df0991c1dff03d2acedd4720ef69c765974b9a65cbf4942f4dcd81d85b975dcd671c7dc6d6ca55684c567fce6a3967a1cf8b127eaf4d4d251635d6a054dad52ae916ccf28e7a8c9a4ef4071425ea49659c5" type="application/x-mpegURL">
+        </video>
+    </div>
+
+    <script>
+        var player = videojs('hls-player', {
+            autoplay: true,
+            controls: true,
+            responsive: true,
+            fluid: true
+        });
+    </script>
+
+</body>
+</html>

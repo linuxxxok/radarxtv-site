@@ -1,0 +1,15 @@
+Forgot password
+Signup m button daldenge
+Profile page add krenge ek usme dikhega uska account details
+Balance
+Statement 
+Bet history
+
+App logo
+Telegram logo for contact 
+Spam check
+Sticky experience fix.
+Admin login in firebase 
+Under node admin
+Username 
+Pass

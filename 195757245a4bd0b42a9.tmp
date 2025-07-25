@@ -1,0 +1,30 @@
+<?php
+error_reporting(0); // Errors hide karna
+
+// Target website
+$target_url = "https://mafiatv.live/vod";
+
+// Proxy list (Bangladesh IP proxy)
+$proxy_list = [
+    "http://103.233.169.46:8080",  // BD Proxy
+    "http://103.48.68.36:83",  // BD Proxy
+    "http://103.48.68.37:84"   // BD Proxy
+];
+
+// Random proxy select karein
+$proxy = $proxy_list[array_rand($proxy_list)];
+
+// cURL se request send karein
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $target_url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
+curl_setopt($ch, CURLOPT_PROXY, $proxy);
+$output = curl_exec($ch);
+curl_close($ch);
+
+// Response return karein
+echo $output;
+?>

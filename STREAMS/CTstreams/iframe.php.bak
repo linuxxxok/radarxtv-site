@@ -1,0 +1,18 @@
+<?php
+// ✅ Secret Key & IV (16 bytes IV is required)
+$secret_key = "RadarX@Secure1234";
+$iv = "1234567890123456";
+
+// ✅ Actual Iframe URL (Server-Side Secure)
+$iframe_url = "https://offerstore.xyz/ddh/?play=65";
+
+// ✅ Encrypt URL using AES-256-CBC
+$encrypted_url = openssl_encrypt($iframe_url, "AES-256-CBC", $secret_key, 0, $iv);
+
+// ✅ Encode it to Base64 & URL Encode for safe transmission
+$final_token = urlencode(base64_encode($encrypted_url));
+
+// ✅ Redirect to `player.php`
+header("Location: player.php?token=$final_token");
+exit();
+?>

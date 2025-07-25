@@ -1,0 +1,11 @@
+<?php
+$api_url = "https://tv4wap.tiiny.io/sportstv.php";
+$response = file_get_contents($api_url);
+$data = json_decode($response, true); // JSON ko PHP array me convert karo
+
+if(isset($data['c'])) { 
+    print_r($data['c']); // "c" array ko print karo
+} else {
+    echo "❌ 'c' array nahi mila!";
+}
+?>

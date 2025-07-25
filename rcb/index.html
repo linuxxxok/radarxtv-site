@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HLS Stream Player</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        body { background-color: black; text-align: center; margin: 0; }
+        video { width: 100%; max-width: 800px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <video id="video" controls autoplay></video>
+    <script>
+        var video = document.getElementById('video');
+        var videoSrc = "https://cdn-in3.100ms.live/beam1/62306e57f097c15b9c7c5289/67d80ff1b72a0fec60c1145d/20250317/1742213109541/stream_0/stream.m3u8";
+
+        if (Hls.isSupported()) {
+            var hls = new Hls();
+            hls.loadSource(videoSrc);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                video.play();
+            });
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = videoSrc;
+            video.play();
+        }
+    </script>
+</body>
+</html>

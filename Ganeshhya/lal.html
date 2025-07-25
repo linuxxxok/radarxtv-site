@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pushpa Game</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Host/Join Room -->
+    <div id="room-section">
+      <h1>Pushpa Game</h1>
+      <button id="host-room">Host Room</button>
+      <button id="join-room">Join Room</button>
+      <input type="text" id="room-id" placeholder="Enter Room ID">
+    </div>
+
+    <!-- Lobby -->
+    <div id="lobby-section" class="hidden">
+      <h2>Lobby</h2>
+      <div id="players-list"></div>
+      <button id="start-game" class="hidden">Start Game</button>
+    </div>
+
+    <!-- Game -->
+    <div id="game-section" class="hidden">
+      <h2 id="phase-title"></h2>
+      <div id="game-info"></div>
+      <div id="chat-box">
+        <div id="chat-messages"></div>
+        <input type="text" id="chat-input" placeholder="Type your message...">
+        <button id="send-message">Send</button>
+      </div>
+      <div id="voting-section" class="hidden">
+        <h3>Vote to Eliminate</h3>
+        <div id="vote-options"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+  <script src="firebase.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

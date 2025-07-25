@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<?php include 'banner.php'; ?>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RADARxTV - Watch Live Cricket</title>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <link rel="manifest" href="/manifest.json" />
+
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', 'Inter', sans-serif;
+      background: #0f1021;
+      color: #f9fafc;
+      scroll-behavior: smooth;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    /* Background Parallax */
+    .parallax-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .parallax-bg svg {
+      width: 140vw;
+      height: 140vh;
+      position: absolute;
+      top: -25vh;
+      left: -10vw;
+      opacity: 0.2;
+      filter: blur(1px);
+      animation: waveShift 30s ease-in-out infinite alternate;
+    }
+
+    @keyframes waveShift {
+      0% {
+        transform: translateY(0px);
+      }
+
+      100% {
+        transform: translateY(-80px);
+      }
+    }
+
+    /* Header & Hero */
+    header {
+      text-align: center;
+      padding: 65px 20px 20px;
+    }
+
+    .hero-content {
+      padding-top: 20px;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .hero-content h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, #00d9ff, #b16cff, #e95388, #ca21de);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 18px;
+      text-shadow: 0 2px 28px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-content h1 span {
+      color: #ff38a1;
+    }
+
+    .hero-content p {
+      font-size: 1.2rem;
+      color: #c2bbeb;
+      margin-bottom: 2rem;
+      font-weight: 400;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      font-size: 1.1rem;
+      font-weight: 600;
+      padding: 12px 28px;
+      border-radius: 40px;
+      background: linear-gradient(90deg, #ff38a1, #125bff);
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .cta-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
+    }
+
+    .ip-address {
+      font-size: 0.98rem;
+      color: #ffaaec;
+      margin-top: 1rem;
+    }
+
+    /* Cards */
+.box-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  padding: 60px 20px;
+  max-width: 1240px;
+  margin: 40px auto 0 auto;
+}
+
+@media (max-width: 1100px) {
+  .box-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 700px) {
+  .box-container {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+  min-height: 410px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 22px;
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.21);
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+.box:hover {
+  transform: translateY(-10px) scale(1.018);
+  box-shadow: 0 24px 56px 0 rgba(54,12,222,0.22), 0 2px 18px #006ee624;
+}
+
+.box img {
+  width: 100%;
+  object-fit: cover;
+  border-top-left-radius: 22px;
+  border-top-right-radius: 22px;
+}
+
+/* Ensure the desc area is flexible and titles align at the bottom */
+.desc {
+  min-height: 92px;
+  flex: 1 1 auto;
+  display: flex;
+  align-items: flex-start;
+}
+
+.title {
+  margin-top: auto;
+  background: linear-gradient(90deg, #6e40c9, #00b4ff);
+  font-size: 1.14rem;
+  font-weight: 700;
+  border-radius: 0 0 22px 22px;
+  color: #fff;
+  padding: 15px 0;
+  width: 100%;
+  min-height: 48px;
+  text-align: center;
+  letter-spacing: 0.01em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+    footer {
+      text-align: center;
+      font-size: 0.9rem;
+      padding: 30px 10px;
+      background: rgba(255, 255, 255, 0.03);
+      color: #aaa;
+    }
+
+    @media (max-width: 600px) {
+      .hero-content h1 {
+        font-size: 2.2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- 🌀 Parallax Background -->
+  <div class="parallax-bg">
+    <svg viewBox="0 0 1440 630" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#6e40c9" fill-opacity="0.5" d="M0,420 Q600,580 1440,120 L1440,630 L0,630 Z"></path>
+      <path fill="#00b4ff" fill-opacity="0.3" d="M0,120 Q840,480 1440,40 L1440,630 L0,630 Z"></path>
+      <path fill="#ff38a1" fill-opacity="0.15" d="M0,320 Q700,450 1440,80 L1440,630 L0,630 Z"></path>
+    </svg>
+  </div>
+
+  <!-- ✨ Header + Hero Section -->
+  <header>
+    <div class="hero-content">
+      <h1>Welcome to <span>RADARxTV</span></h1>
+      <p>Your Gateway to <strong>Live Cricket</strong>, Latest News & PWA Experience</p>
+      <a href="#cards" class="cta-btn">🚀 Explore Features</a>
+      <div class="ip-address">
+        Your IP: <span id="userIP">Loading...</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- 💎 Cards -->
+  <div class="box-container" id="cards">
+    <a href="lo.html" class="box">
+      <img src="don/qyar.jpg" alt="Live Streams" />
+      <div class="desc">Watch live matches in crisp HD and zero buffering, now powered by our AI autonet stream engine.</div>
+      <div class="title"><i class="fas fa-broadcast-tower"></i> Live Streams</div>
+    </a>
+
+    <a href="about" class="box">
+      <img src="don/qyak.jpg" alt="About Radar" />
+      <div class="desc">Learn more about the RADARxTV team, mission, and the tech behind this futuristic cricket hub.</div>
+      <div class="title"><i class="fas fa-users"></i> About Radar</div>
+    </a>
+
+    <a href="stipl/news.php" class="box">
+      <img src="don/chut.jpg" alt="News" />
+      <div class="desc">
+  Stay updated with breaking sports news, analysis and cricket insights anytime, anywhere. From match results to exclusive interviews—all the latest action in one place.
+     </div>
+      <div class="title"><i class="fas fa-newspaper"></i> News</div>
+    </a>
+
+    <a href="#" class="box" id="installCard">
+      <img src="https://img.freepik.com/free-vector/installing-application-concept-illustration_114360-5163.jpg?w=700" alt="Install App" />
+      <div class="desc">Install RADARxTV as a Progressive Web App (PWA) for app-like speed & offline access.</div>
+      <div class="title"><i class="fas fa-mobile-alt"></i> Install App</div>
+    </a>
+  </div>
+
+  <footer>&copy; 2025 RadarXTV. Built for Cricket Fans. All Rights Reserved.</footer>
+
+  <script>
+    // IP Display
+    async function getUserIP() {
+      try {
+        const res = await fetch('https://checkip.amazonaws.com');
+        const ip = await res.text();
+        document.getElementById('userIP').textContent = ip.trim();
+      } catch {
+        document.getElementById('userIP').textContent = "Unavailable";
+      }
+    }
+    getUserIP();
+
+    // GSAP Animation
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.from(".box", {
+      scrollTrigger: {
+        trigger: "#cards",
+        start: "top 90%"
+      },
+      opacity: 0,
+      scale: 0.95,
+      y: 30,
+      duration: 0.6,
+      ease: "power2.out",
+      stagger: 0.2
+    });
+
+    // 📦 Add to Home Screen logic
+    let deferredPrompt;
+    const installBtn = document.createElement('button');
+    installBtn.id = 'installBtn';
+    installBtn.innerText = '📲 Install RadarXTV';
+    installBtn.style.cssText = 'position: fixed; bottom: 20px; right: 20px; padding: 12px 20px; background: #ff416c; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; display: none; z-index: 999;';
+    document.body.appendChild(installBtn);
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.style.display = 'block';
+    });
+
+    installBtn.addEventListener('click', () => {
+      installBtn.style.display = 'none';
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choice) => {
+        if (choice.outcome === 'accepted') {
+          console.log('✅ User accepted install prompt');
+        } else {
+          console.log('❌ User dismissed install prompt');
+        }
+        deferredPrompt = null;
+      });
+    });
+
+    document.getElementById('installCard').addEventListener('click', () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+      } else {
+        alert("PWA install prompt not available or already installed.");
+      }
+    });
+
+    // 🛠️ Register Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(() => console.log('✅ Service Worker Registered'))
+        .catch(err => console.error('❌ Service Worker Error:', err));
+    }
+  </script>
+</body>
+
+</html>
+

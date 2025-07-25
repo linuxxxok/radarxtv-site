@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiplayer Game Lobby</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container" id="home">
+        <h1>Multiplayer Game</h1>
+        <div class="input-group">
+            <input type="text" id="playerName" placeholder="Enter Your Name">
+        </div>
+        <button class="btn" id="hostBtn">Host Room</button>
+        <div class="input-group">
+            <input type="text" id="roomCode" placeholder="Enter Room Code">
+        </div>
+        <button class="btn" id="joinBtn">Join Room</button>
+    </div>
+
+    <div id="lobby" style="display: none;">
+        <h2>Lobby</h2>
+        <div class="room-code-container">
+            Room Code: <span id="roomCodeDisplay"></span>
+        </div>
+        <div class="players-container">
+            <h3 id="hostName"></h3>
+            <div class="players-list" id="playersList"></div>
+        </div>
+        <div class="buttons-container">
+            <button class="btn" id="startGameBtn" style="display: none;">Start Game</button>
+            <button class="btn" id="leaveBtn">Leave Room</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getDatabase, ref, set, update, remove, get, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+        const firebaseConfig = {
+            databaseURL: "https://game-f18e0-default-rtdb.firebaseio.com/"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
+
+        let playerName = localStorage.getItem("playerName") || "";
+        let roomCode = localStorage.getItem("roomCode") || "";
+
+        document.getElementById("hostBtn").addEventListener("click", () => {
+            playerName = document.getElementById("playerName").value;
+            if (!playerName) return alert("Enter your name!");
+
+            roomCode = Math.random().toString(36).substr(2, 6).toUpperCase();
+            localStorage.setItem("roomCode", roomCode);
+            localStorage.setItem("playerName", playerName);
+
+            set(ref(db, "rooms/" + roomCode), {
+                host: playerName,
+                players: { [playerName]: true }
+            });
+
+            enterLobby(roomCode, playerName);
+        });
+
+        document.getElementById("joinBtn").addEventListener("click", () => {
+            roomCode = document.getElementById("roomCode").value.trim();
+            playerName = document.getElementById("playerName").value.trim();
+            if (!roomCode || !playerName) return alert("Enter name and room code!");
+
+            get(ref(db, "rooms/" + roomCode)).then(snapshot => {
+                if (snapshot.exists()) {
+                    localStorage.setItem("roomCode", roomCode);
+                    localStorage.setItem("playerName", playerName);
+
+                    update(ref(db, "rooms/" + roomCode + "/players"), { [playerName]: true });
+
+                    enterLobby(roomCode, playerName);
+                } else {
+                    alert("Room does not exist!");
+                }
+            });
+        });
+
+        function enterLobby(roomCode, playerName) {
+            document.getElementById("home").style.display = "none";
+            document.getElementById("lobby").style.display = "block";
+            document.getElementById("roomCodeDisplay").innerText = roomCode;
+
+            let roomRef = ref(db, "rooms/" + roomCode);
+            onValue(roomRef, (snapshot) => {
+                let data = snapshot.val();
+                if (data) {
+                    document.getElementById("hostName").innerText = "Host: " + data.host;
+                    let playersList = document.getElementById("playersList");
+                    playersList.innerHTML = "";
+
+                    Object.keys(data.players).forEach(player => {
+                        let div = document.createElement("div");
+                        div.className = "player-name";
+                        if (player === data.host) div.classList.add("host-name");
+                        div.innerText = player;
+                        playersList.appendChild(div);
+                    });
+
+                    document.getElementById("startGameBtn").style.display = (playerName === data.host) ? "block" : "none";
+                }
+            });
+        }
+
+        document.getElementById("startGameBtn").addEventListener("click", () => {
+            get(ref(db, "rooms/" + roomCode + "/players")).then(snapshot => {
+                if (snapshot.exists()) {
+                    let players = Object.keys(snapshot.val());
+                    let roles = ["Pushpa", "Gundappa", "Shekhawat", "Sidappa", "Syndicate"];
+                    let assignedRoles = {};
+
+                    players.forEach(player => {
+                        let randomIndex = Math.floor(Math.random() * roles.length);
+                        assignedRoles[player] = roles.splice(randomIndex, 1)[0];
+                    });
+
+                    update(ref(db, "rooms/" + roomCode), { roles: assignedRoles });
+
+                    players.forEach(player => {
+                        if (player === playerName) {
+                            window.location.href = "game.html";
+                        }
+                    });
+                }
+            });
+        });
+
+        document.getElementById("leaveBtn").addEventListener("click", () => {
+            remove(ref(db, "rooms/" + roomCode + "/players/" + playerName));
+            localStorage.removeItem("roomCode");
+            localStorage.removeItem("playerName");
+            location.reload();
+        });
+
+        if (roomCode && playerName) enterLobby(roomCode, playerName);
+    </script>
+</body>
+</html>
